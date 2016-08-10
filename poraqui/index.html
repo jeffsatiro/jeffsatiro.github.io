@@ -1,1 +1,69 @@
-start
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script src="assets/firebase.js"></script>
+	<script src="assets/geofire.js"></script>
+	<script src="assets/vue.min.js"></script>
+</head>
+<body>
+	
+	<div id="_app">
+		<button @click="markAdd();">markAdd();</button>
+		<button @click="markList();">markList();</button>
+		<hr>
+		
+		<ul>
+			<li v-for="mark in marks">
+				<div>{{mark|json}}</div>
+			</li>
+		</ul>
+
+		<pre>{{$data|json}}</pre>
+	</div>
+
+	<script>
+	var base = new Firebase("https://poraqui.firebaseio.com/", {
+		apiKey: "cppPr8mu5D50E2uqbL7IEVkRYiAYGnSABfAR43fn",
+		databaseURL: "https://poraqui.firebaseio.com/"
+	});
+	var geo = new GeoFire(base);
+
+	var vm = new Vue({el:"#_app",
+		data: function() {
+			var o = {};
+			o.marks = [];
+			return o;
+		},
+
+		methods: {
+			markAdd: function() {
+				geo.set("marks", [37.785326, -122.405696]).then(function() {
+					console.log("Provided key has been added to GeoFire");
+				}, function(error) {
+					console.log("Error: " + error);
+				});
+				/*var marks = base.child("marks");
+				marks.push().set({
+					title: "Teste",
+					lat: Math.round(Math.random()*99),
+					lng: Math.round(Math.random()*99),
+				}, function(error) {
+					if (error) return;
+					vm.markList();
+				});*/
+			},
+
+			markRemove: function() {},
+
+			markList: function() {
+				var marks = base.child("marks").once("value", function(snap) {
+					vm.$set("marks", snap.val());
+				});
+			},
+		},
+	});
+	</script>
+</body>
+</html>
