@@ -16,9 +16,36 @@
 	<script>
 	var base = new Firebase("https://poraqui.firebaseio.com/");
 	var marks = base.child("marks");
+	var auth = base.getAuth();
+	console.log(auth.facebook);
 
 	function _view() {
 
+	}
+
+	function _addMarker(e) {
+		if (!auth) {
+			base.authWithOAuthPopup("facebook", function(error, data) {
+				_addMarker(e);
+				console.log(error, data);
+			});
+			return;
+		}
+
+		var o = {};
+		o.title = "Teste";
+		o.text = "Teste";
+		o.imgs = [{src:"https://images-eu.ssl-images-amazon.com/images/G/31/img15/Shoes/CatNav/p._V293117552_.jpg", alt:"Shoe"}];
+		o.lat = e.latLng.lat();
+		o.lng = e.latLng.lng();
+		o.id = auth.facebook.id;
+		o.name = auth.facebook.displayName;
+		o.email = auth.facebook.email;
+		o.img = auth.facebook.profileImageURL;
+		marks.push().set(o, function(error) {
+			if (error) return;
+			_view();
+		});
 	}
 
 	function _init() {
@@ -28,12 +55,7 @@
 		});
 
 		// Add marker on user click
-		map.addListener('click', function(e) {
-			marks.push().set({title: "Teste", lat: e.latLng.lat(), lng: e.latLng.lng()}, function(error) {
-				if (error) return;
-				_view();
-			});
-		});
+		map.addListener('click', _addMarker);
 
 		// Create a heatmap.
 		var heatmap = new google.maps.visualization.HeatmapLayer({
@@ -43,13 +65,21 @@
 		});
 
 		marks.on("child_added", function(snapshot, prevChildKey) {
-			var pos = snapshot.val();
-			var latLng = new google.maps.LatLng(pos.lat, pos.lng);
+			var obj = snapshot.val();
+			var latLng = new google.maps.LatLng(obj.lat, obj.lng);
+
+			var infowindow = new google.maps.InfoWindow({
+				content: '<div><strong>'+ obj.title +'</strong><br />'+obj.name+'<br /><div>'+ obj.text +'</div>'+ obj.imgs.map(function(img) { return '<img src="'+img.src+'" alt="'+img.alt+'" style="width:200px;"/>'; }) +'</div>',
+			});
 
 			var marker = new google.maps.Marker({
 				position: latLng,
 				map: map,
 				title: 'Hello World!'
+			});
+
+			marker.addListener('click', function() {
+				infowindow.open(map, marker);
 			});
 			
 			//heatmap.getData().push(latLng);
