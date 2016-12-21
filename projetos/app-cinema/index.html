@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    
+    <!-- JQuery -->
+    <script src="assets/jquery.min.js"></script>
+    
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="assets/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/bootstrap/slate.min.css">
+    <script src="assets/bootstrap/bootstrap.min.js"></script>
+    
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
+    
+    <!-- AngularJS -->
+    <script src="assets/angular/angular.min.js"></script>
+    
+    <!-- Mousetrap -->
+    <script src="assets/mousetrap/mousetrap.min.js"></script>
+    
+    <!-- Bootstrap Growl -->
+    <script src="assets/bootstrap-growl/jquery.bootstrap-growl.min.js"></script>
+    
+    <script>
+    function Db() {
+        this.get = function() {
+            var hash = location.hash || '{}';
+            hash = hash.charAt(0)==='#'? hash.slice( 1 ): hash;
+            try { eval('var data = '+hash+';'); }
+            catch(e) {var data = {};}
+            return data;
+        };
+        
+        this.save = function(data) {
+            location.hash = JSON.stringify(data);
+        };
+        
+        return this;
+    }
+    
+        
+    var App = angular.module('App',[]).controller('AppController', function($scope) {
+        
+        $(function() {
+            $(document).on("keyup", function(ev) {
+                if (ev.keyCode==27) {
+                    $('.popup').fadeOut(200);
+                }
+            });
+
+            Mousetrap.bind(['command+s', 'ctrl+s'], function(e) {
+                $scope.save();
+                return false;
+            });
+            
+            Mousetrap.bind(['command+z', 'ctrl+z'], function(e) {
+                window.history.back();
+                $scope.project = Db().get();
+                //$scope.save();
+                return false;
+            });
+        });
+        
+        $scope.project = Db().get();
+        
+        $scope.save = function() {
+            Db().save($scope.project);
+            $.bootstrapGrowl("Dados salvos", {type:"success"});
+        };
+
+        $scope.download = function() {
+            var filedata = "data:application/octet-stream,"+ encodeURI(JSON.stringify($scope.project));
+            var link = document.createElement('a');
+            link.href = filedata;
+            link.download = ($scope.project.title||"download") +'.cine';    
+            document.body.appendChild(link);
+            link.click();
+        };
+
+        $scope.upload = function(el) {
+            var file = $(el)[0].files[0]||false;
+            if (file) {
+                var fr = new FileReader();
+                fr.readAsText(file);
+                fr.onload = function (ev) {
+                    $scope.project = JSON.parse(ev.target.result);
+                    $scope.$apply();
+                    $scope.save();
+                };
+            }
+        };
+        
+        $scope.modalToggle = function(modal_sel) {
+            $(modal_sel).fadeToggle(200);
+            $(modal_sel).off("click").on("click", function(ev) {
+                if (ev.target==this) {
+                    $(this).fadeOut(200);
+                }
+            });
+        };
+        
+        $scope.add = function(parent, attr, val) {
+            if (typeof parent[attr]=="undefined") {
+                parent[attr] = [];
+            }
+            val.createdAt = new Date();
+            parent[attr].push(val);
+            $scope.save();
+        };
+        
+        $scope.remove = function(parent, index, conf) {
+            if (typeof conf=="string") {
+                if (!confirm(conf)) {
+                    return false;
+                }
+            }
+            parent.splice(index, 1);
+            $scope.save();
+        };
+        
+        
+        $scope.staffForm = {};
+        $scope.staffEdit = function(data) {
+            $scope.staffForm = data;
+        };
+        
+        $scope.profileData = {};
+        $scope.profile = function(data) {
+            $scope.profileData = data;
+            $scope.modalToggle('#modal_profile');
+        };
+        
+        $scope.equipamentsForm = {};
+        $scope.equipamentsEdit = function(data) {
+            $scope.equipamentsForm = data;
+        };
+        
+    });
+    </script>
+    
+    <style>
+    * {border-radius:0!important;}
+    .popup {display:block; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,.5); z-index:9999;}
+    .popup-content {position:absolute; left:0; right:0; top:0; bottom:0; margin:40px auto; z-index:99999; display:table-cell; vertical-align:middle;}
+    .cursor-pointer {cursor:pointer;}
+    </style>
+</head>
+<body ng-app="App" ng-controller="AppController">
+   
+   <!-- Menu -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="javascript:">Orça Cine</a>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-6">
+                <ul class="nav navbar-nav">
+                    <li><a href="javascript:;" ng-click="modalToggle('#modal_basic')">Básicos</a></li>
+                    <li><a href="javascript:;" ng-click="modalToggle('#modal_staff')">Staff</a></li>
+                    <li><a href="javascript:;" ng-click="modalToggle('#modal_equipments')">Equipamentos</a></li>
+                    <li><a href="javascript:;" ng-click="modalToggle('#modal_file')">Arquivo</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <br><br><br>
+     <!-- Menu -->
+     
+     
+    <!------------------------------------------------------------------->
+    <!-- Modal Default -------------------------------------------------->
+    <div id="modal_example" class="popup" style="display:none;">
+        <div class="popup-content" style="width:700px;">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Título</div>
+                <div class="panel-body">Conteúdo</div>
+                <div class="panel-footer">Rodapé</div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal Default -------------------------------------------------->
+    <!------------------------------------------------------------------->
+    
+    
+    <!------------------------------------------------------------------->
+    <!-- Modal atributos ------------------------------------------------>
+     <div id="modal_basic" class="popup" style="display:none;">
+        <div class="popup-content" style="width:500px; height:300px;">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <i class="pull-right fa fa-remove cursor-pointer" ng-click="modalToggle('#modal_basic');"></i>
+                    Teste
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label>Título</label>
+                        <input type="text" ng-model="project.title" class="form-control">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Storyline</label>
+                        <textarea ng-model="project.storyline" class="form-control"></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Sinopse</label>
+                        <textarea ng-model="project.sinopse" class="form-control"></textarea>
+                    </div>
+                </div>
+                <div class="panel-footer text-right">
+                    <input type="button" value="Ok" class="btn btn-primary" ng-click="save(); modalToggle('#modal_basic');">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal atributos ------------------------------------------------>
+    <!------------------------------------------------------------------->
+    
+    
+    
+    <!------------------------------------------------------------------->
+    <!-- Modal pessoas -------------------------------------------------->
+     <div id="modal_staff" class="popup" style="display:none;">
+        <div class="popup-content" style="width:700px; height:300px;">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <i class="pull-right fa fa-remove cursor-pointer" ng-click="modalToggle('#modal_staff');"></i>
+                    Equipe
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-6">
+                           <div class="input-group">
+                               <input type="text" class="form-control">
+                               <div class="input-group-addon"><i class="fa fa-search"></i></div>
+                               <div class="input-group-addon" ng-click="add(project, 'staff', {name:'New'});" title="Adicionar membro à equipe"><i class="fa fa-plus"></i></div>
+                           </div>
+                            <br>
+                            <div style="max-height:400px; overflow:auto;">
+                                <table class="table table-striped">
+                                   <col width="50px">
+                                   <col width="*">
+                                    <tbody>
+                                        <tr ng-repeat="person in project.staff track by $index">
+                                            <td><img ng-src="{{person.img}}" alt="" class="cover" style="width:100%; height:40px;"></td>
+                                            <td>
+                                                <ul class="list-inline pull-right">
+                                                    <li><a href="javascript:;" class="btn btn-primary btn-xs fa fa-search" ng-click="profile(person);"></a></li>
+                                                    <li><a href="javascript:;" class="btn btn-primary btn-xs fa fa-pencil" ng-click="staffEdit(person);"></a></li>
+                                                    <li><a href="javascript:;" class="btn btn-danger btn-xs fa fa-remove" ng-click="remove(project.staff, $index, 'Confirma a ação de remover esta pessoa do projeto?');"></a></li>
+                                                </ul>
+                                                <strong>{{person.name}}</strong> <br><small class="muted" ng-repeat="role in person.roles track by $index">{{role.name}}, </small>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-xs-6" ng-show="staffForm.name != null">
+                           
+                            <div>
+
+                                <!-- Nav tabs -->
+                                <ul class="nav nav-tabs" role="tablist">
+                                    <li role="presentation" class="active"><a href="#form_staff_info" aria-controls="home" role="tab" data-toggle="tab">Info</a></li>
+                                    <li role="presentation"><a href="#form_staff_roles" aria-controls="messages" role="tab" data-toggle="tab">Funções</a></li>
+                                    <li role="presentation"><a href="#form_staff_contacts" aria-controls="profile" role="tab" data-toggle="tab">Contatos</a></li>
+                                </ul>
+                                <br>
+
+                                <!-- Tab panes -->
+                                <div class="tab-content">
+                                    <div role="tabpanel" class="tab-pane active" id="form_staff_info">
+                                        <div class="form-group"><label>Nome</label>
+                                        <input type="text" class="form-control" ng-model="staffForm.name">
+                                        </div>
+                                        
+                                        <div class="form-group"><label>URL foto</label>
+                                        <input type="text" class="form-control" ng-model="staffForm.img">
+                                        </div>
+
+                                        <div class="form-group"><label>Pagamento</label>
+                                            <div class="input-group">
+                                               <div class="input-group-addon">R$</div>
+                                                <input type="text" class="form-control" ng-model="staffForm.payment.value">
+                                                <div class="input-group-btn">
+                                                    <select class="form-control" style="width:150px;" ng-model="staffForm.payment.periodicity">
+                                                        <option value="0">/ Contrato</option>
+                                                        <option value="30">/ Mês</option>
+                                                        <option value="7">/ Semana</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div role="tabpanel" class="tab-pane" id="form_staff_roles">
+                                        <a href="javascript:;" class="btn btn-primary btn-xs fa fa-plus" ng-click="add(staffForm, 'roles', {name:'New'});"></a>
+                                        
+                                        <div class="input-group" style="margin-top:5px;" ng-repeat="role in staffForm.roles track by $index">
+                                            <input type="text" class="form-control" ng-model="role.name">
+                                            <div class="input-group-btn"><a href="javascript:;" class="btn btn-danger" ng-click="remove(staffForm.roles, $index);"><i class="fa fa-remove"></i></a></div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div role="tabpanel" class="tab-pane" id="form_staff_contacts">
+                                        <a href="javascript:;" class="btn btn-primary btn-xs fa fa-plus" ng-click="add(staffForm, 'contacts', {value:'example@mail.com', type:'email', info:''});"></a>
+                                        
+                                        <div class="input-group" style="margin-top:5px;" ng-repeat="contact in staffForm.contacts track by $index">
+                                            <input type="text" class="form-control" ng-model="contact.value">
+                                            <div class="input-group-btn">
+                                                <input type="text" class="form-control" ng-model="contact.info" style="width:150px;">
+                                            </div>
+                                            <div class="input-group-btn"><a href="javascript:;" class="btn btn-danger" ng-click="remove(staffForm.roles, $index);"><i class="fa fa-remove"></i></a></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                           
+                            
+                            
+                            <br>
+                            <div class="panel-footer text-right">
+                                <input type="button" value="Cancelar" class="btn" ng-click="staffForm={};">
+                                <input type="button" value="Ok" class="btn btn-primary" ng-click="save(); staffForm={};">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal pessoas -------------------------------------------------->
+    <!------------------------------------------------------------------->
+    
+    
+    
+    
+    <!------------------------------------------------------------------->
+    <!-- MODAL PROFILE -------------------------------------------------->
+    <div id="modal_profile" class="popup" style="display:none;">
+        <div class="popup-content" style="width:500px;">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Profile</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-4">
+                            <img ng-src="{{profileData.img}}" alt="" style="width:100%; float:left; margin:0 15px 15px 0;">
+                        </div>
+                        <div class="col-xs-8">
+                            <strong class="text-uppercase">{{profileData.name}}</strong>
+                            <br>
+                            <div class="label label-default" style="margin:0 5px 5px 0;" ng-repeat="role in profileData.roles track by $index">{{role.name}}</div>
+                            <br><br>
+                            <table class="table">
+                                <col width="50%">
+                                <col width="50%">
+                                <tbody>
+                                    <tr>
+                                        <th colspan="2">Contatos</th>
+                                    </tr>
+                                    <tr ng-repeat="contact in profileData.contacts track by $index">
+                                        <td>{{contact.value}}</td>
+                                        <td>{{contact.info}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                            
+                </div>
+                <div class="panel-footer text-right">
+                    <input type="button" value="Ok" class="btn btn-primary" ng-click="modalToggle('#modal_profile');">
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- MODAL PROFILE -------------------------------------------------->
+    <!------------------------------------------------------------------->
+    
+    
+    <!------------------------------------------------------------------->
+    <!-- MODAL EQUIPAMENTOS --------------------------------------------->
+    <div id="modal_equipments" class="popup" style="display:none;">
+        <div class="popup-content" style="width:700px;">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <a href="javascript:;" class="pull-right fa fa-remove" ng-click="modalToggle('#modal_equipments');"></a>
+                    Equipamentos
+                </div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-6">
+                           <div class="input-group">
+                               <input type="text" class="form-control">
+                               <div class="input-group-addon"><i class="fa fa-search"></i></div>
+                               <div class="input-group-addon" ng-click="add(project, 'equipments', {name:'New'});" title="Adicionar equipamento"><i class="fa fa-plus"></i></div>
+                           </div>
+                            <br>
+                            <div style="max-height:400px; overflow:auto;">
+                                <table class="table table-striped">
+                                   <col width="50px">
+                                   <col width="*">
+                                    <tbody>
+                                        <tr ng-repeat="row in project.equipments track by $index">
+                                            <td><img ng-src="{{row.img}}" alt="" class="cover" style="width:100%; height:40px;"></td>
+                                            <td>
+                                                <ul class="list-inline pull-right">
+                                                    <li><a href="javascript:;" class="btn btn-primary btn-xs fa fa-pencil" ng-click="equipamentsEdit(row);"></a></li>
+                                                    <li><a href="javascript:;" class="btn btn-danger btn-xs fa fa-remove" ng-click="remove(project.equipments, $index);"></a></li>
+                                                </ul>
+                                                <strong>{{row.name}}</strong>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        
+                        <div class="col-xs-6" ng-show="equipamentsForm.name != null">
+                            <div class="form-group"><label>Nome do equipamento</label>
+                            <input type="text" ng-model="equipamentsForm.name" class="form-control">
+                            </div>
+                            
+                            <div class="form-group"><label>URL imagem</label>
+                            <input type="text" ng-model="equipamentsForm.img" class="form-control">
+                            </div>
+                            
+                            <div class="panel-footer text-right">
+                                <input type="button" value="Cancelar" class="btn" ng-click="equipamentsForm={};">
+                                <input type="button" value="Ok" class="btn btn-primary" ng-click="equipamentsForm={}; save();">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- MODAL EQUIPAMENTOS --------------------------------------------->
+    <!------------------------------------------------------------------->
+
+
+    <!------------------------------------------------------------------->
+    <!-- MODAL FILE ------------------------------------------------->
+    <div id="modal_file" class="popup" style="display:none;">
+        <div class="popup-content" style="width:700px;">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Título</div>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <a href="javascript:;" class="btn btn-block btn-success" ng-click="download();">Download JSON</a>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="input-group">
+                                <input type="file" class="form-control" id="upload-input" />
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-success" ng-click="upload('#upload-input');">Upload</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-footer">Rodapé</div>
+            </div>
+        </div>
+    </div>
+    <!-- MODAL FILE ------------------------------------------------->
+    <!------------------------------------------------------------------->
+    
+    <pre>{{project|json}}</pre>
+</body>
+</html>
+   
+
+   
