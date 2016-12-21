@@ -2,5 +2,42 @@
   "skills": [
     {"title":"JS", "description":"Typescript, JQuery, Angular", "percent":95},
     {"title":"CSS", "description":"CSS3, Bootstrap, BEM", "percent":85},
-  ]
+  ],
+  "experiencies": [
+    {
+      "company":"WebBH Escola de Informática",
+      "role":"Instrutor",
+      "description":"Ministrei cursos de PHP, MySQL, HTML5, CSS, Tableless e Briefing.",
+      "start":["Janeiro", "2012"],
+      "end":["Dezembro", "2012"],
+    },
+    {
+      "company":"Netranet Networking",
+      "role":"Programador PHP",
+      "description":"Desenvolvimento de sistemas para clientes da agência.",
+      "start":["Janeiro", "2013"],
+      "end":["Dezembro", "2013"],
+    },
+    {
+      "company":"Cushman & Wakefield",
+      "role":"Programador PHP",
+      "description":"Trabalhando terceirizado para a Vale do Rio Doce, desenvolvi ferramentas para otimizar o trabalho dos engenheiros da diretoria que trabalhei.",
+      "start":["Janeiro", "2013"],
+      "end":["Dezembro", "2013"],
+    },
+    {
+      "company":"Freelancer",
+      "role":"Programador PHP",
+      "description":"Desenvolvi sistemas como Freelancer.",
+      "start":["Janeiro", "2014"],
+      "end":["Dezembro", "2014"],
+    },
+    {
+      "company":"Netranet Networking",
+      "role":"Programador PHP",
+      "description":"Desenvolvimento de sistemas para clientes da agência.",
+      "start":["Janeiro", "2015"],
+      "end":false,
+    },
+  ],
 }
