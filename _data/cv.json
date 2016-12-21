@@ -1,6 +1,6 @@
 {
   "skills": [
     {"title":"JS", "description":"Typescript, JQuery, Angular", "percent":95},
-    {"title":"CSS", "description":"CSS3, Bootstrap, BEM", "percent":85}
+    {"title":"CSS", "description":"CSS3, Bootstrap, BEM", "percent":85},
   ]
 }
