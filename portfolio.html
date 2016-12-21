@@ -4,4 +4,10 @@ title: Portfolio
 
 {% for portfolio in site.portfolio %}
   <h2>{{ portfolio.title }}</h2>
+  Ano: {{ portfolio.year }} <br />
+  Tags:
+  {% for tag in portfolio.tags %}
+  {{ tag }}
+  {% endfor %}
+  <hr />
 {% endfor %}
