@@ -31,7 +31,7 @@ title: Currículo Jeferson Inácio
 										</figure>
 										<div class="row">
 											<div class="col-xs-12 social-btns">
-												{% social in site.data.curriculum.socials %}
+												{% for social in site.curriculum.socials %}
 												<div class="col-xs-3 col-md-1 col-lg-1 social-btn-holder">
 													<a href="{{ social.href }}" class="btn btn-social btn-block btn-{{ social.namespace }}">
 													<i class="{{ social.class }}"></i> </a>
