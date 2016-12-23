@@ -1,4 +1,8 @@
 {
+  "name": "Jeferson Inácio Siqueira da Silva e Silva",
+  "birthday": "1986-02-11",
+  "addr": "Rua Ozenil José de Oliveira, 13 - Ap 401 - Belo Horizonte/MG",
+  "embedmap": "",
   "skills": [
     {"title":"JS", "description":"Typescript, JQuery, Angular", "percent":95},
     {"title":"CSS", "description":"CSS3, Bootstrap, BEM", "percent":85},
