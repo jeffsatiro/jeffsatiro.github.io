@@ -20,6 +20,9 @@ meta_keywords: Orçamento, Projeto cinematográfico, Cinema, App
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css">
     
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="assets/animate/animate.css">
+    
     <!-- AngularJS -->
     <script src="assets/angular/angular.min.js"></script>
     
@@ -455,7 +458,10 @@ meta_keywords: Orçamento, Projeto cinematográfico, Cinema, App
     <div id="modal_file" class="popup" style="display:none;">
         <div class="popup-content" style="width:700px;">
             <div class="panel panel-primary">
-                <div class="panel-heading">Título</div>
+                <div class="panel-heading">
+                    <a href="javascript:;" class="pull-right fa fa-remove" ng-click="modalToggle('#modal_file');"></a>
+                    Salvar/Carregar projeto
+                </div>
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-xs-6">
@@ -471,16 +477,11 @@ meta_keywords: Orçamento, Projeto cinematográfico, Cinema, App
                         </div>
                     </div>
                 </div>
-                <div class="panel-footer">Rodapé</div>
             </div>
         </div>
     </div>
     <!-- MODAL FILE ------------------------------------------------->
     <!------------------------------------------------------------------->
     
-    <pre>{{project|json}}</pre>
 </body>
 </html>
-   
-
-   
