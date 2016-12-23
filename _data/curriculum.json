@@ -6,8 +6,8 @@
   "embed_map": "",
   "job_title": "Programador Frontend e Backend",
   "socials": [
-    {"name":"Facebook", "href":"https://facebook.com/jeferson.satiro"},
-    {"name":"Linkedin", "href":"https://www.linkedin.com/in/jeferson-in%C3%A1cio-27b37026?trk=hp-identity-name"},
+    {"name":"Facebook", "namespace":"facebook", "class":"fa fa-fw fa-facebook", "href":"https://facebook.com/jeferson.satiro"},
+    {"name":"Linkedin", "namespace":"linkedin", "class":"fa fa-fw fa-linkedin", "href":"https://www.linkedin.com/in/jeferson-in%C3%A1cio-27b37026?trk=hp-identity-name"},
   ],
   "skills": [
     {"title":"JS", "description":"Typescript, JQuery, Angular", "percent":95},
