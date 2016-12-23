@@ -2,6 +2,8 @@
   "last_update": "2016-12-22",
   "name": "Jeferson Inácio Siqueira da Silva e Silva",
   "birthday": "1986-02-11",
+  "picture": "assets/img/profile.jpg",
+  "description": "Olá, meu nome é <b>Jeferson Inácio</b>, tenho <b>30 anos</b>, moro atualmente na região de <b>venda nova</b>, em <b>Belo Horizonte/MG</b>.\nSou um programador PHP com 6 anos de experiência. Já trabalhei em sistemas de diversos tipos, usando os mais variados frameworks e backend e frontend.\nGosto de conhecer tecnologias e metodologias novas.",
   "phone": "(31) 99619-2746",
   "email": "jeferson.i.silva@gmail.com",
   "addr": "Rua Ozenil José de Oliveira, 13 - Ap 401 - Belo Horizonte/MG",
