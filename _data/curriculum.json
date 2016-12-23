@@ -3,6 +3,7 @@
   "birthday": "1986-02-11",
   "addr": "Rua Ozenil José de Oliveira, 13 - Ap 401 - Belo Horizonte/MG",
   "embedmap": "",
+  "jobtitle": "Programador Frontend e Backend",
   "skills": [
     {"title":"JS", "description":"Typescript, JQuery, Angular", "percent":95},
     {"title":"CSS", "description":"CSS3, Bootstrap, BEM", "percent":85},
