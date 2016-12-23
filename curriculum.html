@@ -8,12 +8,6 @@ title: Currículo Jeferson Inácio
 </head>
 <body>
 	<div class="container">
-		<div class="row info" style="text-align:center;">
-			<div class="col-xs-12 alert alert-info">
-				The skills meter from <a class="alert-link" href="http://bootsnipp.com/snippets/featured/progress-bar-meter">here</a> is used in this design. 
-				Feel free to remove this div from the design.
-			</div>
-		</div>
 		<div class="resume">
 			<header class="page-header">
 				<h1 class="page-title">{{ site.data.curriculum.name }}</h1>
@@ -31,7 +25,7 @@ title: Currículo Jeferson Inácio
 										</figure>
 										<div class="row">
 											<div class="col-xs-12 social-btns">
-												{% for social in site.curriculum.socials %}
+												{% for social in site.data.curriculum.socials %}
 												<div class="col-xs-3 col-md-1 col-lg-1 social-btn-holder">
 													<a href="{{ social.href }}" class="btn btn-social btn-block btn-{{ social.namespace }}">
 													<i class="{{ social.class }}"></i> </a>
@@ -42,10 +36,10 @@ title: Currículo Jeferson Inácio
 									</div>
 									<div class="col-xs-12 col-sm-8">
 										<ul class="list-group">
-											<li class="list-group-item">{{ site.curriculum.name }}</li>
-											<li class="list-group-item">{{ site.curriculum.job_title }}</li>
-											<li class="list-group-item"><i class="fa fa-phone"></i> {{ site.curriculum.phone }} </li>
-											<li class="list-group-item"><i class="fa fa-envelope"></i> {{ site.curriculum.email }}</li>
+											<li class="list-group-item">{{ site.data.curriculum.name }}</li>
+											<li class="list-group-item">{{ site.data.curriculum.job_title }}</li>
+											<li class="list-group-item"><i class="fa fa-phone"></i> {{ site.data.curriculum.phone }} </li>
+											<li class="list-group-item"><i class="fa fa-envelope"></i> {{ site.data.curriculum.email }}</li>
 										</ul>
 									</div>
 								</div>
