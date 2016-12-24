@@ -319,14 +319,14 @@
                                        <col width="*">
                                         <tbody>
                                             <tr ng-repeat="person in project.staff">
-                                                <td><img ng-src="{[{person.img}]}" alt="" class="cover" style="width:100%; height:40px;"></td>
+                                                <td><img ng-src="{{person.img}}" alt="" class="cover" style="width:100%; height:40px;"></td>
                                                 <td>
                                                     <ul class="list-inline pull-right">
                                                         <li><a href="javascript:;" class="btn btn-primary btn-xs fa fa-search" ng-click="staffProfile(person);"></a></li>
                                                         <li><a href="javascript:;" class="btn btn-primary btn-xs fa fa-pencil" ng-click="staffEdit(person);"></a></li>
                                                         <li><a href="javascript:;" class="btn btn-danger btn-xs fa fa-remove" ng-click="staffRemove($index);"></a></li>
                                                     </ul>
-                                                    <strong>{[{person.name}]}</strong> <br><small class="muted" ng-repeat="role in person.roles">{[{role.name}]}, </small>
+                                                    <strong>{{person.name}}</strong> <br><small class="muted" ng-repeat="role in person.roles">{{role.name}}, </small>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -422,12 +422,12 @@
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-xs-4">
-                                <img ng-src="{[{staffProfileData.img}]}" alt="" style="width:100%; float:left; margin:0 15px 15px 0;">
+                                <img ng-src="{{staffProfileData.img}}" alt="" style="width:100%; float:left; margin:0 15px 15px 0;">
                             </div>
                             <div class="col-xs-8">
-                                <strong class="text-uppercase">{[{staffProfileData.name}]}</strong>
+                                <strong class="text-uppercase">{{staffProfileData.name}}</strong>
                                 <br>
-                                <div class="label label-default" style="margin:0 5px 5px 0;" ng-repeat="role in staffProfileData.roles">{[{role.name}]}</div>
+                                <div class="label label-default" style="margin:0 5px 5px 0;" ng-repeat="role in staffProfileData.roles">{{role.name}}</div>
                                 <br><br>
                                 <table class="table">
                                     <col width="50%">
@@ -437,8 +437,8 @@
                                             <th colspan="2">Contatos</th>
                                         </tr>
                                         <tr ng-repeat="contact in staffProfileData.contacts">
-                                            <td>{[{contact.value}]}</td>
-                                            <td>{[{contact.info}]}</td>
+                                            <td>{{contact.value}}</td>
+                                            <td>{{contact.info}}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -480,13 +480,13 @@
                                        <col width="*">
                                         <tbody>
                                             <tr ng-repeat="row in project.equipments">
-                                                <td><img ng-src="{[{row.img}]}" alt="" class="cover" style="width:100%; height:40px;"></td>
+                                                <td><img ng-src="{{row.img}}" alt="" class="cover" style="width:100%; height:40px;"></td>
                                                 <td>
                                                     <ul class="list-inline pull-right">
                                                         <li><a href="javascript:;" class="btn btn-primary btn-xs fa fa-pencil" ng-click="equipamentsEdit(row);"></a></li>
                                                         <li><a href="javascript:;" class="btn btn-danger btn-xs fa fa-remove" ng-click="equipmentRemove($index);"></a></li>
                                                     </ul>
-                                                    <strong>{[{row.name}]}</strong>
+                                                    <strong>{{row.name}}</strong>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -546,7 +546,7 @@
         </div>
         <!-- MODAL FILE -->
 
-        <pre>{[{ project|json }]}</pre>
+        <pre>{{ project|json }}</pre>
     </div>
     
 </body>
