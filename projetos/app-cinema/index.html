@@ -22,23 +22,6 @@ meta_keywords: Orçamento, Projeto cinematográfico, Cinema, App
     <script src="assets/bootstrap-growl/jquery.bootstrap-growl.min.js"></script>
     
     <script>
-    function Db() {
-        this.get = function() {
-            var hash = location.hash || '{}';
-            hash = hash.charAt(0)==='#'? hash.slice( 1 ): hash;
-            try { eval('var data = '+hash+';'); }
-            catch(e) {var data = {};}
-            return data;
-        };
-        
-        this.save = function(data) {
-            location.hash = JSON.stringify(data);
-        };
-        
-        return this;
-    }
-    
-        
     var App = angular.module('App',[]).controller('AppController', function($scope) {
         
         $(function() {
@@ -55,18 +38,25 @@ meta_keywords: Orçamento, Projeto cinematográfico, Cinema, App
             
             Mousetrap.bind(['command+z', 'ctrl+z'], function(e) {
                 window.history.back();
-                $scope.project = Db().get();
-                //$scope.save();
+                $scope.project = $scope.data();
+                $scope.save();
                 return false;
             });
         });
         
-        $scope.project = Db().get();
         
         $scope.save = function() {
-            Db().save($scope.project);
+            location.hash = JSON.stringify($scope.project);
             $.bootstrapGrowl("Dados salvos", {type:"success"});
         };
+
+        $scope.data = function() {
+            var hash = location.hash || '{}';
+            hash = hash.charAt(0)==='#'? hash.slice( 1 ): hash;
+            try { eval('var data = '+hash+';'); }
+            catch(e) {var data = {};}
+            return data;
+        }
 
         $scope.download = function() {
             var filedata = "data:application/octet-stream,"+ encodeURI(JSON.stringify($scope.project));
@@ -159,6 +149,13 @@ meta_keywords: Orçamento, Projeto cinematográfico, Cinema, App
         };
 
 
+        $scope.staffProfileData = {};
+        $scope.staffProfile = function(data) {
+            $scope.staffProfileData = data;
+            $scope.modalToggle('#modal_profile');
+        };
+
+
 
 
         /**
@@ -190,18 +187,9 @@ meta_keywords: Orçamento, Projeto cinematográfico, Cinema, App
             }
         };
 
-
-
-    
         
-        
-        
-        $scope.staffProfileData = {};
-        $scope.staffProfile = function(data) {
-            $scope.staffProfileData = data;
-            $scope.modalToggle('#modal_profile');
-        };
-        
+        // Preenche data
+        $scope.project = $scope.data();
     });
     </script>
     
@@ -212,6 +200,7 @@ meta_keywords: Orçamento, Projeto cinematográfico, Cinema, App
     .cursor-pointer {cursor:pointer;}
     </style>
 </head>
+
 <body ng-app="App" ng-controller="AppController">
    
    <!-- Menu -->
