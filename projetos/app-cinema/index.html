@@ -6,7 +6,23 @@ meta_keywords: Orçamento, Projeto cinematográfico, Cinema, App
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% include head.html %}
+
+    <!-- {% include head.html %} -->
+    <!-- JQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!-- Font awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <!-- end head -->
+
+
+
+
+
     
     <!-- Bootstrap theme -->
     <link rel="stylesheet" href="assets/bootstrap/slate.min.css">
@@ -97,41 +113,108 @@ meta_keywords: Orçamento, Projeto cinematográfico, Cinema, App
                 }
             });
         };
-        
-        $scope.add = function(parent, attr, val) {
-            if (typeof parent[attr]=="undefined") {
-                parent[attr] = [];
-            }
-            val.createdAt = new Date();
-            parent[attr].push(val);
-            $scope.save();
-        };
-        
-        $scope.remove = function(parent, index, conf) {
-            if (typeof conf=="string") {
-                if (!confirm(conf)) {
-                    return false;
-                }
-            }
-            parent.splice(index, 1);
-            $scope.save();
-        };
-        
-        
+
+
+        /**
+        * STAFF
+        * Ações para adicionar/remover membros da equipe de filmagem
+        */
+
         $scope.staffForm = {};
-        $scope.staffEdit = function(data) {
-            $scope.staffForm = data;
+
+        $scope.staffAdd = function(obj) {
+            obj = typeof obj=="object"? obj: {};
+
+            obj.id = Math.round(Math.random()*99999);
+            obj.name = "Staff "+ obj.id;
+
+            $scope.project.staff = $scope.project.staff||[];
+            $scope.project.staff.push(obj);
+            $scope.save();
         };
+
+        $scope.staffEdit = function(obj) {
+            $scope.staffForm = obj;
+        };
+
+        $scope.staffRemove = function(index) {
+            if (confirm("Tem certeza que deseja remover este membro da equipe?")) {
+                $scope.project.staff.splice(index, 1);
+                $scope.save();
+            }
+        };
+
+        $scope.staffRoleAdd = function() {
+            var role = {};
+            role.id = Math.round(Math.random()*99999);
+            role.name = "Role "+ role.id;
+
+            $scope.staffForm.roles = $scope.staffForm.roles||[];
+            $scope.staffForm.roles.push(role);
+        };
+
+        $scope.staffRoleRemove = function(index) {
+            $scope.staffForm.roles.splice(index, 1);
+            $scope.save();
+        };
+
+        $scope.staffContactAdd = function() {
+            var contact = {};
+            contact.id = Math.round(Math.random()*99999);
+            contact.name = "E-mail";
+            contact.value = "user-"+ contact.id +"@mail.com";
+
+            $scope.staffForm.contacts = $scope.staffForm.contacts||[];
+            $scope.staffForm.contacts.push(contact);
+        };
+
+        $scope.staffContactRemove = function(index) {
+            $scope.staffForm.contacts.splice(index, 1);
+            $scope.save();
+        };
+
+
+
+
+        /**
+        * EQUIPAMENTS
+        * Ações para adicionar/remover equipamentos do set
+        */
         
-        $scope.profileData = {};
-        $scope.profile = function(data) {
-            $scope.profileData = data;
+        $scope.equipmentForm = {};
+
+        $scope.equipmentAdd = function(obj) {
+            obj = typeof obj=="object"? obj: {};
+
+            obj.id = Math.round(Math.random()*99999);
+            obj.name = "Equipment "+ obj.id;
+
+            $scope.project.equipments = $scope.project.equipments||[];
+            $scope.project.equipments.push(obj);
+            $scope.save();
+        };
+
+        $scope.equipmentEdit = function(obj) {
+            $scope.equipmentForm = obj;
+        };
+
+        $scope.equipmentRemove = function(index) {
+            if (confirm("Tem certeza que deseja remover este equipmento?")) {
+                $scope.project.equipments.splice(index, 1);
+                $scope.save();
+            }
+        };
+
+
+
+    
+        
+        
+        
+        $scope.staffProfileData = {};
+        $scope.staffProfile = function(data) {
+            $scope.staffProfileData = data;
             $scope.modalToggle('#modal_profile');
-        };
-        
-        $scope.equipamentsForm = {};
-        $scope.equipamentsEdit = function(data) {
-            $scope.equipamentsForm = data;
         };
         
     });
@@ -189,7 +272,7 @@ meta_keywords: Orçamento, Projeto cinematográfico, Cinema, App
             <div class="panel panel-primary">
                 <div class="panel-heading">
                     <i class="pull-right fa fa-remove cursor-pointer" ng-click="modalToggle('#modal_basic');"></i>
-                    Teste
+                    Atributos
                 </div>
                 <div class="panel-body">
                     <div class="form-group">
@@ -233,7 +316,7 @@ meta_keywords: Orçamento, Projeto cinematográfico, Cinema, App
                            <div class="input-group">
                                <input type="text" class="form-control">
                                <div class="input-group-addon"><i class="fa fa-search"></i></div>
-                               <div class="input-group-addon" ng-click="add(project, 'staff', {name:'New'});" title="Adicionar membro à equipe"><i class="fa fa-plus"></i></div>
+                               <div class="input-group-addon" ng-click="staffAdd();" title="Adicionar membro à equipe"><i class="fa fa-plus"></i></div>
                            </div>
                             <br>
                             <div style="max-height:400px; overflow:auto;">
@@ -241,15 +324,15 @@ meta_keywords: Orçamento, Projeto cinematográfico, Cinema, App
                                    <col width="50px">
                                    <col width="*">
                                     <tbody>
-                                        <tr ng-repeat="person in project.staff track by $index">
+                                        <tr ng-repeat="person in project.staff">
                                             <td><img ng-src="{{person.img}}" alt="" class="cover" style="width:100%; height:40px;"></td>
                                             <td>
                                                 <ul class="list-inline pull-right">
-                                                    <li><a href="javascript:;" class="btn btn-primary btn-xs fa fa-search" ng-click="profile(person);"></a></li>
+                                                    <li><a href="javascript:;" class="btn btn-primary btn-xs fa fa-search" ng-click="staffProfile(person);"></a></li>
                                                     <li><a href="javascript:;" class="btn btn-primary btn-xs fa fa-pencil" ng-click="staffEdit(person);"></a></li>
-                                                    <li><a href="javascript:;" class="btn btn-danger btn-xs fa fa-remove" ng-click="remove(project.staff, $index, 'Confirma a ação de remover esta pessoa do projeto?');"></a></li>
+                                                    <li><a href="javascript:;" class="btn btn-danger btn-xs fa fa-remove" ng-click="staffRemove($index);"></a></li>
                                                 </ul>
-                                                <strong>{{person.name}}</strong> <br><small class="muted" ng-repeat="role in person.roles track by $index">{{role.name}}, </small>
+                                                <strong>{{person.name}}</strong> <br><small class="muted" ng-repeat="role in person.roles">{{role.name}}, </small>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -295,23 +378,22 @@ meta_keywords: Orçamento, Projeto cinematográfico, Cinema, App
                                     </div>
                                     
                                     <div role="tabpanel" class="tab-pane" id="form_staff_roles">
-                                        <a href="javascript:;" class="btn btn-primary btn-xs fa fa-plus" ng-click="add(staffForm, 'roles', {name:'New'});"></a>
+                                        <a href="javascript:;" class="btn btn-primary btn-xs fa fa-plus" ng-click="staffRoleAdd();"></a>
                                         
-                                        <div class="input-group" style="margin-top:5px;" ng-repeat="role in staffForm.roles track by $index">
+                                        <div class="input-group" style="margin-top:5px;" ng-repeat="role in staffForm.roles">
                                             <input type="text" class="form-control" ng-model="role.name">
-                                            <div class="input-group-btn"><a href="javascript:;" class="btn btn-danger" ng-click="remove(staffForm.roles, $index);"><i class="fa fa-remove"></i></a></div>
+                                            <div class="input-group-btn"><a href="javascript:;" class="btn btn-danger" ng-click="staffRoleRemove($index);"><i class="fa fa-remove"></i></a></div>
                                         </div>
                                     </div>
                                     
                                     <div role="tabpanel" class="tab-pane" id="form_staff_contacts">
-                                        <a href="javascript:;" class="btn btn-primary btn-xs fa fa-plus" ng-click="add(staffForm, 'contacts', {value:'example@mail.com', type:'email', info:''});"></a>
+                                        <a href="javascript:;" class="btn btn-primary btn-xs fa fa-plus" ng-click="staffContactAdd();"></a>
                                         
-                                        <div class="input-group" style="margin-top:5px;" ng-repeat="contact in staffForm.contacts track by $index">
+                                        <div class="input-group" style="margin-top:5px;" ng-repeat="contact in staffForm.contacts">
+                                            <input type="text" class="form-control" ng-model="contact.name">
+                                            <div class="input-group-btn" style="width:0;"></div>
                                             <input type="text" class="form-control" ng-model="contact.value">
-                                            <div class="input-group-btn">
-                                                <input type="text" class="form-control" ng-model="contact.info" style="width:150px;">
-                                            </div>
-                                            <div class="input-group-btn"><a href="javascript:;" class="btn btn-danger" ng-click="remove(staffForm.roles, $index);"><i class="fa fa-remove"></i></a></div>
+                                            <div class="input-group-btn"><a href="javascript:;" class="btn btn-danger" ng-click="staffContactRemove($index);"><i class="fa fa-remove"></i></a></div>
                                         </div>
                                     </div>
                                 </div>
@@ -346,12 +428,12 @@ meta_keywords: Orçamento, Projeto cinematográfico, Cinema, App
                 <div class="panel-body">
                     <div class="row">
                         <div class="col-xs-4">
-                            <img ng-src="{{profileData.img}}" alt="" style="width:100%; float:left; margin:0 15px 15px 0;">
+                            <img ng-src="{{staffProfileData.img}}" alt="" style="width:100%; float:left; margin:0 15px 15px 0;">
                         </div>
                         <div class="col-xs-8">
-                            <strong class="text-uppercase">{{profileData.name}}</strong>
+                            <strong class="text-uppercase">{{staffProfileData.name}}</strong>
                             <br>
-                            <div class="label label-default" style="margin:0 5px 5px 0;" ng-repeat="role in profileData.roles track by $index">{{role.name}}</div>
+                            <div class="label label-default" style="margin:0 5px 5px 0;" ng-repeat="role in staffProfileData.roles">{{role.name}}</div>
                             <br><br>
                             <table class="table">
                                 <col width="50%">
@@ -360,7 +442,7 @@ meta_keywords: Orçamento, Projeto cinematográfico, Cinema, App
                                     <tr>
                                         <th colspan="2">Contatos</th>
                                     </tr>
-                                    <tr ng-repeat="contact in profileData.contacts track by $index">
+                                    <tr ng-repeat="contact in staffProfileData.contacts">
                                         <td>{{contact.value}}</td>
                                         <td>{{contact.info}}</td>
                                     </tr>
@@ -395,7 +477,7 @@ meta_keywords: Orçamento, Projeto cinematográfico, Cinema, App
                            <div class="input-group">
                                <input type="text" class="form-control">
                                <div class="input-group-addon"><i class="fa fa-search"></i></div>
-                               <div class="input-group-addon" ng-click="add(project, 'equipments', {name:'New'});" title="Adicionar equipamento"><i class="fa fa-plus"></i></div>
+                               <div class="input-group-addon" ng-click="equipmentAdd();" title="Adicionar equipamento"><i class="fa fa-plus"></i></div>
                            </div>
                             <br>
                             <div style="max-height:400px; overflow:auto;">
@@ -403,12 +485,12 @@ meta_keywords: Orçamento, Projeto cinematográfico, Cinema, App
                                    <col width="50px">
                                    <col width="*">
                                     <tbody>
-                                        <tr ng-repeat="row in project.equipments track by $index">
+                                        <tr ng-repeat="row in project.equipments">
                                             <td><img ng-src="{{row.img}}" alt="" class="cover" style="width:100%; height:40px;"></td>
                                             <td>
                                                 <ul class="list-inline pull-right">
                                                     <li><a href="javascript:;" class="btn btn-primary btn-xs fa fa-pencil" ng-click="equipamentsEdit(row);"></a></li>
-                                                    <li><a href="javascript:;" class="btn btn-danger btn-xs fa fa-remove" ng-click="remove(project.equipments, $index);"></a></li>
+                                                    <li><a href="javascript:;" class="btn btn-danger btn-xs fa fa-remove" ng-click="equipmentRemove($index);"></a></li>
                                                 </ul>
                                                 <strong>{{row.name}}</strong>
                                             </td>
@@ -469,7 +551,6 @@ meta_keywords: Orçamento, Projeto cinematográfico, Cinema, App
         </div>
     </div>
     <!-- MODAL FILE -->
-    
     
 </body>
 </html>
