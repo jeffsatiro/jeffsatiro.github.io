@@ -1,13 +1,215 @@
----
-title: Orça Cine | Orçamento de projeto cinematográfico
-meta_description: Orçamento de projeto cinematográfico
-meta_keywords: Orçamento, Projeto cinematográfico, Cinema, App
----
 <!DOCTYPE html>
 <html lang="en">
 <head>
 
-    {% include head.html %}    
+    <title>Orça Cine | Orçamento de projeto cinematográfico</title>
+
+    
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <meta name="description" content="Orçamento de projeto cinematográfico" />
+    <meta name="keywords" content="Orçamento, Projeto cinematográfico, Cinema, App"/>
+    <meta property="og:title" content="Orça Cine | Orçamento de projeto cinematográfico" />
+    <meta property="og:description" content="Orçamento de projeto cinematográfico" />
+    <meta property="twitter:title" content="Orça Cine | Orçamento de projeto cinematográfico" />
+    <meta property="twitter:description" content="Orçamento de projeto cinematográfico" />
+    <meta name="author" content="Jeferson Inácio" />
+
+    <!-- JQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.4/jquery.min.js"></script>
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <!-- Font awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Bootstrap theme -->
+    <link rel="stylesheet" href="assets/bootstrap/slate.min.css">
+    
+    <!-- AngularJS -->
+    <script src="assets/angular/angular.min.js"></script>
+    
+    <!-- Mousetrap -->
+    <script src="assets/mousetrap/mousetrap.min.js"></script>
+    
+    <!-- Bootstrap Growl -->
+    <script src="assets/bootstrap-growl/jquery.bootstrap-growl.min.js"></script>
+
+    <script>
+    var App = angular.module('App', []).controller('AppController', function($scope) {
+    
+        $(function() {
+            $(document).on("keyup", function(ev) {
+                if (ev.keyCode==27) {
+                    $('.popup').fadeOut(200);
+                }
+            });
+
+            Mousetrap.bind(['command+s', 'ctrl+s'], function(e) {
+                $scope.save();
+                return false;
+            });
+            
+            Mousetrap.bind(['command+z', 'ctrl+z'], function(e) {
+                window.history.back();
+                $scope.project = $scope.data();
+                $scope.save();
+                return false;
+            });
+        });
+        
+        
+        $scope.save = function() {
+            location.hash = JSON.stringify($scope.project);
+            $.bootstrapGrowl("Dados salvos", {type:"success"});
+        };
+
+        $scope.data = function() {
+            var hash = location.hash || '{}';
+            hash = hash.charAt(0)==='#'? hash.slice( 1 ): hash;
+            try { eval('var data = '+hash+';'); }
+            catch(e) {var data = {};}
+            return data;
+        }
+
+        $scope.download = function() {
+            var filedata = "data:application/octet-stream,"+ encodeURI(JSON.stringify($scope.project));
+            var link = document.createElement('a');
+            link.href = filedata;
+            link.download = ($scope.project.title||"download") +'.cine';    
+            document.body.appendChild(link);
+            link.click();
+        };
+
+        $scope.upload = function(el) {
+            var file = $(el)[0].files[0]||false;
+            if (file) {
+                var fr = new FileReader();
+                fr.readAsText(file);
+                fr.onload = function (ev) {
+                    $scope.project = JSON.parse(ev.target.result);
+                    $scope.$apply();
+                    $scope.save();
+                };
+            }
+        };
+        
+        $scope.modalToggle = function(modal_sel) {
+            $(modal_sel).fadeToggle(200);
+            $(modal_sel).off("click").on("click", function(ev) {
+                if (ev.target==this) {
+                    $(this).fadeOut(200);
+                }
+            });
+        };
+
+
+        /**
+        * STAFF
+        * Ações para adicionar/remover membros da equipe de filmagem
+        */
+
+        $scope.staffForm = {};
+
+        $scope.staffAdd = function(obj) {
+            obj = typeof obj=="object"? obj: {};
+
+            obj.id = Math.round(Math.random()*99999);
+            obj.name = "Staff "+ obj.id;
+
+            $scope.project.staff = $scope.project.staff||[];
+            $scope.project.staff.push(obj);
+            $scope.save();
+        };
+
+        $scope.staffEdit = function(obj) {
+            $scope.staffForm = obj;
+        };
+
+        $scope.staffRemove = function(index) {
+            if (confirm("Tem certeza que deseja remover este membro da equipe?")) {
+                $scope.project.staff.splice(index, 1);
+                $scope.save();
+            }
+        };
+
+        $scope.staffRoleAdd = function() {
+            var role = {};
+            role.id = Math.round(Math.random()*99999);
+            role.name = "Role "+ role.id;
+
+            $scope.staffForm.roles = $scope.staffForm.roles||[];
+            $scope.staffForm.roles.push(role);
+        };
+
+        $scope.staffRoleRemove = function(index) {
+            $scope.staffForm.roles.splice(index, 1);
+            $scope.save();
+        };
+
+        $scope.staffContactAdd = function() {
+            var contact = {};
+            contact.id = Math.round(Math.random()*99999);
+            contact.name = "E-mail";
+            contact.value = "user-"+ contact.id +"@mail.com";
+
+            $scope.staffForm.contacts = $scope.staffForm.contacts||[];
+            $scope.staffForm.contacts.push(contact);
+        };
+
+        $scope.staffContactRemove = function(index) {
+            $scope.staffForm.contacts.splice(index, 1);
+            $scope.save();
+        };
+
+
+        $scope.staffProfileData = {};
+        $scope.staffProfile = function(data) {
+            $scope.staffProfileData = data;
+            $scope.modalToggle('#modal_profile');
+        };
+
+
+
+
+        /**
+        * EQUIPAMENTS
+        * Ações para adicionar/remover equipamentos do set
+        */
+        
+        $scope.equipmentForm = {};
+
+        $scope.equipmentAdd = function(obj) {
+            obj = typeof obj=="object"? obj: {};
+
+            obj.id = Math.round(Math.random()*99999);
+            obj.name = "Equipment "+ obj.id;
+
+            $scope.project.equipments = $scope.project.equipments||[];
+            $scope.project.equipments.push(obj);
+            $scope.save();
+        };
+
+        $scope.equipmentEdit = function(obj) {
+            $scope.equipmentForm = obj;
+        };
+
+        $scope.equipmentRemove = function(index) {
+            if (confirm("Tem certeza que deseja remover este equipmento?")) {
+                $scope.project.equipments.splice(index, 1);
+                $scope.save();
+            }
+        };
+
+        
+        // Preenche data
+        $scope.project = $scope.data();
+    });
+    </script>
     
     <style>
     * {border-radius:0!important;}
@@ -117,14 +319,14 @@ meta_keywords: Orçamento, Projeto cinematográfico, Cinema, App
                                        <col width="*">
                                         <tbody>
                                             <tr ng-repeat="person in project.staff">
-                                                <td><img ng-src="{{person.img}}" alt="" class="cover" style="width:100%; height:40px;"></td>
+                                                <td><img ng-src="{[{person.img}]}" alt="" class="cover" style="width:100%; height:40px;"></td>
                                                 <td>
                                                     <ul class="list-inline pull-right">
                                                         <li><a href="javascript:;" class="btn btn-primary btn-xs fa fa-search" ng-click="staffProfile(person);"></a></li>
                                                         <li><a href="javascript:;" class="btn btn-primary btn-xs fa fa-pencil" ng-click="staffEdit(person);"></a></li>
                                                         <li><a href="javascript:;" class="btn btn-danger btn-xs fa fa-remove" ng-click="staffRemove($index);"></a></li>
                                                     </ul>
-                                                    <strong>{{person.name}}</strong> <br><small class="muted" ng-repeat="role in person.roles">{{role.name}}, </small>
+                                                    <strong>{[{person.name}]}</strong> <br><small class="muted" ng-repeat="role in person.roles">{[{role.name}]}, </small>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -220,12 +422,12 @@ meta_keywords: Orçamento, Projeto cinematográfico, Cinema, App
                     <div class="panel-body">
                         <div class="row">
                             <div class="col-xs-4">
-                                <img ng-src="{{staffProfileData.img}}" alt="" style="width:100%; float:left; margin:0 15px 15px 0;">
+                                <img ng-src="{[{staffProfileData.img}]}" alt="" style="width:100%; float:left; margin:0 15px 15px 0;">
                             </div>
                             <div class="col-xs-8">
-                                <strong class="text-uppercase">{{staffProfileData.name}}</strong>
+                                <strong class="text-uppercase">{[{staffProfileData.name}]}</strong>
                                 <br>
-                                <div class="label label-default" style="margin:0 5px 5px 0;" ng-repeat="role in staffProfileData.roles">{{role.name}}</div>
+                                <div class="label label-default" style="margin:0 5px 5px 0;" ng-repeat="role in staffProfileData.roles">{[{role.name}]}</div>
                                 <br><br>
                                 <table class="table">
                                     <col width="50%">
@@ -235,8 +437,8 @@ meta_keywords: Orçamento, Projeto cinematográfico, Cinema, App
                                             <th colspan="2">Contatos</th>
                                         </tr>
                                         <tr ng-repeat="contact in staffProfileData.contacts">
-                                            <td>{{contact.value}}</td>
-                                            <td>{{contact.info}}</td>
+                                            <td>{[{contact.value}]}</td>
+                                            <td>{[{contact.info}]}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -278,13 +480,13 @@ meta_keywords: Orçamento, Projeto cinematográfico, Cinema, App
                                        <col width="*">
                                         <tbody>
                                             <tr ng-repeat="row in project.equipments">
-                                                <td><img ng-src="{{row.img}}" alt="" class="cover" style="width:100%; height:40px;"></td>
+                                                <td><img ng-src="{[{row.img}]}" alt="" class="cover" style="width:100%; height:40px;"></td>
                                                 <td>
                                                     <ul class="list-inline pull-right">
                                                         <li><a href="javascript:;" class="btn btn-primary btn-xs fa fa-pencil" ng-click="equipamentsEdit(row);"></a></li>
                                                         <li><a href="javascript:;" class="btn btn-danger btn-xs fa fa-remove" ng-click="equipmentRemove($index);"></a></li>
                                                     </ul>
-                                                    <strong>{{row.name}}</strong>
+                                                    <strong>{[{row.name}]}</strong>
                                                 </td>
                                             </tr>
                                         </tbody>
@@ -344,24 +546,8 @@ meta_keywords: Orçamento, Projeto cinematográfico, Cinema, App
         </div>
         <!-- MODAL FILE -->
 
-        <pre>{{project|json}}</pre>
+        <pre>{[{ project|json }]}</pre>
     </div>
-
-
-    <!-- Bootstrap theme -->
-    <link rel="stylesheet" href="assets/bootstrap/slate.min.css">
-    
-    <!-- AngularJS -->
-    <script src="assets/angular/angular.min.js"></script>
-    
-    <!-- Mousetrap -->
-    <script src="assets/mousetrap/mousetrap.min.js"></script>
-    
-    <!-- Bootstrap Growl -->
-    <script src="assets/bootstrap-growl/jquery.bootstrap-growl.min.js"></script>
-
-    <script src="app.js"></script>
-
     
 </body>
 </html>
