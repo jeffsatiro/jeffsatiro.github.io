@@ -12,6 +12,7 @@
   "socials": [
     {"name":"Facebook", "namespace":"facebook", "class":"fa fa-fw fa-facebook", "href":"https://facebook.com/jeferson.satiro"},
     {"name":"Linkedin", "namespace":"linkedin", "class":"fa fa-fw fa-linkedin", "href":"https://www.linkedin.com/in/jeferson-in%C3%A1cio-27b37026?trk=hp-identity-name"},
+    {"name":"Trampos.co", "namespace":"trampos", "class":"fa fa-fw fa-file", "href":"http://trampos.co/jeff-inacio"},
   ],
   "skills": [
     {"title":"JS", "description":"Typescript, JQuery, Angular", "percent":95},
