@@ -1,6 +1,0 @@
-name: Teste
-markdown: Teste
-collections:
-  portfolio:
-    output: true
-    permalink: /portfolio/:path/
