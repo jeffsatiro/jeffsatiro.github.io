@@ -247,6 +247,14 @@
     new Vue({
       el: "#app",
 
+      filters: {
+        moment(value, strFormat="MM/YYYY") {
+          let m = moment(value, "MMM YYYY");
+          if (!m.isValid()) return '';
+          return m.format(strFormat);
+        },
+      },
+
       data() {
         return {
           linkedin: false,

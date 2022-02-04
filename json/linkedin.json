@@ -1,1 +1,184 @@
-{"PhoneNumbers":[{"extension":"","number":"+55 31 99527-1426","type":""},{"extension":"","number":"+55 31 99527-1426","type":"Work"}],"Positions":[{"company_name":"Listra","title":"Desenvolvedor da web","description":"","location":"Belo Horizonte","started_on":"Minas Gerais","finished_on":"Brasil"},{"company_name":"Jsiqueira Multimídia","title":"Programador","description":"Prestação de serviços para clientes diretos e parcerias com agências.","location":"Belo Horizonte e Região","started_on":"Brasil","finished_on":"Oct 2017"},{"company_name":"Digital Pixel","title":"Programador web","description":"Desenvolvimento de sites","location":"Belo Horizonte","started_on":"Minas Gerais","finished_on":"Brasil"},{"company_name":"Codificar Sistemas Tecnológicos","title":"Desenvolvedor da web","description":"Tive contato com vários projetos diferentes nessa fábrica de software","location":"onde trabalhei principalmente na manutenção de sistemas com desenvolvimento em andamento.","started_on":"Belo Horizonte e Região","finished_on":"Brasil"},{"company_name":"Agência de Criação","title":"Programador web","description":"Desenvolvimento de painel CMS próprio e funções específicas para cada cliente dentro dos mesmos.","location":"Belo Horizonte e Região","started_on":"Brasil","finished_on":"Jan 2015"},{"company_name":"Cushman & Wakefield","title":"Desenvolvedor","description":"Dentro dessa experiência","location":"atuei em duas diretorias diferentes","started_on":"criando uma ferramenta para cada uma","finished_on":"sendo elas:  Ferramenta para filtrar fornecedores por estado"},{"company_name":"Netranet Networking","title":"Desenvolvedor da web","description":"Desenvolvimento de funções para o CMS próprio da agência.","location":"Belo Horizonte e Região","started_on":"Brasil","finished_on":"Jan 2011"},{"company_name":"Web BH Escola de Informática","title":"Instrutor","description":"Atuei como instrutor dos cursos de PHP","location":"MySQL","started_on":"CSS","finished_on":"Javascript"}],"Profile":{"first_name":"Jeferson","last_name":"Inácio","maiden_name":"","address":"","birth_date":"Feb 11","headline":"Full Stack • Vue • Nuxt • Laravel • Unity","summary":"Sou programador profissional para plataforma web desde 2010. Tenho conhecimento e experiência em alguns frameworks e bibliotecas","industry":"como por exemplo","zip_code":"Jquery","geo_location":"Angular","twitter_handles":"Vue.js","websites":"Web components","instant_messengers":"Code Igniter","name":"Jeferson Inácio"},"Skills":[{"name":"Laravel","percent":80},{"name":"Javascript","percent":85},{"name":"Vue.js","percent":90},{"name":"PHP","percent":90},{"name":"WordPress","percent":95},{"name":"MySQL","percent":80},{"name":"JQuery","percent":90},{"name":"CSS3","percent":85},{"name":"Bootstrap","percent":85},{"name":"HTML5","percent":95},{"name":"Firebase","percent":70},{"name":"Git","percent":65},{"name":"APIs","percent":95},{"name":"Nuxt.js","percent":85},{"name":"Unity","percent":55}],"Socials":[{"name":"LinkedIn","icon":"fa fa-fw fa-linkedin","url":"https://www.linkedin.com/in/jeferson-siqueira/"},{"name":"Whatsapp","icon":"fa fa-fw fa-whatsapp","url":"https://wa.me/message/NG7A2SW25XIEI1"},{"name":"Telefone","icon":"fa fa-fw fa-phone","url":"tel:+5531995271426"},{"name":"E-mail","icon":"fa fa-fw fa-envelope","url":"mailto:jeferson.i.silva@gmail.com"}]}
+{
+ "PhoneNumbers": [
+  {
+   "Extension": "",
+   "Number": "+55 31 99527-1426",
+   "Type": "",
+   "Whatsapp": "https://web.whatsapp.com/send?phone=5531995271426",
+   "Link": "tel:5531995271426"
+  },
+  {
+   "Extension": "",
+   "Number": "+55 31 99527-1426",
+   "Type": "Work",
+   "Whatsapp": "https://web.whatsapp.com/send?phone=5531995271426",
+   "Link": "tel:5531995271426"
+  }
+ ],
+ "Skills": [
+  {
+   "Name": "Laravel",
+   "percent": 50
+  },
+  {
+   "Name": "Javascript",
+   "percent": 50
+  },
+  {
+   "Name": "Vue.js",
+   "percent": 50
+  },
+  {
+   "Name": "PHP",
+   "percent": 50
+  },
+  {
+   "Name": "WordPress",
+   "percent": 50
+  },
+  {
+   "Name": "MySQL",
+   "percent": 50
+  },
+  {
+   "Name": "JQuery",
+   "percent": 50
+  },
+  {
+   "Name": "CSS3",
+   "percent": 50
+  },
+  {
+   "Name": "Bootstrap",
+   "percent": 50
+  },
+  {
+   "Name": "HTML5",
+   "percent": 50
+  },
+  {
+   "Name": "Firebase",
+   "percent": 50
+  },
+  {
+   "Name": "Git",
+   "percent": 50
+  },
+  {
+   "Name": "APIs",
+   "percent": 50
+  },
+  {
+   "Name": "Nuxt.js",
+   "percent": 50
+  },
+  {
+   "Name": "Unity",
+   "percent": 50
+  }
+ ],
+ "Profile": {
+  "First_Name": "Jeferson",
+  "Last_Name": "Inácio",
+  "Maiden_Name": "",
+  "Address": "",
+  "Birth_Date": "Feb 11",
+  "Headline": "Full Stack • Vue • Nuxt • Laravel • Unity",
+  "Summary": "Sou programador profissional para plataforma web desde 2010. Tenho conhecimento e experiência em alguns frameworks e bibliotecas, como por exemplo, Jquery, Angular, Vue.js, Web components, Code Igniter, Laravel, plugins, temas e customizações para Wordpress. Já atuei no desenvolvimento de vários sites e lojas virtuais.",
+  "Industry": "Strategic Management Services",
+  "Zip_Code": "30110",
+  "Geo_Location": "Belo Horizonte, Minas Gerais, Brasil",
+  "Twitter_Handles": "",
+  "Websites": "[PORTFOLIO:https://jsiqueira.com]",
+  "Instant_Messengers": "[SKYPE:live:jeferson.i.silva_1]",
+  "name": "Jeferson Inácio"
+ },
+ "Positions": [
+  {
+   "Company_Name": "Listra ",
+   "Title": "Desenvolvedor da web",
+   "Description": "",
+   "Location": "Belo Horizonte, Minas Gerais, Brasil",
+   "Started_On": "Oct 2020",
+   "Finished_On": ""
+  },
+  {
+   "Company_Name": "Jsiqueira Multimídia",
+   "Title": "Programador",
+   "Description": "Prestação de serviços para clientes diretos e parcerias com agências.",
+   "Location": "Belo Horizonte e Região, Brasil",
+   "Started_On": "Oct 2017",
+   "Finished_On": ""
+  },
+  {
+   "Company_Name": "Digital Pixel",
+   "Title": "Programador web",
+   "Description": "Desenvolvimento de sites",
+   "Location": "Belo Horizonte, Minas Gerais, Brasil",
+   "Started_On": "Aug 2020",
+   "Finished_On": "Oct 2020"
+  },
+  {
+   "Company_Name": "Codificar Sistemas Tecnológicos",
+   "Title": "Desenvolvedor da web",
+   "Description": "Tive contato com vários projetos diferentes nessa fábrica de software, onde trabalhei principalmente na manutenção de sistemas com desenvolvimento em andamento.",
+   "Location": "Belo Horizonte e Região, Brasil",
+   "Started_On": "Feb 2017",
+   "Finished_On": "Oct 2017"
+  },
+  {
+   "Company_Name": "Agência de Criação",
+   "Title": "Programador web",
+   "Description": "Desenvolvimento de painel CMS próprio e funções específicas para cada cliente dentro dos mesmos.",
+   "Location": "Belo Horizonte e Região, Brasil",
+   "Started_On": "Jan 2015",
+   "Finished_On": "Jan 2017"
+  },
+  {
+   "Company_Name": "Cushman & Wakefield",
+   "Title": "Desenvolvedor",
+   "Description": "Dentro dessa experiência, atuei em duas diretorias diferentes, criando uma ferramenta para cada uma, sendo elas:  Ferramenta para filtrar fornecedores por estado, material/trabalho fornecido, orçamento anual, obras já prestadas, porte da empresa, entre outros dados;  Calculadora de prazo de obras, onde o valor total de um projeto era estimado de acordo com a quantidade de empregados levando em consideração a proporção encarregados/funcionários, benefícios, vales, valor de locação de equipamentos, imóveis, automóveis, eletricidade e outras coisas, utilizando uma curva de Gauss para calcular a quantidade de contratados dentro de uma timeline;  Nesse trabalho fui terceirizado para a Vale, onde os engenheiros utilizam bastante Excel para fazer seus trabalhos, então ambos os sistemas tinha que conversar bem com Excel e fazer importações e exportações.",
+   "Location": "",
+   "Started_On": "Feb 2012",
+   "Finished_On": "Jan 2013"
+  },
+  {
+   "Company_Name": "Netranet Networking",
+   "Title": "Desenvolvedor da web",
+   "Description": "Desenvolvimento de funções para o CMS próprio da agência.",
+   "Location": "Belo Horizonte e Região, Brasil",
+   "Started_On": "Jan 2011",
+   "Finished_On": "Jan 2012"
+  },
+  {
+   "Company_Name": "Web BH Escola de Informática",
+   "Title": "Instrutor",
+   "Description": "Atuei como instrutor dos cursos de PHP, MySQL, CSS, Javascript, HTML5, Tableless e Action script.",
+   "Location": "Belo Horizonte e Região, Brasil",
+   "Started_On": "Jan 2010",
+   "Finished_On": "Jan 2011"
+  }
+ ],
+ "Socials": [
+  {
+   "name": "LinkedIn",
+   "icon": "fa fa-fw fa-linkedin",
+   "url": "https://www.linkedin.com/in/jeferson-siqueira/"
+  },
+  {
+   "name": "Whatsapp",
+   "icon": "fa fa-fw fa-whatsapp",
+   "url": "https://wa.me/message/NG7A2SW25XIEI1"
+  },
+  {
+   "name": "Telefone",
+   "icon": "fa fa-fw fa-phone",
+   "url": "tel:+5531995271426"
+  },
+  {
+   "name": "E-mail",
+   "icon": "fa fa-fw fa-envelope",
+   "url": "mailto:jeferson.i.silva@gmail.com"
+  }
+ ]
+}

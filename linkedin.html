@@ -8,22 +8,31 @@
 
     <script src="//unpkg.com/vue@2.6.14/dist/vue.min.js"></script>
     <script src="//unpkg.com/moment@2.29.1/moment.js"></script>
+    <script src="//unpkg.com/jszip@3.1.5/dist/jszip.min.js"></script>
+    <script src="//unpkg.com/papaparse@5.3.1/papaparse.min.js"></script>
+
     <link rel="stylesheet" href="//unpkg.com/bootstrap@5.1.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="//unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css">
 </head>
 <body>
     <div id="app" class="container mt-3">
         <ol>
-            <li>Acesse <a href="https://www.linkedin.com/psettings/member-data" target="_blank">https://www.linkedin.com/psettings/member-data</a> e baixe os arquivos.</li>
-            <li>Arraste os arquivos csv para a área abaixo.</li>
-            <li>Baixar o arquivo <code>linkedin.json</code> e movê-lo para dentro da pasta <code>/json</code></li>
+            <li>Acesse <a href="https://www.linkedin.com/psettings/member-data" target="_blank">https://www.linkedin.com/psettings/member-data</a> e baixe o arquivo zip.</li>
+            <li>Faça upload no campo abaixo.</li>
+            <li>A aplicação vai gerar um arquivo <code>linkedin.json</code>. Mova-o para dentro da pasta <code>/json</code> sem renomear.</li>
         </ol>
 
-        <div class="text-center py-5 bg-light" style="border:dashed 3px #eee;" @drop.prevent="parseFilesContent" @dragover.prevent>
+        <div class="text-center py-5 bg-light" style="border:dashed 3px #eee;" @click="uploadBrowser" @drop.prevent="onDrop" @dragover.prevent>
             <div class="py-5 text-center">Solte aqui</div>
         </div>
 
-        <pre>{{ content }}</pre>
+        <div class="text-center mt-3" v-if="linkedin">
+            <a href="javascript:;" class="btn btn-success" @click="linkedinJsonDownload()">
+                <i class="fa fa-fw fa-download"></i> Download
+            </a>
+        </div>
+
+        <pre v-if="linkedin" class="bg-dark text-white p-2 mt-3">{{ linkedin }}</pre>
     </div>
 
     <script>
@@ -32,130 +41,151 @@
 
         data() {
             return {
-                content: false,
+                linkedin: false,
             };
         },
 
         methods: {
-            parseFilesContent(ev) {
-                let _csvJSON = (csv) => {
+            linkedinParse(linkedin) {
+                linkedin.PhoneNumbers = linkedin.PhoneNumbers.filter(item => item.Number);
+                linkedin.PhoneNumbers = linkedin.PhoneNumbers.map(item => {
+                    item.Number = item.Number.trim();
+                    item.Whatsapp = 'https://web.whatsapp.com/send?phone='+item.Number.replace(/[^0-9]/g, '');
+                    item.Link = 'tel:'+item.Number.replace(/[^0-9]/g, '');
+                    return item;
+                });
 
-                    var lines=csv.split("\n");
+                linkedin.Positions = linkedin.Positions.filter(item => item.Company_Name);
+                linkedin.Skills = linkedin.Skills.filter(item => item.Name);
 
-                    var result = [];
+                linkedin.Skills = linkedin.Skills.map(item => {
+                    let percents = {
+                        "Laravel": 80,
+                        "Javascript": 85,
+                        "Vue.js": 90,
+                        "PHP": 90,
+                        "WordPress": 95,
+                        "MySQL": 80,
+                        "JQuery": 90,
+                        "CSS3": 85,
+                        "Bootstrap": 85,
+                        "HTML5": 95,
+                        "Firebase": 70,
+                        "Git": 65,
+                        "APIs": 95,
+                        "Nuxt.js": 85,
+                        "Unity": 55,
+                    };
 
-                    // NOTE: If your columns contain commas in their values, you'll need
-                    // to deal with those before doing the next step 
-                    // (you might convert them to &&& or something, then covert them back later)
-                    // jsfiddle showing the issue https://jsfiddle.net/
-                    var headers=lines[0].split(",");
+                    item.percent = percents[item.name] || 50;
+                    return item;
+                });
 
-                    for(var i=1;i<lines.length;i++){
+                linkedin.Socials = [
+                    {
+                        name: "LinkedIn",
+                        icon: "fa fa-fw fa-linkedin",
+                        url: "https://www.linkedin.com/in/jeferson-siqueira/",
+                    },
+                    {
+                        name: "Whatsapp",
+                        icon: "fa fa-fw fa-whatsapp",
+                        url: "https://wa.me/message/NG7A2SW25XIEI1",
+                    },
+                    {
+                        name: "Telefone",
+                        icon: "fa fa-fw fa-phone",
+                        url: "tel:+5531995271426",
+                    },
+                    {
+                        name: "E-mail",
+                        icon: "fa fa-fw fa-envelope",
+                        url: "mailto:jeferson.i.silva@gmail.com",
+                    },
+                ];
 
-                        var obj = {};
-                        var currentline=lines[i].split(",");
-                        
-                        for(var j=0;j<headers.length;j++){
-                            let headerName = (headers[j] || '');
-                            headerName = headerName.replace(/\s+/g, '_').toLowerCase();
-                            obj[headerName] = currentline[j];
+                linkedin.Profile = linkedin.Profile[0];
+                linkedin.Profile.name = `${linkedin.Profile.First_Name} ${linkedin.Profile.Last_Name}`;
+                return linkedin;
+            },
+
+            linkedinJsonDownload() {
+                if (!this.linkedin) return;
+                Object.assign(document.createElement('a'), {
+                    href: "data:application/octet-stream,"+ encodeURI(JSON.stringify(this.linkedin, 4, ' ')),
+                    download: "linkedin.json",
+                }).click();
+            },
+
+            parseFile(file) {
+                let zip = new JSZip();
+                let only = ["PhoneNumbers.csv", "Positions.csv", "Profile.csv", "Skills.csv"];
+
+                let f = new FileReader();
+                f.onload = ev => {
+                    JSZip.loadAsync(ev.target.result).then(zip => {
+                        let promises = [];
+
+                        for(let i in zip.files) {
+                            if (only.indexOf(i)<0) continue;
+                            promises.push(new Promise((resolve, reject) => {
+                                let zfile = zip.files[i];
+                                zip.file(i).async("string").then(csv => {
+                                    csv = this.csvToJson(csv);
+                                    if (typeof csv!='object') return;
+                                    resolve({
+                                        name: i.replace('.csv', '').replace(/\s/g, '_'),
+                                        value: csv,
+                                    });
+                                });
+                            }));
                         }
 
-                        result.push(obj);
-                    }
+                        Promise.all(promises).then(values => {
+                            let linkedin = {};
+                            values.forEach(item => {
+                                linkedin[item.name] = item.value;
+                            });
 
-                    return result; //JSON
+                            console.log(linkedin);
+                            this.linkedin = this.linkedinParse(linkedin);
+                        });
+                    });
                 };
+                f.readAsArrayBuffer(file);
+            },
 
-                let files = ["PhoneNumbers.csv", "Positions.csv", "Profile.csv", "Skills.csv"];
-                let promises = [];
+            uploadBrowser() {
+                Object.assign(document.createElement('input'), {
+                    type: "file",
+                    onchange: (ev) => {
+                        for(let i in ev.target.files) {
+                            let file = ev.target.files[i];
+                            if (typeof file != 'object') continue;
+                            this.parseFile(file);
+                        }
+                    }
+                }).click();
+            },
+
+            onDrop(ev) {
                 for(let i in ev.dataTransfer.files) {
                     let file = ev.dataTransfer.files[i];
-
-                    if (file && file.name && files.indexOf(file.name)>=0) {
-                        promises.push(new Promise((resolve, reject) => {
-                            let f = new FileReader();
-                            f.onload = () => {
-                                let attrName = file.name.replace('.csv', '');
-                                resolve({name:attrName, value:_csvJSON(f.result)});
-                            };
-                            f.readAsText(file);
-                        }));
-                    }
+                    if (typeof file != 'object') continue;
+                    this.parseFile(file);
                 }
+            },
 
-                Promise.all(promises).then(items => {
-                    let data = {};
-                    items.forEach(item => {
-                        data[ item.name ] = item.value;
-                    });
-
-                    data.PhoneNumbers = data.PhoneNumbers.filter(item => item.number);
-                    data.Positions = data.Positions.filter(item => item.company_name);
-                    data.Skills = data.Skills.filter(item => item.name);
-
-                    for(let i in data) {
-                        for(let ii in data[i]) {
-                            for(let iii in data[i][ii]) {
-                                data[i][ii][iii] = (data[i][ii][iii] || '').replace('\"', '').trim();
-                            }
-                        }
+            csvToJson(csv) {
+                let items = Papa.parse(csv).data;
+                let headers = items.shift();
+                return items.map(values => {
+                    let o = {};
+                    for(let i in values) {
+                        let name = headers[i].replace(/\s/g, '_');
+                        o[name] = values[i];
                     }
-
-                    data.Skills = data.Skills.map(item => {
-                        let percents = {
-                            "Laravel": 80,
-                            "Javascript": 85,
-                            "Vue.js": 90,
-                            "PHP": 90,
-                            "WordPress": 95,
-                            "MySQL": 80,
-                            "JQuery": 90,
-                            "CSS3": 85,
-                            "Bootstrap": 85,
-                            "HTML5": 95,
-                            "Firebase": 70,
-                            "Git": 65,
-                            "APIs": 95,
-                            "Nuxt.js": 85,
-                            "Unity": 55,
-                        };
-
-                        item.percent = percents[item.name] || 50;
-                        return item;
-                    });
-
-                    data.Socials = [
-                        {
-                            name: "LinkedIn",
-                            icon: "fa fa-fw fa-linkedin",
-                            url: "https://www.linkedin.com/in/jeferson-siqueira/",
-                        },
-                        {
-                            name: "Whatsapp",
-                            icon: "fa fa-fw fa-whatsapp",
-                            url: "https://wa.me/message/NG7A2SW25XIEI1",
-                        },
-                        {
-                            name: "Telefone",
-                            icon: "fa fa-fw fa-phone",
-                            url: "tel:+5531995271426",
-                        },
-                        {
-                            name: "E-mail",
-                            icon: "fa fa-fw fa-envelope",
-                            url: "mailto:jeferson.i.silva@gmail.com",
-                        },
-                    ];
-
-                    data.Profile = data.Profile[0];
-                    data.Profile.name = `${data.Profile.first_name} ${data.Profile.last_name}`;
-                    this.content = data;
-
-                    Object.assign(document.createElement('a'), {
-                        href: "data:application/octet-stream,"+ encodeURI(JSON.stringify(this.content)),
-                        download: "linkedin.json",
-                    }).click();
+                    return o;
                 });
             },
         },
