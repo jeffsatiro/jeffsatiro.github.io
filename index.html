@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>MyResume Bootstrap Template - Index</title>
+  <title>Portfólio</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -61,12 +61,12 @@
     </header><!-- End Header -->
   
     <!-- ======= Hero Section ======= -->
-    <section id="hero" class="d-flex flex-column justify-content-center">
+    <section id="hero" class="d-flex flex-column justify-content-center" v-if="linkedin">
       <div class="container" data-aos="zoom-in" data-aos-delay="100">
-        <h1 v-if="linkedin">{{ linkedin.Profile.name }}</h1>
-        <p>Eu faço <span class="typed" data-typed-items="sistemas para web, lojas virtuais, edição de videos, games 2D e 3D"></span>. <br>Vamos trabalhar juntos?</p>
+        <h1>{{ linkedin.Profile.name }}</h1>
+        <p>Eu faço <span class="typed" data-typed-items="sistemas para web, websites, lojas virtuais, edição de videos, games 2D e 3D"></span>. <br>Vamos trabalhar juntos?</p>
         <div class="social-links">
-          <template v-if="linkedin" v-for="s in linkedin.Socials">
+          <template v-for="s in linkedin.Socials">
             <a :href="s.url" target="_blank"><i :class="s.icon"></i></a>
           </template>
         </div>
@@ -170,57 +170,45 @@
         </div>
       </section><!-- End Facts Section -->
   
-      <!-- ======= Skills Section ======= -->
-      <section id="skills" class="skills section-bg">
-        <div class="container" data-aos="fade-up">
-  
-          <div class="section-title">
-            <h2>Skills</h2>
-            <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
-          </div>
-  
-          <div class="row skills-content">
-  
-            <template v-if="linkedin">
-              <div class="col-lg-6" v-for="s in linkedin.Skills" v-if="s.percent">
-                <div class="progress">
-                  <span class="skill">{{ s.name }} <i class="val">{{ s.percent }}%</i></span>
-                  <div class="progress-bar-wrap">
-                    <div class="progress-bar" role="progressbar" :aria-valuenow="s.percent" aria-valuemin="0" aria-valuemax="100" :style="`width:${s.percent}%;`"></div>
-                  </div>
-                </div>
-              </div>
-            </template>
-  
-          </div>
-  
-        </div>
-      </section><!-- End Skills Section -->
-  
       <!-- ======= Resume Section ======= -->
-      <section id="resume" class="resume">
+      <section id="resume" class="resume" v-if="linkedin">
         <div class="container" data-aos="fade-up">
   
           <div class="section-title">
             <h2>Experiência</h2>
-            <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
+            <!-- <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p> -->
           </div>
 
-          <div class="row" v-if="linkedin">
+          <div class="row">
             <div class="col-lg-6">
-              <h3 class="resume-title">Sumary</h3>
+              <h3 class="resume-title">Resumo</h3>
               <div class="resume-item pb-0">
-                <h4 v-if="linkedin">{{ linkedin.Profile.name }}</h4>
-                <p><em>Innovative and deadline-driven Graphic Designer with 3+ years of experience designing and developing user-centered digital/print marketing material from initial concept to final, polished deliverable.</em></p>
+                <h4>{{ linkedin.Profile.name }}</h4>
+                <p><em>{{ linkedin.Profile.Summary }}</em></p>
                 <ul>
-                  <li>Portland par 127,Orlando, FL</li>
-                  <li>(123) 456-7891</li>
-                  <li>alice.barkley@example.com</li>
+                  <li>{{ linkedin.Profile.Geo_Location }}</li>
+                  <!-- <li>(123) 456-7891</li>
+                  <li>alice.barkley@example.com</li> -->
                 </ul>
               </div>
   
-              <h3 class="resume-title">Education</h3>
-              <div class="resume-item">
+              <h3 class="resume-title">Skills</h3>
+
+              <div class="skills">
+                <div class="skills-content m-0">
+                  <template v-for="s in linkedin.Skills" v-if="s.percent">
+                    <div class="progress">
+                      <span class="skill">{{ s.Name }} <i class="val">{{ s.percent }}%</i></span>
+                      <div class="progress-bar-wrap">
+                        <div class="progress-bar" role="progressbar" :aria-valuenow="s.percent" aria-valuemin="0" aria-valuemax="100" :style="`width:${s.percent}%;`"></div>
+                      </div>
+                    </div>
+                  </template>
+                </div>
+              </div>
+
+
+              <!-- <div class="resume-item">
                 <h4>Master of Fine Arts &amp; Graphic Design</h4>
                 <h5>2015 - 2016</h5>
                 <p><em>Rochester Institute of Technology, Rochester, NY</em></p>
@@ -231,8 +219,9 @@
                 <h5>2010 - 2014</h5>
                 <p><em>Rochester Institute of Technology, Rochester, NY</em></p>
                 <p>Quia nobis sequi est occaecati aut. Repudiandae et iusto quae reiciendis et quis Eius vel ratione eius unde vitae rerum voluptates asperiores voluptatem Earum molestiae consequatur neque etlon sader mart dila</p>
-              </div>
+              </div> -->
             </div>
+
             <div class="col-lg-6">
               <h3 class="resume-title">Experiência profissional</h3>
               <div class="resume-item" v-for="p in linkedin.Positions">
@@ -254,12 +243,12 @@
       </section><!-- End Resume Section -->
   
       <!-- ======= Portfolio Section ======= -->
-      <section id="portfolio" class="portfolio section-bg">
+      <section id="portfolio" class="portfolio section-bg" v-if="linkedin">
         <div class="container" data-aos="fade-up">
   
           <div class="section-title">
             <h2>Portfolio</h2>
-            <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
+            <!-- <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p> -->
           </div>
   
           <div class="row">
@@ -275,6 +264,20 @@
   
           <div class="row portfolio-container" data-aos="fade-up" data-aos-delay="200">
   
+            <div class="col-lg-4 col-md-6 portfolio-item" v-for="p in linkedin.Projects">
+              <div class="portfolio-wrap">
+                <img src="assets/img/portfolio/portfolio-1.jpg" class="img-fluid" alt="">
+                <div class="portfolio-info">
+                  <h4>{{ p.Title }}</h4>
+                  <!-- <p>App</p> -->
+                  <div class="portfolio-links">
+                    <a href="assets/img/portfolio/portfolio-1.jpg" data-gallery="portfolioGallery" class="portfolio-lightbox" title="App 1"><i class="bx bx-plus"></i></a>
+                    <a :href="p.Url" class="portfolio-details-lightbox" data-glightbox="type: external" title="Portfolio Details"><i class="bx bx-link"></i></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
             <div class="col-lg-4 col-md-6 portfolio-item filter-app">
               <div class="portfolio-wrap">
                 <img src="assets/img/portfolio/portfolio-1.jpg" class="img-fluid" alt="">
@@ -652,12 +655,12 @@
     </main><!-- End #main -->
   
     <!-- ======= Footer ======= -->
-    <footer id="footer">
+    <footer id="footer" v-if="linkedin">
       <div class="container">
-        <h3 v-if="linkedin">{{ linkedin.Profile.name }}</h3>
-        <p v-if="linkedin">{{ linkedin.Profile.headline }}</p>
+        <h3>{{ linkedin.Profile.name }}</h3>
+        <p>{{ linkedin.Profile.headline }}</p>
         <div class="social-links">
-          <template v-if="linkedin" v-for="s in linkedin.Socials">
+          <template v-for="s in linkedin.Socials">
             <a :href="s.url" target="_blank"><i :class="s.icon"></i></a>
           </template>
         </div>

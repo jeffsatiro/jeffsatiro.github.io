@@ -1,98 +1,66 @@
 {
- "PhoneNumbers": [
-  {
-   "Extension": "",
-   "Number": "+55 31 99527-1426",
-   "Type": "",
-   "Whatsapp": "https://web.whatsapp.com/send?phone=5531995271426",
-   "Link": "tel:5531995271426"
-  },
-  {
-   "Extension": "",
-   "Number": "+55 31 99527-1426",
-   "Type": "Work",
-   "Whatsapp": "https://web.whatsapp.com/send?phone=5531995271426",
-   "Link": "tel:5531995271426"
-  }
- ],
  "Skills": [
   {
    "Name": "Laravel",
-   "percent": 50
+   "percent": 80
   },
   {
    "Name": "Javascript",
-   "percent": 50
+   "percent": 85
   },
   {
    "Name": "Vue.js",
-   "percent": 50
+   "percent": 90
   },
   {
    "Name": "PHP",
-   "percent": 50
+   "percent": 90
   },
   {
    "Name": "WordPress",
-   "percent": 50
+   "percent": 95
   },
   {
    "Name": "MySQL",
-   "percent": 50
+   "percent": 80
   },
   {
    "Name": "JQuery",
-   "percent": 50
+   "percent": 90
   },
   {
    "Name": "CSS3",
-   "percent": 50
+   "percent": 85
   },
   {
    "Name": "Bootstrap",
-   "percent": 50
+   "percent": 85
   },
   {
    "Name": "HTML5",
-   "percent": 50
+   "percent": 95
   },
   {
    "Name": "Firebase",
-   "percent": 50
+   "percent": 70
   },
   {
    "Name": "Git",
-   "percent": 50
+   "percent": 65
   },
   {
    "Name": "APIs",
-   "percent": 50
+   "percent": 95
   },
   {
    "Name": "Nuxt.js",
-   "percent": 50
+   "percent": 85
   },
   {
    "Name": "Unity",
-   "percent": 50
+   "percent": 55
   }
  ],
- "Profile": {
-  "First_Name": "Jeferson",
-  "Last_Name": "Inácio",
-  "Maiden_Name": "",
-  "Address": "",
-  "Birth_Date": "Feb 11",
-  "Headline": "Full Stack • Vue • Nuxt • Laravel • Unity",
-  "Summary": "Sou programador profissional para plataforma web desde 2010. Tenho conhecimento e experiência em alguns frameworks e bibliotecas, como por exemplo, Jquery, Angular, Vue.js, Web components, Code Igniter, Laravel, plugins, temas e customizações para Wordpress. Já atuei no desenvolvimento de vários sites e lojas virtuais.",
-  "Industry": "Strategic Management Services",
-  "Zip_Code": "30110",
-  "Geo_Location": "Belo Horizonte, Minas Gerais, Brasil",
-  "Twitter_Handles": "",
-  "Websites": "[PORTFOLIO:https://jsiqueira.com]",
-  "Instant_Messengers": "[SKYPE:live:jeferson.i.silva_1]",
-  "name": "Jeferson Inácio"
- },
  "Positions": [
   {
    "Company_Name": "Listra ",
@@ -159,11 +127,144 @@
    "Finished_On": "Jan 2011"
   }
  ],
+ "PhoneNumbers": [
+  {
+   "Extension": "",
+   "Number": "+55 31 99527-1426",
+   "Type": "",
+   "Whatsapp": "https://web.whatsapp.com/send?phone=5531995271426",
+   "Link": "tel:5531995271426"
+  },
+  {
+   "Extension": "",
+   "Number": "+55 31 99527-1426",
+   "Type": "Work",
+   "Whatsapp": "https://web.whatsapp.com/send?phone=5531995271426",
+   "Link": "tel:5531995271426"
+  }
+ ],
+ "Profile": {
+  "First_Name": "Jeferson",
+  "Last_Name": "Siqueira",
+  "Maiden_Name": "",
+  "Address": "",
+  "Birth_Date": "Feb 11",
+  "Headline": "Full Stack • Vue • Nuxt • Laravel • Unity",
+  "Summary": "Sou programador profissional para plataforma web desde 2010. Tenho conhecimento e experiência em alguns frameworks e bibliotecas, como por exemplo, Jquery, Angular, Vue.js, Web components, Code Igniter, Laravel, plugins, temas e customizações para Wordpress. Já atuei no desenvolvimento de vários sites e lojas virtuais.",
+  "Industry": "Strategic Management Services",
+  "Zip_Code": "30110",
+  "Geo_Location": "Belo Horizonte, Minas Gerais, Brasil",
+  "Twitter_Handles": "",
+  "Websites": "[PORTFOLIO:https://jsiqueira.com]",
+  "Instant_Messengers": "[SKYPE:live:jeferson.i.silva_1]",
+  "name": "Jeferson Siqueira"
+ },
+ "Projects": [
+  {
+   "Title": "Eiriz Saúde",
+   "Description": "",
+   "Url": "http://eiriz-saude.unbox.pt",
+   "Started_On": "Jan 2017",
+   "Finished_On": "Jan 2017"
+  },
+  {
+   "Title": "Águas do Acuruí",
+   "Description": "Desenvolvimento de website utilizando plataforma Wordpress",
+   "Url": "https://web.archive.org/web/20210302055106/http://aguasdoacurui.com.br/",
+   "Started_On": "Jan 2015",
+   "Finished_On": "Dec 2015"
+  },
+  {
+   "Title": "Cantor Beto Santos",
+   "Description": "Desenvolvimento de website utilizando CMS customizado",
+   "Url": "https://web.archive.org/web/20211127021144/http://betosantos.net/",
+   "Started_On": "Jan 2015",
+   "Finished_On": "Dec 2015"
+  },
+  {
+   "Title": "Estrela Rural",
+   "Description": "CMS e gerenciador de leilões utilizando plataforma customizada da agência.",
+   "Url": "https://web.archive.org/web/20220110211402/http://estrelarural.com.br/",
+   "Started_On": "Jan 2011",
+   "Finished_On": "Dec 2011"
+  },
+  {
+   "Title": "ASSEMG",
+   "Description": "Site construído com CMS customizado da agência.",
+   "Url": "https://web.archive.org/web/20170612004919/http://assemg.org/",
+   "Started_On": "Jan 2015",
+   "Finished_On": "Dec 2015"
+  },
+  {
+   "Title": "Samarco",
+   "Description": "Gerenciador de conteúdo utilizando Wordpress + Elementor",
+   "Url": "https://web.archive.org/web/20220130172103/https://www.samarco.com/",
+   "Started_On": "Aug 2020",
+   "Finished_On": "Oct 2020"
+  },
+  {
+   "Title": "Orbitae",
+   "Description": "Apresentações de produtos voltados para perícia forense. Feito utilizando Wordpress + Elementor com elementos personalizados. Feito em parceria com a Partners Comunicação Pro Business.",
+   "Url": "https://web.archive.org/web/20210517192720/https://orbitae.com.br/",
+   "Started_On": "Jan 2019",
+   "Finished_On": "Aug 2019"
+  },
+  {
+   "Title": "Cocks Skate",
+   "Description": "E-commerce para vendas de produtos voltados para skatistas. Criado com Wordpress + Woocommerce + Elementor com elementos customizados.",
+   "Url": "https://web.archive.org/web/20211226170044/https://cocksskate.com.br/",
+   "Started_On": "2018",
+   "Finished_On": "2018"
+  },
+  {
+   "Title": "Habitat Group",
+   "Description": "Clínica veterinária, utilizando Wordpress + Elementor com elementos customizados.",
+   "Url": "https://web.archive.org/web/20220110082741/https://habitatgroup.com.br/",
+   "Started_On": "2019",
+   "Finished_On": "2019"
+  },
+  {
+   "Title": "Don Desenvolvimento",
+   "Description": "Alterações no layout original e manutenções pontuais utilizando Wordpress e Vue.",
+   "Url": "https://web.archive.org/web/20181224004334/http://dondesenvolvimento.com.br/",
+   "Started_On": "2018",
+   "Finished_On": "2018"
+  },
+  {
+   "Title": "Blog Banco da Amazônia",
+   "Description": "Notícias e utlidades do Banco da Amazônia. Feito utilizando Wordpress + Elementor com elementos personalizados. Feito em parceria com a Partners Comunicação Pro Business.",
+   "Url": "https://web.archive.org/web/20211229163534/https://basablog.com.br/",
+   "Started_On": "2019",
+   "Finished_On": "2019"
+  },
+  {
+   "Title": "Assinar ou comprar",
+   "Description": "Calculadora desenvolvida em parceria com Unidas e Samy Dana, para verificar se é mais vantajoso comprar ou alugar um carro.",
+   "Url": "https://web.archive.org/web/20211217154133/https://assinaroucomprar.com.br/",
+   "Started_On": "2021",
+   "Finished_On": "2021"
+  },
+  {
+   "Title": "Faculdade Faveni",
+   "Description": "Estilização e customização de componentes do tema utilizando plataforma Wordpress com multisite.",
+   "Url": "https://web.archive.org/web/20220131193706/https://faveni.edu.br/",
+   "Started_On": "2020",
+   "Finished_On": "2020"
+  },
+  {
+   "Title": ""
+  }
+ ],
  "Socials": [
   {
    "name": "LinkedIn",
    "icon": "fa fa-fw fa-linkedin",
    "url": "https://www.linkedin.com/in/jeferson-siqueira/"
+  },
+  {
+   "name": "Github",
+   "icon": "fa fa-fw fa-github",
+   "url": "https://github.com/jeff-silva"
   },
   {
    "name": "Whatsapp",
