@@ -2,6 +2,7 @@ const createDemoMenu = () => ({
   install(app, options) {
     app.component('demo-menu', {
       data: () => ({
+        source: location.href.replace(/.+\/demo\/(.+?)\/index\.html.*/g, 'https://github.com/jeff-silva/jeff-silva.github.io/blob/master/demo/$1/index.html'),
         items: [
           {name:'Championship', href:'../championship/index.html'},
           {name:'Clockify', href:'../clockify/index.html'},
@@ -10,7 +11,9 @@ const createDemoMenu = () => ({
           {name:'OpenAPI', href:'../openapi/index.html'},
         ],
       }),
-      template: `<div style="position:fixed; bottom:25px; right:50px; z-index:999;">
+      template: `<div style="display:flex; gap:10px; position:fixed; bottom:25px; right:50px; z-index:999;">
+        <v-btn icon="mdi-xml" :href="source" target="_blank"></v-btn>
+        
         <v-menu>
           <template #activator="{ props }">
             <v-btn v-bind="props" color="primary" icon="mdi-menu"></v-btn>
