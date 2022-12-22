@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Vue3 + Vuetify</title>
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@3.0.1/dist/vuetify.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@3.0.1/dist/vuetify.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
+
+  <!-- Demo menu -->
+  <script src="../demo-menu.js"></script>
+</head>
+<body>
+  <div id="app">
+    <v-app>
+      <v-main>
+        <v-row no-gutters>
+          <v-col cols="12" md="3">
+            <v-text-field
+              label="Nome do time"
+              v-model="team.item.name"
+              @keyup.enter="teamAdd()"
+            ></v-text-field>
+            <v-btn block @click="teamAdd()">Add</v-btn>
+            <template v-for="(t, i) in team.items">
+              <v-text-field
+                :label="`Time ${i+1}`"
+                v-model="t.name"
+                :hide-details="true"
+                append-inner-icon="mdi-close"
+                @click:append-inner="teamRemove(t)"
+              ></v-text-field>
+            </template>
+          </v-col>
+          <v-col cols="12" md="9">
+            <div class="pa-1" style="overflow:auto; width:100%;">
+              <!-- Groups -->
+              <div class="d-flex" style="gap:16px;">
+                <template v-for="g in tournament.groups">
+                  <div style="min-width:300px;">
+                    <v-card>
+                      <v-card-title>{{ g.name }}</v-card-title>
+                      <v-card-subtitle>Times</v-card-subtitle>
+                      <v-list>
+                        <v-list-item v-for="t in g.teams">
+                          {{ t.name }}
+                        </v-list-item>
+                      </v-list>
+                      <v-card-subtitle>Jogos</v-card-subtitle>
+                      <v-table>
+                        <tbody>
+                          <template v-for="m in g.matches">
+                            <tr>
+                              <template v-for="(t, i) in m.teams">
+                                <td>
+                                  <v-text-field
+                                    :label="`${t.team.name} points`"
+                                    v-model="t.points"
+                                    type="number"
+                                  ></v-text-field>
+                                </td>
+                              </template>
+                            </tr>
+                          </template>
+                        </tbody>
+                      </v-table>
+                    </v-card>
+                  </div>
+                </template>
+              </div>
+              <!-- Brackets -->
+              <div class="d-flex" style="gap:16px;">
+                <template v-for="r in tournament.rounds">
+                  <div style="min-width:300px;">
+                    <v-card>
+                      <v-alert color="primary" rounded="0">{{ r.matches.length }} jogos</v-alert>
+                      <v-card-title>{{ r.name }}</v-card-title>
+                      <v-card-text>
+                        <pre style="max-height:300px; overflow:auto;">{{ r }}</pre>
+                      </v-card-text>
+                    </v-card>
+                  </div>
+                </template>
+              </div>
+            </div>
+            <pre>{{ { tournament, $data } }}</pre>
+          </v-col>
+          <v-col cols="12">
+            <!--  -->
+          </v-col>
+        </v-row>
+        <demo-menu></demo-menu>
+      </v-main>
+    </v-app>
+  </div>
+  <script>
+    Vue.createApp({
+      mounted() {
+        // for(let i=1; i<=3; i++) this.teamAdd();
+        // for(let i=1; i<=4; i++) this.teamAdd();
+        // for(let i=1; i<=5; i++) this.teamAdd();
+        // for(let i=1; i<=8; i++) this.teamAdd();
+        // for(let i=1; i<=11; i++) this.teamAdd();
+        // for(let i=1; i<=16; i++) this.teamAdd();
+        // for(let i=1; i<=32; i++) this.teamAdd();
+      },
+
+      data: () => ({
+        team: {
+          item: {},
+          items: [],
+        },
+      }),
+
+      methods: {
+        uuid(prefix='') {
+          return (prefix? prefix+'-': '') + ([] + 1e4).replace(/[018]/g, c => ( c ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (c / 4))) ).toString(16) );
+        },
+        teamDefault(data={}) {
+          let id = this.uuid('team');
+          return { id, name: id.replace('team-', ''), ...data };
+        },
+
+        teamAdd() {
+          let team = this.teamDefault(this.team.item);
+          this.team.items.push(team);
+          this.team.item = {};
+        },
+
+        teamRemove(team) {
+          const index = this.team.items.indexOf(team);
+          this.team.items.splice(index, 1);
+        },
+
+        roundDefault(data = {}) {
+          let round = {
+            id: this.uuid('round'),
+            name: '',
+            round: 0,
+            matches: [],
+            ...data
+          };
+
+          round.name = round.name || `Round ${round.round+1}`;
+          return round;
+        },
+
+        groupDefault(data = {}) {
+          const id = this.uuid('group');
+          return { id, name: id, teams: [], matches: [], ...data };
+        },
+        
+        matchDefault(team1, team2, data = {}) {
+          const id = this.uuid('match');
+          const name = `${team1.name} vs ${team2.name}`;
+          const teams = [
+            {
+              points: 0,
+              team: team1,
+            },
+            {
+              points: 0,
+              team: team2,
+            },
+          ];
+          return { id, name, teams, ...data };
+        },
+
+        /**
+         * - A rodada 0 precisa ser classificatória se a quantidade for diferente de 4,8,16,32
+         */
+        tournamentData() {
+          let error = false;
+
+          if (this.team.items.length%2 !=0) {
+            error = 'Invalid quantity of teams';
+          }
+
+          const teamsTotal = this.team.items.length;
+          const sideTeamsSize = teamsTotal / 2;
+          const needBaseGroups = sideTeamsSize >=2 && sideTeamsSize%2 != 0;
+          let groups = [];
+
+          let rounds = (() => {
+            const _factorial = (n) => { let result = 0; for(let i=n; i>0; i--) { result += i-1; } return result; };
+
+            const _groupAddTeam = (team) => {
+              let groupTotalTeams = Math.ceil(teamsTotal / Math.ceil(teamsTotal / 4));
+              let lastGroup = groups[ groups.length-1 ] || false;
+              if (!lastGroup) {
+                groups.push(this.groupDefault({ name: `Grupo ${groups.length+1}` }));
+                lastGroup = groups[ groups.length-1 ] || false;
+                if (!lastGroup) return;
+              }
+              if (lastGroup.teams.length>=groupTotalTeams) {
+                groups.push(this.groupDefault({ name: `Grupo ${groups.length+1}` }));
+                lastGroup = groups[ groups.length-1 ] || false;
+              }
+              lastGroup.teams.push(team);
+            };
+
+            let rounds = [];
+
+            // Perfect quantity of teams
+            if (![4, 8, 16, 32, 64].includes(teamsTotal)) {
+              this.team.items.forEach(team => {
+                _groupAddTeam(team);
+              });
+              groups.forEach(group => {
+                group.teams.forEach((team1, index) => {
+                  for(let i=index+1; i<group.teams.length; i++) {
+                    let team2 = group.teams[i];
+                    group.matches.push(this.matchDefault(team1, team2));
+                  }
+                });
+              });
+            }
+
+            let matchesTotal = teamsTotal/2;
+            for(let i=0; i<(Math.ceil(teamsTotal/4)); i++) {
+              let round = this.roundDefault({ round: i });
+              for(let ii=0; ii<matchesTotal; ii++) {
+                // round.matches.push(this.matchDefault());
+              }
+              rounds.push(round);
+              matchesTotal = matchesTotal / 2;
+            }
+
+            rounds.push(this.roundDefault({
+              name: 'Final',
+              // matches: [ this.matchDefault() ],
+            }));
+            
+            return rounds;
+          })();
+
+          return {
+            error,
+            teamsTotal,
+            sideTeamsSize,
+            needBaseGroups,
+            groups,
+            rounds,
+          };
+        },
+      },
+
+      computed: {
+        tournament() {
+          return this.tournamentData();
+        },
+      },
+    })
+    .use(Vuetify.createVuetify())
+    .use(createDemoMenu())
+		.mount('#app');
+  </script>
+</body>
+</html>

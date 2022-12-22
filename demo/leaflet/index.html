@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Vue3 + Vuetify</title>
+
+  <!-- Axios -->
+  <script src="https://unpkg.com/axios@1.2.1/dist/axios.min.js"></script>
+
+  <!-- Vue -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+  <script src="https://unpkg.com/vue-router@4.1.6/dist/vue-router.global.js"></script>
+
+  <!-- Vuetify -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@3.0.1/dist/vuetify.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@3.0.1/dist/vuetify.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+  <script src="../../assets/js/vue3-leaflet.js"></script>
+  
+  <!-- Demo menu -->
+  <script src="../demo-menu.js"></script>
+</head>
+<body>
+  <div id="app">
+    <v-app>
+      <v-main>
+        <l-map
+          ref="map"
+          v-model:center="map.center"
+          v-model:zoom="map.zoom"
+          v-model:osm="map.osm"
+          @click="if ($event.latlng) mapMarkerAdd(Object.values($event.latlng));"
+          style="height:100vh;"
+          @moveend="mapMoveend($event)"
+        >
+          <l-tile-layer :url="tile"></l-tile-layer>
+          <v-card style="position:absolute; z-index:999!important; top:10px; right:10px;">
+            <v-card-text>
+              <router-view :data="$data"></router-view>
+            </v-card-text>
+          </v-card>
+          <template v-for="(m, i) in map.markers">
+            <l-marker
+              :key="m"
+              v-model:center="m.center"
+              :draggable="true"
+              :icon="{iconUrl:m.icon, iconSize:[60, 60], iconAnchor:[30, 30]}"
+            >
+              <template #content>
+                <div style="background:#f00; padding:5px; position:sticky; top:0;">
+                  {{ m.name || 'Marker' }}
+                </div>
+                <!-- <v-card :title="m.name || 'Marker'" style="width:300px;">
+                  <v-card-text>
+                    <v-text-field label="Aaa" v-model="m.name" :hide-details="true"></v-text-field>
+                    <v-img :src="m.icon" class="mt-4"></v-img>
+                    <pre>{{ m }}</pre>
+                  </v-card-text>
+                </v-card> -->
+              </template>
+
+              <!-- <l-popup v-model="m.popup">
+                <div style="width:100px;">
+                  <v-text-field label="Aaa" v-model="m.name" :hide-details="true"></v-text-field>
+                </div>
+              </l-popup> -->
+
+              <!-- <l-tooltip v-model="m.tooltip">
+                <div style="width:100px;">
+                  <v-text-field label="Aaa" v-model="m.name" :hide-details="true"></v-text-field>
+                </div>
+              </l-tooltip> -->
+            </l-marker>
+          </template>
+        </l-map>
+
+        <!-- <v-row no-gutters>
+          <v-col cols="6">
+          </v-col>
+          <v-col cols="6" class="pa-3">
+            <v-card title="Markers">
+              <v-divider></v-divider>
+              <div style="height:calc(100vh - 80px);">
+                <v-card-text>
+                  <v-slider v-model="map.zoom" :min="0" :max="22"></v-slider>
+                </v-card-text>
+                <v-card-text>
+                  <v-select
+                    v-model="tile"
+                    label="Tile"
+                    :items="tiles"
+                    item-title="title"
+                    item-value="value"
+                    :hide-details="true"
+                  ></v-select>
+                </v-card-text>
+                <v-divider></v-divider>
+                <div class="d-flex pa-2" style="gap:8px;">
+                  <v-text-field v-model="map.rect.sw[0]" v-bind="{hideDetails:true, variant:'outlined', label:'ne_lat'}"></v-text-field>
+                  <v-text-field v-model="map.rect.sw[1]" v-bind="{hideDetails:true, variant:'outlined', label:'ne_lng'}"></v-text-field>
+                  <v-text-field v-model="map.rect.ne[0]" v-bind="{hideDetails:true, variant:'outlined', label:'sw_lat'}"></v-text-field>
+                  <v-text-field v-model="map.rect.ne[1]" v-bind="{hideDetails:true, variant:'outlined', label:'sw_lng'}"></v-text-field>
+                </div>
+                <v-divider></v-divider>
+                <div style="max-height:100vh; overflow:auto;">
+                  <v-list>
+                    <v-list-item
+                      v-for="(m, i) in map.markers"
+                      :key="m"
+                    >
+                      <div class="d-flex">
+                        <v-text-field
+                          v-model="m.name"
+                        ></v-text-field>
+                        <v-select
+                          v-model="m.icon"
+                          :items="icons"
+                          item-title="title"
+                          item-value="value"
+                          append-icon="mdi-close-box"
+                          @click:append="map.markers.splice(i, 1)"
+                        ></v-select>
+                      </div>
+                    </v-list-item>
+                  </v-list>
+                  <v-card-text>
+                    <pre>{{ map }}</pre>
+                  </v-card-text>
+                </div>
+              </div>
+            </v-card>
+          </v-col>
+        </v-row> -->
+        <demo-menu></demo-menu>
+      </v-main>
+    </v-app>
+  </div>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      Vue.createApp({
+        data: () => ({
+          map: {
+            center: [-19.9797925, -44.0017424],
+            zoom: 16,
+            markers: [],
+            rect: {
+              sw: [0, 0],
+              ne: [0, 0],
+            },
+            osm: false,
+          },
+          // http://alexurquhart.github.io/free-tiles/
+          tile: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+          tiles: [
+            {
+              title: 'Default',
+              value: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+            },
+            {
+              title: 'OSM Humanitarian',
+              value: 'http://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png',
+            },
+            {
+              title: 'World Imagery',
+              value: 'http://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+            },
+            {
+              title: 'World Topo Map',
+              value: 'http://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}',
+            },
+            {
+              title: 'Dark Matter',
+              value: 'http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+            },
+            {
+              title: 'Toner',
+              value: 'http://tile.stamen.com/toner/{z}/{x}/{y}.png',
+            },
+            {
+              title: 'Watercolor',
+              value: 'http://tile.stamen.com/watercolor/{z}/{x}/{y}.png',
+            },
+          ],
+          icons: [
+            {
+              title: 'Brasil',
+              value: 'https://cdn-icons-png.flaticon.com/512/197/197386.png',
+            },
+            {
+              title: 'Colombia',
+              value: 'https://cdn-icons-png.flaticon.com/512/197/197575.png',
+            },
+            {
+              title: 'Canadá',
+              value: 'https://cdn-icons-png.flaticon.com/512/197/197430.png',
+            },
+          ],
+        }),
+        methods: {
+          log: console.log,
+          mapMarkerAdd(center) {
+            this.map.markers.push({
+              name: '',
+              icon: 'https://cdn-icons-png.flaticon.com/512/197/197386.png',
+              center,
+            });
+          },
+          mapMoveend(ev) {
+            let rect = this.$refs.map.getMap().getBounds();
+            this.map.rect = {
+              sw: Object.values(rect._southWest),
+              ne: Object.values(rect._northEast),
+            };
+          },
+        },
+      })
+      .use(Vuetify.createVuetify())
+      .use(createLeaflet())
+      .use(VueRouter.createRouter({
+        history: VueRouter.createWebHashHistory(),
+        routes: [
+          {
+            path: '/',
+            component: {
+              props: {
+                data: {type:Object, default:() =>({})},
+              },
+              template: `<pre>{{ data.map }}</pre>`,
+            },
+          },
+        ],
+      }))
+      .use(createDemoMenu())
+      .mount('#app');
+    });
+  </script>
+</body>
+</html>
