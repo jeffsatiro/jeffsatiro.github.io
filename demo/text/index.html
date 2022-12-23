@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Base</title>
+  <title>Text Tools</title>
 
   <!-- Axios -->
   <script src="https://unpkg.com/axios@1.2.0/dist/axios.min.js"></script>
@@ -18,6 +18,10 @@
   <script src="https://cdn.jsdelivr.net/npm/vuetify@3.0.3/dist/vuetify.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
 
+  <!-- Vue3 Ckeditor -->
+  <script src="https://cdn.ckeditor.com/ckeditor5/35.4.0/classic/ckeditor.js"></script>
+  <script src="../../assets/js/vue3-ckeditor.js"></script>
+  
   <!-- Demo menu -->
   <script src="../demo-menu.js"></script>
 </head>
@@ -30,15 +34,27 @@
           :permanent="true"
           width="300"
         >
-          <v-card-title>Base</v-card-title>
+          <v-card-title>Text Tools</v-card-title>
           <v-divider></v-divider>
-          <v-card-text>
-            Base
-          </v-card-text>
+          <v-list density="compact">
+            <template v-for="item in $router.options.routes">
+              <v-list-item :to="item.path">
+                {{ item.meta.title }}
+              </v-list-item>
+            </template>
+          </v-list>
         </v-navigation-drawer>
 
         <v-main style="height:100vh; overflow:auto;">
-          <div class="pa-3">Base</div>
+          <div class="d-flex flex-column" style="height:100vh;">
+            <div class="pa-3">
+              <v-ckeditor v-model="text"></v-ckeditor>
+            </div>
+            <v-divider></v-divider>
+            <div class="flex-grow-1 pa-3">
+              <router-view :text="text"></router-view>
+            </div>
+          </div>
           <demo-menu></demo-menu>
         </v-main>
       </v-layout>
@@ -48,15 +64,74 @@
     Vue.createApp({
       data() {
         return {
-          test: true,
+          text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam beatae vel voluptate! Tempore accusamus autem cupiditate quidem asperiores cumque impedit animi provident nemo ipsam ut minima, dolor veniam quod odit!',
         };
       },
     })
     .use(Vuetify.createVuetify({}))
     .use(VueRouter.createRouter({
       history: VueRouter.createWebHashHistory(),
-      routes: [],
+      routes: [
+        {
+          path: '/',
+          meta: { title: 'Preview' },
+          component: {
+            props: {text: ''},
+            template: `<div v-html="text"></div>`,
+          },
+        },
+        {
+          path: '/case',
+          meta: { title: 'Lower, upper, capitalize' },
+          component: {
+            props: {text: ''},
+            computed: {
+              textRenderized() {
+                let type = this.types.filter(item => item.value==this.type)[0] || false;
+                if (!type) return this.text;
+                return type.callback(this.text);
+                
+              },
+            },
+            data: () => ({
+              type: 'default',
+              types: [
+                {
+                  value: 'default',
+                  title: 'Padrão',
+                  callback(value) {
+                    return value;
+                  },
+                },
+                {
+                  value: 'lowercase',
+                  title: 'Minúsculo',
+                  callback(value) {
+                    return value.toLowerCase();
+                  },
+                },
+                {
+                  value: 'uppercase',
+                  title: 'Maiúsculo',
+                  callback(value) {
+                    return value.toUpperCase();
+                  },
+                },
+              ],
+            }),
+            template: `<div>
+              <v-select
+                label="Tipo"
+                v-model="type"
+                :items="types"
+              ></v-select>
+              <div v-html="textRenderized"></div>
+            </div>`,
+          },
+        },
+      ],
     }))
+    .use(createCkeditor())
     .use(createDemoMenu())
 		.mount('#app');
   </script>
