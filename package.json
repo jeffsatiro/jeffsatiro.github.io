@@ -5,5 +5,5 @@
   "repository": "https://github.com/jeff-silva/jeff-silva.github.io.git",
   "author": "Jeferson Silva <jeferson.i.silva@gmail.com>",
   "license": "MIT",
-  "devDependencies": {}
+  "dependencies": {}
 }
