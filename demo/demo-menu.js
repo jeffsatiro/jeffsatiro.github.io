@@ -6,6 +6,7 @@ const createDemoMenu = () => ({
         items: [
           {name:'Championship', href:'../championship/index.html'},
           {name:'Clockify', href:'../clockify/index.html'},
+          {name:'Diff Tool', href:'../diff-tool/index.html'},
           {name:'Filesize Generator', href:'../filesize-generator/index.html'},
           {name:'Leaflet', href:'../leaflet/index.html'},
           {name:'OpenAPI', href:'../openapi/index.html'},

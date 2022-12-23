@@ -5,31 +5,38 @@ const createCkeditor = (options = {}) => ({
     app.component('v-ckeditor', {
       props: {
         modelValue: {
-          type: [Array, String],
+          type: [Boolean, String],
           default: '',
         },
       },
-      data: () => ({
-        editor: false,
-      }),
+      watch: {
+        modelValue(value) {
+          if (this.$el.contains(document.activeElement)) return;
+          this.setValue(value);
+        },
+      },
       methods: {
         ckeditorInit() {
-          this.editor = ClassicEditor.create(this.$refs.editor)
+          ClassicEditor.create(this.$refs.editor)
             .then(editor => {
               editor.data.set(this.modelValue);
               editor.model.document.on('change:data', ev => {
                 this.$emit('update:modelValue', editor.data.get());
               });
+              this.setValue = (value) => {
+                editor.data.set(value || '&nbsp;');
+              };
             })
             .catch(error => {
               console.error( error );
             });
         },
+        setValue(value) {},
       },
       mounted() {
         this.ckeditorInit();
       },
-      template: `<div ref="editor"></div>`,
+      template: `<div><div ref="editor"></div></div>`,
     });
   },
 });

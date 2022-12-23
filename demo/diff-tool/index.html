@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Base</title>
+
+  <!-- Axios -->
+  <script src="https://unpkg.com/axios@1.2.0/dist/axios.min.js"></script>
+
+  <!-- Vue -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <script src="https://unpkg.com/vue-router@4.1.6/dist/vue-router.global.js"></script>
+
+  <!-- Vuetify -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@3.0.3/dist/vuetify.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@3.0.3/dist/vuetify.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
+
+  <!-- Vue3 Monaco -->
+  <link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0/min/vs/editor/editor.main.min.css">
+  <script>var require = { paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0/min/vs' } };</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0/min/vs/loader.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0/min/vs/editor/editor.main.nls.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0/min/vs/editor/editor.main.js"></script>
+  <script src="../../assets/js/vue3-monaco.js"></script>
+
+  <!-- Demo menu -->
+  <script src="../demo-menu.js"></script>
+</head>
+<body>
+  <div id="app">
+    <v-app style="background:#f5f5f5;">
+      <v-layout>
+        <v-main>
+          <v-row class="pa-3">
+            <v-col cols="6">
+              <div>Original</div>
+              <v-monaco style="height:40vh;" v-model="original"></v-monaco>
+            </v-col>
+            <v-col cols="6">
+              <div>Modified</div>
+              <v-monaco style="height:40vh;" v-model="modified"></v-monaco>
+            </v-col>
+            <v-col cols="12">
+              <div>Diff</div>
+              <v-monaco-diff style="height:40vh;" :original="original" :modified="modified"></v-monaco-diff>
+            </v-col>
+          </v-row>
+          <demo-menu></demo-menu>
+        </v-main>
+      </v-layout>
+    </v-app>
+  </div>
+  <script>
+    Vue.createApp({
+      data() {
+        return {
+          original: '',
+          modified: '',
+        };
+      },
+    })
+    .use(Vuetify.createVuetify({}))
+    .use(VueRouter.createRouter({
+      history: VueRouter.createWebHashHistory(),
+      routes: [],
+    }))
+    .use(createMonaco())
+    .use(createDemoMenu())
+		.mount('#app');
+  </script>
+</body>
+</html>
