@@ -9,6 +9,7 @@ const createDemoMenu = () => ({
           {name:'Filesize Generator', href:'../filesize-generator/index.html'},
           {name:'Leaflet', href:'../leaflet/index.html'},
           {name:'OpenAPI', href:'../openapi/index.html'},
+          {name:'Text tools', href:'../text/index.html'},
         ],
       }),
       template: `<div style="display:flex; gap:10px; position:fixed; bottom:25px; right:50px; z-index:999;">
