@@ -4,11 +4,13 @@ const createDemoMenu = () => ({
       data: () => ({
         source: location.href.replace(/.+\/demo\/(.+?)\/index\.html.*/g, 'https://github.com/jeff-silva/jeff-silva.github.io/blob/master/demo/$1/index.html'),
         items: [
+          {name:'BrainJS', href:'../brainjs/index.html'},
           {name:'Championship', href:'../championship/index.html'},
           {name:'Clockify', href:'../clockify/index.html'},
           {name:'Diff Tool', href:'../diff-tool/index.html'},
           {name:'Filesize Generator', href:'../filesize-generator/index.html'},
           {name:'Leaflet', href:'../leaflet/index.html'},
+          {name:'Lotto Simulation', href:'../lotto/index.html'},
           {name:'OpenAPI', href:'../openapi/index.html'},
           {name:'Text tools', href:'../text/index.html'},
         ],
