@@ -9,6 +9,7 @@ const createDemoMenu = () => ({
           {name:'Clockify', href:'../clockify/index.html'},
           {name:'Diff Tool', href:'../diff-tool/index.html'},
           {name:'Filesize Generator', href:'../filesize-generator/index.html'},
+          {name:'Laramake', href:'../laramake/index.html'},
           {name:'Leaflet', href:'../leaflet/index.html'},
           {name:'Lotto Simulation', href:'../lotto/index.html'},
           {name:'OpenAPI', href:'../openapi/index.html'},
