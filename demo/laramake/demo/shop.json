@@ -1,0 +1,288 @@
+{
+  "uuid": "eafe6cf5ad",
+  "storeId": "laramake",
+  "name": "Shop",
+  "database": {
+    "uuid": "4398248b95",
+    "tables": [
+      {
+        "uuid": "d1fc51c8d6",
+        "name": "user",
+        "fields": [
+          {
+            "uuid": "4b6adcaa39",
+            "name": "id"
+          },
+          {
+            "uuid": "e501bb1e02",
+            "name": "name"
+          },
+          {
+            "uuid": "d39d1fb455",
+            "name": "created_at"
+          },
+          {
+            "uuid": "d38662a0c1",
+            "name": "updated_at"
+          }
+        ],
+        "fks": []
+      },
+      {
+        "uuid": "7b67c0a31f",
+        "name": "user_group",
+        "fields": [
+          {
+            "uuid": "dc926e0b49",
+            "name": "id"
+          },
+          {
+            "uuid": "2cf4cf84dc",
+            "name": "name"
+          },
+          {
+            "uuid": "731a88a792",
+            "name": "user_id"
+          },
+          {
+            "uuid": "a6ec9302a5",
+            "name": "created_at"
+          },
+          {
+            "uuid": "92a9b4aa94",
+            "name": "updated_at"
+          }
+        ],
+        "fks": [
+          {
+            "uuid": "394d4ddad1",
+            "name": "",
+            "field": "user_id",
+            "ref_table": "user",
+            "ref_field": "id"
+          }
+        ]
+      },
+      {
+        "uuid": "93a68dff29",
+        "name": "shop_product",
+        "fields": [
+          {
+            "uuid": "8d7483e026",
+            "name": "id"
+          },
+          {
+            "uuid": "adcf4782f1",
+            "name": "name"
+          },
+          {
+            "uuid": "7a64420513",
+            "name": "amount"
+          },
+          {
+            "uuid": "f3d1fc5d94",
+            "name": "parent_id"
+          },
+          {
+            "uuid": "91ae063e81",
+            "name": "created_at"
+          },
+          {
+            "uuid": "c3f3cbc74d",
+            "name": "updated_at"
+          }
+        ],
+        "fks": [
+          {
+            "uuid": "22fa50886c",
+            "name": "",
+            "field": "parent_id",
+            "ref_table": "shop_product",
+            "ref_field": "id"
+          }
+        ]
+      },
+      {
+        "uuid": "2e2bac969c",
+        "name": "shop_category",
+        "fields": [
+          {
+            "uuid": "612d80a944",
+            "name": "id"
+          },
+          {
+            "uuid": "96aca794f0",
+            "name": "name"
+          },
+          {
+            "uuid": "f1dd988558",
+            "name": "created_at"
+          },
+          {
+            "uuid": "1ac82954b3",
+            "name": "updated_at"
+          }
+        ],
+        "fks": []
+      },
+      {
+        "uuid": "9e50a37c93",
+        "name": "shop_product_category",
+        "fields": [
+          {
+            "uuid": "4dc09fe5cb",
+            "name": "id"
+          },
+          {
+            "uuid": "15d2c9929e",
+            "name": "product_id"
+          },
+          {
+            "uuid": "27296963ae",
+            "name": "category_id"
+          },
+          {
+            "uuid": "c12e86dc12",
+            "name": "created_at"
+          },
+          {
+            "uuid": "993506232a",
+            "name": "updated_at"
+          }
+        ],
+        "fks": [
+          {
+            "uuid": "4ee0be54e5",
+            "name": "",
+            "field": "product_id",
+            "ref_table": "shop_product",
+            "ref_field": "id"
+          },
+          {
+            "uuid": "6219d1df1e",
+            "name": "",
+            "field": "category_id",
+            "ref_table": "shop_category",
+            "ref_field": "id"
+          }
+        ]
+      },
+      {
+        "uuid": "3e413b1242",
+        "name": "shop_order",
+        "fields": [
+          {
+            "uuid": "35f5fc5c34",
+            "name": "id"
+          },
+          {
+            "uuid": "4a9037b6e6",
+            "name": "name"
+          },
+          {
+            "uuid": "a8981c3da3",
+            "name": "client_id"
+          },
+          {
+            "uuid": "5a3fee98d6",
+            "name": "coupon_id"
+          },
+          {
+            "uuid": "7a20a94460",
+            "name": "created_at"
+          },
+          {
+            "uuid": "d763c74f13",
+            "name": "updated_at"
+          }
+        ],
+        "fks": [
+          {
+            "uuid": "f771a97a0b",
+            "name": "",
+            "field": "client_id",
+            "ref_table": "user",
+            "ref_field": "id"
+          },
+          {
+            "uuid": "8bd3cd4ebe",
+            "name": "",
+            "field": "coupon_id",
+            "ref_table": "shop_coupon",
+            "ref_field": "id"
+          }
+        ]
+      },
+      {
+        "uuid": "be18431c04",
+        "name": "shop_order_item",
+        "fields": [
+          {
+            "uuid": "c127ef2eb6",
+            "name": "id"
+          },
+          {
+            "uuid": "2becb7e37e",
+            "name": "name"
+          },
+          {
+            "uuid": "93056fd2e8",
+            "name": "order_id"
+          },
+          {
+            "uuid": "ef842ddece",
+            "name": "created_at"
+          },
+          {
+            "uuid": "e5d395a51b",
+            "name": "updated_at"
+          }
+        ],
+        "fks": [
+          {
+            "uuid": "924c9b54e7",
+            "name": "",
+            "field": "order_id",
+            "ref_table": "shop_order",
+            "ref_field": "id"
+          }
+        ]
+      },
+      {
+        "uuid": "c5b0a38ff3",
+        "name": "shop_coupon",
+        "fields": [
+          {
+            "uuid": "e6e76405c6",
+            "name": "id"
+          },
+          {
+            "uuid": "823209e283",
+            "name": "name"
+          },
+          {
+            "uuid": "8914abe340",
+            "name": "code"
+          },
+          {
+            "uuid": "4af60a2d97",
+            "name": "date_start"
+          },
+          {
+            "uuid": "1d71934346",
+            "name": "date_final"
+          },
+          {
+            "uuid": "90c26d9312",
+            "name": "created_at"
+          },
+          {
+            "uuid": "b54d37b4bf",
+            "name": "updated_at"
+          }
+        ],
+        "fks": []
+      }
+    ]
+  }
+}

@@ -1,0 +1,241 @@
+{
+  "uuid": "a53828b4bb",
+  "storeId": "laramake",
+  "name": "Tur",
+  "database": {
+    "uuid": "4398248b95",
+    "tables": [
+      {
+        "uuid": "d1fc51c8d6",
+        "name": "user",
+        "fields": [
+          {
+            "uuid": "4b6adcaa39",
+            "name": "id"
+          },
+          {
+            "uuid": "e501bb1e02",
+            "name": "name"
+          },
+          {
+            "uuid": "d39d1fb455",
+            "name": "created_at"
+          },
+          {
+            "uuid": "d38662a0c1",
+            "name": "updated_at"
+          }
+        ],
+        "fks": []
+      },
+      {
+        "uuid": "7b67c0a31f",
+        "name": "user_group",
+        "fields": [
+          {
+            "uuid": "dc926e0b49",
+            "name": "id"
+          },
+          {
+            "uuid": "2cf4cf84dc",
+            "name": "name"
+          },
+          {
+            "uuid": "731a88a792",
+            "name": "user_id"
+          },
+          {
+            "uuid": "a6ec9302a5",
+            "name": "created_at"
+          },
+          {
+            "uuid": "92a9b4aa94",
+            "name": "updated_at"
+          }
+        ],
+        "fks": [
+          {
+            "uuid": "394d4ddad1",
+            "name": "",
+            "field": "user_id",
+            "ref_table": "user",
+            "ref_field": "id"
+          }
+        ]
+      },
+      {
+        "uuid": "429b4b8f30",
+        "name": "tur_vehicle",
+        "fields": [
+          {
+            "uuid": "e5d4744661",
+            "name": "id"
+          },
+          {
+            "uuid": "8bb9c6393a",
+            "name": "name"
+          },
+          {
+            "uuid": "96cf20b5aa",
+            "name": "model_id"
+          },
+          {
+            "uuid": "740749d3cb",
+            "name": "created_at"
+          },
+          {
+            "uuid": "0ce6014710",
+            "name": "updated_at"
+          }
+        ],
+        "fks": [
+          {
+            "uuid": "106c7883a4",
+            "name": "",
+            "field": "model_id",
+            "ref_table": "tur_vehicle_model",
+            "ref_field": "id"
+          }
+        ]
+      },
+      {
+        "uuid": "6c99ca1da2",
+        "name": "tur_vehicle_type",
+        "fields": [
+          {
+            "uuid": "f7cc3a4ada",
+            "name": "id"
+          },
+          {
+            "uuid": "50a2d32d22",
+            "name": "name"
+          },
+          {
+            "uuid": "ccb76f7c77",
+            "name": "created_at"
+          },
+          {
+            "uuid": "c20f359248",
+            "name": "updated_at"
+          }
+        ],
+        "fks": []
+      },
+      {
+        "uuid": "f659ea35c1",
+        "name": "tur_vehicle_brand",
+        "fields": [
+          {
+            "uuid": "62ac56afc3",
+            "name": "id"
+          },
+          {
+            "uuid": "d97e6eae77",
+            "name": "name"
+          },
+          {
+            "uuid": "c0f9f0882d",
+            "name": "created_at"
+          },
+          {
+            "uuid": "5898928ad2",
+            "name": "updated_at"
+          }
+        ],
+        "fks": []
+      },
+      {
+        "uuid": "c83218610c",
+        "name": "tur_vehicle_model",
+        "fields": [
+          {
+            "uuid": "82884f1639",
+            "name": "id"
+          },
+          {
+            "uuid": "272860dee5",
+            "name": "name"
+          },
+          {
+            "uuid": "643b8dccfb",
+            "name": "type_id"
+          },
+          {
+            "uuid": "4eb045bf93",
+            "name": "brand_id"
+          },
+          {
+            "uuid": "97ebb1fe4e",
+            "name": "created_at"
+          },
+          {
+            "uuid": "a2f52183a2",
+            "name": "updated_at"
+          }
+        ],
+        "fks": [
+          {
+            "uuid": "a8ecb460d8",
+            "name": "",
+            "field": "type_id",
+            "ref_table": "tur_vehicle_type",
+            "ref_field": "id"
+          },
+          {
+            "uuid": "ae42018115",
+            "name": "",
+            "field": "brand_id",
+            "ref_table": "tur_vehicle_brand",
+            "ref_field": "id"
+          }
+        ]
+      },
+      {
+        "uuid": "b329855505",
+        "name": "tur_travel",
+        "fields": [
+          {
+            "uuid": "ab6677f43e",
+            "name": "id"
+          },
+          {
+            "uuid": "b31ae9ecca",
+            "name": "name"
+          },
+          {
+            "uuid": "e8b048930b",
+            "name": "driver_id"
+          },
+          {
+            "uuid": "8305211206",
+            "name": "vehicle_id"
+          },
+          {
+            "uuid": "967f0b05ed",
+            "name": "created_at"
+          },
+          {
+            "uuid": "445aeb574c",
+            "name": "updated_at"
+          }
+        ],
+        "fks": [
+          {
+            "uuid": "589228dbe9",
+            "name": "",
+            "field": "driver_id",
+            "ref_table": "user",
+            "ref_field": "id"
+          },
+          {
+            "uuid": "5af747abe8",
+            "name": "",
+            "field": "vehicle_id",
+            "ref_table": "tur_vehicle",
+            "ref_field": "id"
+          }
+        ]
+      }
+    ]
+  }
+}

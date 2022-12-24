@@ -66,9 +66,9 @@ class LaramakeApp extends LaramakeBase {
   storageData() {
     if (!this.storeId) return false;
     try {
-      return JSON.parse(localStorage.getItem(this.storeId) || 'false') || {};
+      return JSON.parse(localStorage.getItem(this.storeId) || 'false') || false;
     } catch(err) {
-      return {};
+      return false;
     }
   }
 
@@ -81,7 +81,7 @@ class LaramakeApp extends LaramakeBase {
     this.storageSave();
   }
 
-  databaseTableDelete(table) {
+  databaseTableRemove(table) {
     const index = this.database.tables.indexOf(table);
     this.database.tables.splice(index, 1);
     this.storageSave();
@@ -100,6 +100,16 @@ class LaramakeApp extends LaramakeBase {
       }
     }
     return [];
+  }
+
+  projectDownload() {
+    const content = JSON.stringify(this, ' ', 2);
+    const blob = new Blob([content], { type: 'application/json' });
+
+    const link = Object.assign(document.createElement('a'), {
+      href: URL.createObjectURL(blob),
+      download: `${this.name}.json`,
+    }).click();
   }
 
   files() {
@@ -173,20 +183,6 @@ class LaramakeDatabase extends LaramakeBase {
   }
 
   diagramUrl() {
-    const diagramSource = `[Person]
-      *name
-      height
-      weight
-      +birth_location_id
-      
-      [Location]
-      *id
-      city
-      state
-      country
-      
-    Person *--1 Location`;
-
     let source = [];
 
     this.tables.forEach(table => {
@@ -199,8 +195,6 @@ class LaramakeDatabase extends LaramakeBase {
       });
       source.push('');
     });
-
-    // return source.join("\n");
 
     let data = new TextEncoder('utf-8').encode(source.join("\n"));
     data = pako.deflate(data, { level: 9, to: 'string' });

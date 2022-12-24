@@ -1,0 +1,157 @@
+{
+  "uuid": "a53828b4bb",
+  "storeId": "laramake",
+  "name": "Uber",
+  "database": {
+    "uuid": "4398248b95",
+    "tables": [
+      {
+        "uuid": "d1fc51c8d6",
+        "name": "user",
+        "fields": [
+          {
+            "uuid": "4b6adcaa39",
+            "name": "id"
+          },
+          {
+            "uuid": "e501bb1e02",
+            "name": "name"
+          },
+          {
+            "uuid": "d39d1fb455",
+            "name": "created_at"
+          },
+          {
+            "uuid": "d38662a0c1",
+            "name": "updated_at"
+          }
+        ],
+        "fks": []
+      },
+      {
+        "uuid": "7b67c0a31f",
+        "name": "user_group",
+        "fields": [
+          {
+            "uuid": "dc926e0b49",
+            "name": "id"
+          },
+          {
+            "uuid": "2cf4cf84dc",
+            "name": "name"
+          },
+          {
+            "uuid": "731a88a792",
+            "name": "user_id"
+          },
+          {
+            "uuid": "a6ec9302a5",
+            "name": "created_at"
+          },
+          {
+            "uuid": "92a9b4aa94",
+            "name": "updated_at"
+          }
+        ],
+        "fks": [
+          {
+            "uuid": "394d4ddad1",
+            "name": "",
+            "field": "user_id",
+            "ref_table": "user",
+            "ref_field": "id"
+          }
+        ]
+      },
+      {
+        "uuid": "78860a1882",
+        "name": "uber_trip",
+        "fields": [
+          {
+            "uuid": "7f2b0ee1e2",
+            "name": "id"
+          },
+          {
+            "uuid": "78cb127d0e",
+            "name": "name"
+          },
+          {
+            "uuid": "671f4ffda3",
+            "name": "driver_id"
+          },
+          {
+            "uuid": "ea83d6b88c",
+            "name": "rider_id"
+          },
+          {
+            "uuid": "66bfac876e",
+            "name": "status"
+          },
+          {
+            "uuid": "b7c126d51b",
+            "name": "amount"
+          },
+          {
+            "uuid": "10b1f7edf1",
+            "name": "created_at"
+          },
+          {
+            "uuid": "e04872c60b",
+            "name": "updated_at"
+          }
+        ],
+        "fks": [
+          {
+            "uuid": "fb4402d9d6",
+            "name": "",
+            "field": "driver_id",
+            "ref_table": "user",
+            "ref_field": "id"
+          },
+          {
+            "uuid": "11a7f79c43",
+            "name": "",
+            "field": "rider_id",
+            "ref_table": "user",
+            "ref_field": "id"
+          }
+        ]
+      },
+      {
+        "uuid": "1f43e20de4",
+        "name": "uber_trip_place",
+        "fields": [
+          {
+            "uuid": "a1c8de94ef",
+            "name": "id"
+          },
+          {
+            "uuid": "4ec8f9bc35",
+            "name": "name"
+          },
+          {
+            "uuid": "7efa3dde53",
+            "name": "trip_id"
+          },
+          {
+            "uuid": "0211514947",
+            "name": "created_at"
+          },
+          {
+            "uuid": "7603c91431",
+            "name": "updated_at"
+          }
+        ],
+        "fks": [
+          {
+            "uuid": "bef6cca895",
+            "name": "",
+            "field": "trip_id",
+            "ref_table": "uber_trip",
+            "ref_field": "id"
+          }
+        ]
+      }
+    ]
+  }
+}
