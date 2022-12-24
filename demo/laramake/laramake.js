@@ -43,6 +43,7 @@ class LaramakeBase {
   }
 }
 
+
 class LaramakeApp extends LaramakeBase {
   onInit(params = {}) {
     this.storeId = params.storeId || false;
@@ -73,7 +74,7 @@ class LaramakeApp extends LaramakeBase {
   }
 
   storageSave() {
-    localStorage.setItem(this.storeId, JSON.stringify(this, ' ', 2));
+    localStorage.setItem(this.storeId, JSON.stringify(this));
   }
 
   databaseTableAdd(params = {}) {
@@ -177,6 +178,7 @@ class LaramakeApp extends LaramakeBase {
   }
 }
 
+
 class LaramakeDatabase extends LaramakeBase {
   onInit(params = {}) {
     this.tables = this.newInstances(LaramakeDatabaseTable, params.tables || []);
@@ -190,9 +192,9 @@ class LaramakeDatabase extends LaramakeBase {
       table.fields.forEach(field => {
         source.push(`${field.name}`);
       });
-      table.fks.forEach(fk => {
-        source.push(`${table.name} *--* ${fk.ref_table}`);
-      });
+      // table.fks.forEach(fk => {
+      //   source.push(`${table.name} *--* ${fk.ref_table}`);
+      // });
       source.push('');
     });
 
@@ -203,16 +205,16 @@ class LaramakeDatabase extends LaramakeBase {
   }
 }
 
+
 class LaramakeDatabaseTable extends LaramakeBase {
   onInit(params = {}) {
     this.name = params.name || '';
     this.fields = this.newInstances(LaramakeDatabaseTableField, params.fields || [
-      { name: 'id' },
-      { name: 'name' },
-      { name: 'created_at' },
-      { name: 'updated_at' },
+      { name: 'id', type: 'id' },
+      { name: 'name', type: 'string' },
+      { name: 'created_at', type: 'datetime' },
+      { name: 'updated_at', type: 'datetime' },
     ]);
-    this.fks = this.newInstances(LaramakeDatabaseTableFk, params.fks || []);
   }
 
   fieldAdd(param = {}) {
@@ -223,28 +225,54 @@ class LaramakeDatabaseTable extends LaramakeBase {
     const index = this.fields.indexOf(field);
     this.fields.splice(index, 1);
   }
-  
-  fkAdd(param = {}) {
-    this.fks.push(this.newInstance(LaramakeDatabaseTableFk, param));
-  }
-
-  fkRemove(fk) {
-    const index = this.fks.indexOf(fk);
-    this.fks.splice(index, 1);
-  }
 }
+
 
 class LaramakeDatabaseTableField extends LaramakeBase {
   onInit(params = {}) {
     this.name = params.name || '';
+    this.type = params.type || '';
+    this.fk_table = params.fk_table || null;
+    this.fk_field = params.fk_field || null;
   }
-}
 
-class LaramakeDatabaseTableFk extends LaramakeBase {
-  onInit(params = {}) {
-    this.name = params.name || '';
-    this.field = params.field || '';
-    this.ref_table = params.ref_table || '';
-    this.ref_field = params.ref_field || '';
+  typesList() {
+    return [
+      {
+        id: 'id',
+        name: 'ID',
+        type: 'bigint',
+      },
+      {
+        id: 'string',
+        name: 'Simple text',
+        type: 'varchar(255)',
+      },
+      {
+        id: 'text',
+        name: 'Big text',
+        type: 'text',
+      },
+      {
+        id: 'enum',
+        name: 'Enum',
+        type: 'enum()',
+      },
+      {
+        id: 'datetime',
+        name: 'Date time',
+        type: 'datetime',
+      },
+      {
+        id: 'decimal',
+        name: 'Decimal',
+        type: 'decimal(10, 2)',
+      },
+      {
+        id: 'relation',
+        name: 'Relation',
+        type: 'bigint',
+      },
+    ];
   }
 }
