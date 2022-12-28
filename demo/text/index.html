@@ -55,7 +55,6 @@
               <router-view :text="text"></router-view>
             </div>
           </div>
-          <demo-menu></demo-menu>
         </v-main>
       </v-layout>
     </v-app>
@@ -132,7 +131,6 @@
       ],
     }))
     .use(createCkeditor())
-    .use(createDemoMenu())
 		.mount('#app');
   </script>
 </body>

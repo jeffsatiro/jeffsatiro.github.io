@@ -1,3 +1,11 @@
+/* Dependencies:
+  <!-- Dayjs -->
+  <script src="https://unpkg.com/dayjs@1.11.7/dayjs.min.js"></script>
+  <script src="https://unpkg.com/dayjs@1.11.7/locale/en.js"></script>
+  <script src="https://unpkg.com/dayjs@1.11.7/plugin/localeData.js"></script>
+  <script>dayjs.locale('en'); dayjs.extend(dayjs_plugin_localeData);</script>
+*/
+
 const createVuetifyPlus = (options = {}) => ({
   install(app, options = {}) {
     app.component('vv-calendar', {
@@ -116,14 +124,18 @@ const createVuetifyPlus = (options = {}) => ({
         slotBind() {
           return {};
         },
+        onResize() {
+          this.headerHeight = this.$refs.header.$el.offsetHeight;
+        },
       },
 
       data: () => ({
         useDisplay: Vuetify.useDisplay(),
         showDrawer: true,
+        headerHeight: 50,
       }),
 
-      template: `<v-layout>
+      template: `<v-layout v-resize="onResize">
         <v-navigation-drawer
             v-model="showDrawer"
             :width="drawerWidth"
@@ -132,7 +144,7 @@ const createVuetifyPlus = (options = {}) => ({
           <slot name="drawer" v-bind="slotBind()"></slot>
         </v-navigation-drawer>
 
-        <v-app-bar elevation="1">
+        <v-app-bar elevation="1" ref="header">
           <div class="d-flex align-center flex-grow-1 px-2" style="gap:10px;">
             <v-btn
               icon="mdi-menu"
@@ -144,7 +156,7 @@ const createVuetifyPlus = (options = {}) => ({
         </v-app-bar>
 
         <v-main>
-          <div class="pa-3" style="height:calc(100vh - 48px); overflow:auto;">
+          <div class="pa-3" :style="\`height:calc(100vh - \${headerHeight}px); overflow:auto;\`">
             <slot v-bind="slotBind()"></slot>
           </div>
         </v-main>

@@ -42,7 +42,6 @@
 
         <v-main style="height:100vh; overflow:auto;">
           <div class="pa-3">Base</div>
-          <demo-menu></demo-menu>
         </v-main>
       </v-layout>
     </v-app>
@@ -80,7 +79,6 @@
       history: VueRouter.createWebHashHistory(),
       routes: [],
     }))
-    .use(createDemoMenu())
 		.mount('#app');
   </script>
 </body>

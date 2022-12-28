@@ -14,9 +14,18 @@
   <script src="https://unpkg.com/vue-router@4.1.6/dist/vue-router.global.js"></script>
 
   <!-- Vuetify -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@3.0.3/dist/vuetify.min.css">
   <script src="https://cdn.jsdelivr.net/npm/vuetify@3.0.3/dist/vuetify.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@3.0.3/dist/vuetify.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
+
+  <!-- Vuetify+ -->
+  <script src="../../assets/js/vue3-vuetify-plus.js"></script>
+
+  <!-- Dayjs -->
+  <script src="https://unpkg.com/dayjs@1.11.7/dayjs.min.js"></script>
+  <script src="https://unpkg.com/dayjs@1.11.7/locale/en.js"></script>
+  <script src="https://unpkg.com/dayjs@1.11.7/plugin/localeData.js"></script>
+  <script>dayjs.locale('en'); dayjs.extend(dayjs_plugin_localeData);</script>
 
   <!-- Demo menu -->
   <script src="../demo-menu.js"></script>
@@ -24,24 +33,13 @@
 <body>
   <div id="app">
     <v-app style="background:#f5f5f5;">
-      <v-layout>
-        <v-navigation-drawer
-          :model-value="true"
-          :permanent="true"
-          width="300"
-        >
-          <v-card-title>Base</v-card-title>
-          <v-divider></v-divider>
-          <v-card-text>
-            Base
-          </v-card-text>
-        </v-navigation-drawer>
+      <vv-app-layout>
+        Main conteny
 
-        <v-main style="height:100vh; overflow:auto;">
-          <div class="pa-3">Base</div>
-          <demo-menu></demo-menu>
-        </v-main>
-      </v-layout>
+        <template #drawer>
+          Drawer
+        </template>
+      </vv-app-layout>
     </v-app>
   </div>
   <script>
@@ -52,12 +50,19 @@
         };
       },
     })
-    .use(Vuetify.createVuetify({}))
+    .use(Vuetify.createVuetify({
+      defaults: {
+        global: {
+          density: 'compact',
+        },
+        VBtn: { density: 'default' },
+      },
+    }))
     .use(VueRouter.createRouter({
       history: VueRouter.createWebHashHistory(),
       routes: [],
     }))
-    .use(createDemoMenu())
+    .use(createVuetifyPlus())
 		.mount('#app');
   </script>
 </body>

@@ -50,7 +50,6 @@
               <v-monaco-diff style="height:40vh;" :original="original" :modified="modified"></v-monaco-diff>
             </v-col>
           </v-row>
-          <demo-menu></demo-menu>
         </v-main>
       </v-layout>
     </v-app>
@@ -70,7 +69,6 @@
       routes: [],
     }))
     .use(createMonaco())
-    .use(createDemoMenu())
 		.mount('#app');
   </script>
 </body>
