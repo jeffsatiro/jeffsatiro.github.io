@@ -115,6 +115,8 @@
           </v-card-text>
         </template>
       </vv-app-layout>
+
+      <demo-menu></demo-menu>
     </v-app>
   </div>
   <script>
@@ -299,6 +301,7 @@
         global: {
           density: 'compact',
         },
+        VBtn: { density: 'default' },
         VTextField: {variant: 'outlined', hideDetails:true},
         VSelect: {variant: 'outlined', hideDetails:true},
         VCombobox: {variant: 'outlined', hideDetails:true},
