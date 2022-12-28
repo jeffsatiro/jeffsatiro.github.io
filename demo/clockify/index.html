@@ -13,9 +13,13 @@
   <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
   <script src="https://unpkg.com/vue-router@4.1.6/dist/vue-router.global.js"></script>
 
+  <!-- Vueuse -->
+  <script src="https://unpkg.com/@vueuse/shared"></script>
+  <script src="https://unpkg.com/@vueuse/core"></script>
+
   <!-- Vuetify -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@3.0.3/dist/vuetify.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/vuetify@3.0.3/dist/vuetify.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@3.0.6/dist/vuetify.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@3.0.6/dist/vuetify.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
 
   <!-- Dayjs -->
@@ -23,9 +27,9 @@
   <script src="https://unpkg.com/dayjs@1.11.7/locale/en.js"></script>
   <script src="https://unpkg.com/dayjs@1.11.7/plugin/localeData.js"></script>
   <script>dayjs.locale('en'); dayjs.extend(dayjs_plugin_localeData);</script>
-
-  <!-- Calendar -->
-  <script src="../../assets/js/vue3-calendar.js"></script>
+  
+  <!-- Vuetify+ -->
+  <script src="../../assets/js/vue3-vuetify-plus.js"></script>
   
   <!-- Demo menu -->
   <script src="../demo-menu.js"></script>
@@ -33,11 +37,39 @@
 <body>
   <div id="app">
     <v-app style="background:#f5f5f5;">
-      <v-layout>
-        <v-navigation-drawer
-          :model-value="true"
-          width="300"
+      <vv-app-layout>
+        <vv-calendar
+          :model-value="$route.query.date || dateDefault"
+          @update:model-value="redirectQuery({ date: $event })"
+          :dates="clockifyUserTimeEntriesItemsCalendar()"
         >
+          <template #day="d">
+            <div class="py-4">
+              <div class="text-h3">{{ d.day }}</div>
+
+              <v-tooltip>
+                <template #activator="{ props }">
+                  <div v-bind="props" v-if="d.dates.length>0">
+                    {{ (d.dates.map(dd => dd.timeInterval.durationSeconds).reduce((partial, a) => partial+a)/60/60).toFixed(1) }} hours
+                  </div>
+                </template>
+
+                <div
+                  v-for="dd in d.dates"
+                >
+                  {{ dd.description }}
+                </div>
+              </v-tooltip>
+            </div>
+          </template>
+        </vv-calendar>
+
+        <v-progress-linear
+          indeterminate
+          v-if="clockify.userTimeEntries.loading"
+        ></v-progress-linear>
+
+        <template #drawer>
           <v-card-title>Clockify</v-card-title>
           <v-divider></v-divider>
           <v-card-text>
@@ -65,10 +97,10 @@
               </v-col>
               <v-col cols="12">
                 <v-card>
-                  <v-calendar
+                  <vv-calendar
                     :model-value="$route.query.date || dateDefault"
                     @update:model-value="redirectQuery({ date: $event })"
-                  ></v-calendar>
+                  ></vv-calendar>
                 </v-card>
               </v-col>
               <v-col cols="12">
@@ -81,43 +113,8 @@
               </v-col>
             </v-row>
           </v-card-text>
-        </v-navigation-drawer>
-
-        <v-main style="height:100vh; overflow:auto;">
-          <v-calendar
-            :model-value="$route.query.date || dateDefault"
-            @update:model-value="redirectQuery({ date: $event })"
-            :dates="clockifyUserTimeEntriesItemsCalendar()"
-          >
-            <template #day="d">
-              <div class="py-4">
-                <div class="text-h3">{{ d.day }}</div>
-  
-                <v-tooltip>
-                  <template #activator="{ props }">
-                    <div v-bind="props" v-if="d.dates.length>0">
-                      {{ (d.dates.map(dd => dd.timeInterval.durationSeconds).reduce((partial, a) => partial+a)/60/60).toFixed(1) }} hours
-                    </div>
-                  </template>
-  
-                  <div
-                    v-for="dd in d.dates"
-                  >
-                    {{ dd.description }}
-                  </div>
-  
-                  <!-- <pre class="text-left">{{ d }}</pre> -->
-                </v-tooltip>
-              </div>
-            </template>
-          </v-calendar>
-          <v-progress-linear
-            indeterminate
-            v-if="clockify.userTimeEntries.loading"
-          ></v-progress-linear>
-          <demo-menu></demo-menu>
-        </v-main>
-      </v-layout>
+        </template>
+      </vv-app-layout>
     </v-app>
   </div>
   <script>
@@ -147,6 +144,8 @@
       },
       data() {
         return {
+          drawer: true,
+          breakpoints: VueUse.useBreakpoints(VueUse.breakpointsVuetify),
           dateDefault: dayjs().format('YYYY-MM-DD'),
           storage: (() => {
             let storage = {};
@@ -297,17 +296,20 @@
     })
     .use(Vuetify.createVuetify({
       defaults: {
-        VTextField: {variant: 'outlined', density: 'compact', hideDetails:true},
-        VSelect: {variant: 'outlined', density: 'compact', hideDetails:true},
-        VCombobox: {variant: 'outlined', density: 'compact', hideDetails:true},
+        global: {
+          density: 'compact',
+        },
+        VTextField: {variant: 'outlined', hideDetails:true},
+        VSelect: {variant: 'outlined', hideDetails:true},
+        VCombobox: {variant: 'outlined', hideDetails:true},
       },
     }))
     .use(VueRouter.createRouter({
       history: VueRouter.createWebHashHistory(),
       routes: [],
     }))
+    .use(createVuetifyPlus())
     .use(createDemoMenu())
-    .use(createCalendar())
 		.mount('#app');
   </script>
 </body>

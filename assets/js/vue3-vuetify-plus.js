@@ -1,16 +1,6 @@
-/* Dependencies:
-<link rel="stylesheet" data-name="vs/editor/editor.main" href="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0/min/vs/editor/editor.main.min.css">
-  <script>window.require = { paths: { 'vs': 'https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0/min/vs' } };</script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0/min/vs/loader.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0/min/vs/editor/editor.main.nls.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.34.0/min/vs/editor/editor.main.js"></script>
-  <script src="https://unpkg.com/emmet-monaco-es/dist/emmet-monaco.min.js"></script>
-  <script>emmetMonaco.emmetHTML(monaco);</script>
-*/
-
-const createCalendar = (options = {}) => ({
+const createVuetifyPlus = (options = {}) => ({
   install(app, options = {}) {
-    app.component('v-calendar', {
+    app.component('vv-calendar', {
       props: {
         modelValue: {
           type: [Boolean, String],
@@ -112,6 +102,53 @@ const createCalendar = (options = {}) => ({
           </template>  
         </v-table>
       </div>`,
+    });
+
+    app.component('vv-app-layout', {
+      props: {
+        drawerWidth: {
+          type: [Number],
+          default: 300,
+        },
+      },
+
+      methods: {
+        slotBind() {
+          return {};
+        },
+      },
+
+      data: () => ({
+        useDisplay: Vuetify.useDisplay(),
+        showDrawer: true,
+      }),
+
+      template: `<v-layout>
+        <v-navigation-drawer
+            v-model="showDrawer"
+            :width="drawerWidth"
+            elevation="1"
+          >
+          <slot name="drawer" v-bind="slotBind()"></slot>
+        </v-navigation-drawer>
+
+        <v-app-bar elevation="1">
+          <div class="d-flex align-center flex-grow-1 px-2" style="gap:10px;">
+            <v-btn
+              icon="mdi-menu"
+              @click="showDrawer=true"
+              v-if="!useDisplay.lgAndUp"
+            ></v-btn>
+            <slot name="header" v-bind="slotBind()"></slot>
+          </div>
+        </v-app-bar>
+
+        <v-main>
+          <div class="pa-3" style="height:calc(100vh - 48px); overflow:auto;">
+            <slot v-bind="slotBind()"></slot>
+          </div>
+        </v-main>
+      </v-layout>`,
     });
   },
 });
