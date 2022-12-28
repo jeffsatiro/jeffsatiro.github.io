@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Base</title>
+
+  <!-- Axios -->
+  <script src="https://unpkg.com/axios@1.2.0/dist/axios.min.js"></script>
+
+  <!-- Vue -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <script src="https://unpkg.com/vue-router@4.1.6/dist/vue-router.global.js"></script>
+
+  <!-- Vuetify -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@3.0.3/dist/vuetify.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@3.0.3/dist/vuetify.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
+
+  <!-- Demo menu -->
+  <script src="../demo-menu.js"></script>
+</head>
+<body>
+  <div id="app">
+    <v-app style="background:#f5f5f5;">
+      <v-layout>
+        <v-navigation-drawer
+          :model-value="true"
+          :permanent="true"
+          width="300"
+        >
+          <v-card-title>Base</v-card-title>
+          <v-divider></v-divider>
+          <v-card-text>
+            Base
+          </v-card-text>
+        </v-navigation-drawer>
+
+        <v-main style="height:100vh; overflow:auto;">
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-text-field
+                  label="Número"
+                  v-model="params.number"
+                  :hide-details="true"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  label="Texto"
+                  v-model="params.text"
+                  :hide-details="true"
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12" class="d-flex" style="gap:20px;">
+                <v-btn :href="numberLink" target="_blank" color="primary">
+                  {{ numberLink }}
+                </v-btn>
+                <v-spacer></v-spacer>
+                <v-btn>COPIAR</v-btn>
+                <v-btn>LIMPAR</v-btn>
+              </v-col>
+            </v-row>
+          </v-container>
+          <demo-menu></demo-menu>
+        </v-main>
+      </v-layout>
+    </v-app>
+  </div>
+  <script>
+    Vue.createApp({
+      data() {
+        return {
+          params: {
+            number: '',
+            text: '',
+          },
+        };
+      },
+      computed: {
+        numberLink() {
+          const number = this.params.number.replace(/[^0-9]/g, '');
+          return number? `https://wa.me/${number}?text=${this.params.text}`: false;
+        },
+      },
+    })
+    .use(Vuetify.createVuetify({}))
+    .use(VueRouter.createRouter({
+      history: VueRouter.createWebHashHistory(),
+      routes: [],
+    }))
+    .use(createDemoMenu())
+		.mount('#app');
+  </script>
+</body>
+</html>

@@ -14,6 +14,7 @@ const createDemoMenu = () => ({
           {name:'Lotto Simulation', href:'../lotto/index.html'},
           {name:'OpenAPI', href:'../openapi/index.html'},
           {name:'Text tools', href:'../text/index.html'},
+          {name:'Gerador link whatsapp', href:'../whatsapp/index.html'},
         ],
       }),
       template: `<div style="display:flex; gap:10px; position:fixed; bottom:25px; right:50px; z-index:999;">
