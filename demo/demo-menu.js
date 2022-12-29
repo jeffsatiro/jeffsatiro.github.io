@@ -33,6 +33,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
         {name:'Leaflet', href:'../leaflet/index.html'},
         {name:'Lotto Simulation', href:'../lotto/index.html'},
         // {name:'OpenAPI', href:'../openapi/index.html'},
+        // {name:'QR Code', href:'../qrcode/index.html'},
         {name:'Text tools', href:'../text/index.html'},
         {name:'Gerador link whatsapp', href:'../whatsapp/index.html'},
       ],

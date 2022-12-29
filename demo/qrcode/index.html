@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Base</title>
+
+  <!-- Axios -->
+  <script src="https://unpkg.com/axios@1.2.0/dist/axios.min.js"></script>
+
+  <!-- Vue -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <script src="https://unpkg.com/vue-router@4.1.6/dist/vue-router.global.js"></script>
+
+  <!-- Vuetify -->
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@3.0.3/dist/vuetify.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@3.0.3/dist/vuetify.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
+
+  <!-- Vuetify+ -->
+  <script src="../../assets/js/vue3-vuetify-plus.js"></script>
+
+  <!-- Dayjs -->
+  <script src="https://unpkg.com/dayjs@1.11.7/dayjs.min.js"></script>
+  <script src="https://unpkg.com/dayjs@1.11.7/locale/en.js"></script>
+  <script src="https://unpkg.com/dayjs@1.11.7/plugin/localeData.js"></script>
+  <script>dayjs.locale('en'); dayjs.extend(dayjs_plugin_localeData);</script>
+
+  <!-- Demo menu -->
+  <script src="../demo-menu.js"></script>
+</head>
+<body>
+  <div id="app">
+    <v-app style="background:#f5f5f5;">
+      <vv-app-layout>
+        Main conteny
+
+        <template #drawer>
+          Drawer
+        </template>
+      </vv-app-layout>
+    </v-app>
+  </div>
+  <script>
+    Vue.createApp({
+      data() {
+        return {
+          test: true,
+        };
+      },
+    })
+    .use(Vuetify.createVuetify({
+      defaults: {
+        global: {
+          density: 'compact',
+        },
+        VBtn: { density: 'default' },
+      },
+    }))
+    .use(VueRouter.createRouter({
+      history: VueRouter.createWebHashHistory(),
+      routes: [],
+    }))
+    .use(createVuetifyPlus())
+		.mount('#app');
+  </script>
+</body>
+</html>
