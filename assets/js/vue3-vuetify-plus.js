@@ -8,6 +8,8 @@
 
 const createVuetifyPlus = (options = {}) => ({
   install(app, options = {}) {
+
+    // vv-dd
     app.component('vv-dd', {
       props: {
         modelValue: {
@@ -69,6 +71,8 @@ const createVuetifyPlus = (options = {}) => ({
       </v-card>`,
     });
 
+
+    // vv-calendar
     app.component('vv-calendar', {
       props: {
         modelValue: {
@@ -173,6 +177,8 @@ const createVuetifyPlus = (options = {}) => ({
       </div>`,
     });
 
+
+    // vv-app-layout
     app.component('vv-app-layout', {
       props: {
         title: {
@@ -241,6 +247,7 @@ const createVuetifyPlus = (options = {}) => ({
     });
 
 
+    // vv-alert
     app.component('vv-alert', {
       props: {
         modelValue: {
@@ -319,6 +326,35 @@ const createVuetifyPlus = (options = {}) => ({
           </template>
         </v-snackbar>
       </div>`,
+    });
+
+
+    // vv-qrcode
+    app.component('vv-qrcode', {
+      props: {
+          modelValue: {default:""},
+          size: {default:"300x300"},
+      },
+      data() {
+        return {
+          qrcodeUrl: this.getQrcodeUrl(this.modelValue),
+          timeout: false,
+        };
+      },
+      watch: {
+        modelValue(value) {
+          if (this.timeout) clearTimeout(this.timeout);
+          this.timeout = setTimeout(() => {
+            this.qrcodeUrl = this.getQrcodeUrl(value);
+          }, 1000);
+        },
+      },
+      methods: {
+        getQrcodeUrl(text) {
+          return `https://chart.googleapis.com/chart?cht=qr&chs=${this.size}&chl=${text}`;
+        },
+      },
+      template: `<v-img :src="qrcodeUrl" alt=""></v-img>`,
     });
   },
 });
