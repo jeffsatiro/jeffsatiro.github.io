@@ -45,9 +45,5 @@ window.addEventListener('DOMContentLoaded', (event) => {
     },
   })
   .use(Vuetify.createVuetify({}))
-  .use(VueRouter.createRouter({
-    history: VueRouter.createWebHashHistory(),
-    routes: [],
-  }))
   .mount(demoMenu);
 });

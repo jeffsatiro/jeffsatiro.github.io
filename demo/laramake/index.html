@@ -18,6 +18,15 @@
   <script src="https://cdn.jsdelivr.net/npm/vuetify@3.0.3/dist/vuetify.min.js"></script>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
 
+  <!-- Vuetify+ -->
+  <script src="../../assets/js/vue3-vuetify-plus.js"></script>
+
+  <!-- Dayjs -->
+  <script src="https://unpkg.com/dayjs@1.11.7/dayjs.min.js"></script>
+  <script src="https://unpkg.com/dayjs@1.11.7/locale/en.js"></script>
+  <script src="https://unpkg.com/dayjs@1.11.7/plugin/localeData.js"></script>
+  <script>dayjs.locale('en'); dayjs.extend(dayjs_plugin_localeData);</script>
+
   <!-- Vue Draggable -->
   <script src="https://unpkg.com/sortablejs@1.15.0/Sortable.min.js"></script>
   <script src="https://www.unpkg.com/vuedraggable@4.1.0/dist/vuedraggable.umd.js"></script>
@@ -33,12 +42,143 @@
 <body>
   <div id="app">
     <v-app style="background:#f5f5f5;">
-      <v-layout>
-        <v-navigation-drawer
-          :model-value="true"
-          :permanent="true"
-          width="400"
-        >
+      <vv-app-layout title="Laramake">
+        <template v-if="edit">
+            
+          <template v-if="edit.constructor.name=='LaramakeDatabaseTable'">
+            <v-card-text>
+              <v-text-field
+                v-model="edit.name"
+              ></v-text-field>
+              <br>
+
+              <v-card>
+                <v-table>
+                  <template #default>
+                    <colgroup>
+                      <col width="50px">
+                      <col width="*">
+                      <col width="300px">
+                      <col width="100px">
+                      <col width="50px">
+                    </colgroup>
+                    <thead>
+                      <tr>
+                        <th></th>
+                        <th>Field</th>
+                        <th>Type</th>
+                        <th>FK</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <draggable v-model="edit.fields" tag="tbody" item-key="uuid" handle="._handle">
+                      <template #item="{ element: _field}">
+                        <tr>
+                          <td class="pa-0"><v-btn class="_handle" flat icon="mdi-dots-grid"></v-btn></td>
+                          <td class="py-0">
+                            <v-text-field
+                              v-model="_field.name"
+                            ></v-text-field>
+                          </td>
+                          <td>
+                            <v-select
+                              v-model="_field.type"
+                              :items="_field.typesList()"
+                              item-title="name"
+                              item-value="id"
+                            ></v-select>
+                          </td>
+                          <td>
+                            <v-dialog>
+                              <template #activator="{ props }">
+                                <v-btn
+                                  block
+                                  v-bind="props"
+                                  ref="fk"
+                                  :color="(_field.fk_table && _field.fk_field)? 'warning': null"
+                                >
+                                  <v-icon v-if="_field.fk_table && _field.fk_field">mdi-key</v-icon>
+                                  <span v-else>FK</span>
+                                </v-btn>
+                              </template>
+
+                              <div class="mx-auto" style="width:600px; max-width:90vh;">
+                                <v-card>
+                                  <v-card-text>
+                                    <v-row>
+                                      <v-col cols="6">
+                                        <v-select
+                                          v-model="_field.fk_table"
+                                          label="Table reference"
+                                          :items="app.databaseTablesList()"
+                                        ></v-select>
+                                      </v-col>
+                                      <v-col cols="6">
+                                        <v-select
+                                          v-model="_field.fk_field"
+                                          label="Field in table reference"
+                                          :items="app.databaseTableFieldsList(_field.fk_table)"
+                                        ></v-select>
+                                      </v-col>
+                                      <v-col cols="6">
+                                        <v-btn
+                                          block
+                                          color="error"
+                                          @click="_field.fk_table=null; _field.fk_field=null;"
+                                        >Clear</v-btn>
+                                      </v-col>
+                                      <v-col cols="6">
+                                        <v-btn
+                                          block
+                                          color="primary"
+                                          @click="$refs.fk.$el.click()"
+                                        >Ok</v-btn>
+                                      </v-col>
+                                    </v-row>
+                                  </v-card-text>
+                                </v-card>
+                              </v-dialog>
+                              </div>
+                          </td>
+                          <td class="pa-0">
+                            <v-btn
+                              flat
+                              size="small"
+                              icon="mdi-close"
+                              color="error"
+                              @click="edit.fieldRemove(_field)"
+                            ></v-btn>
+                          </td>
+                        </tr>
+                      </template>
+                    </draggable>
+                  </template>
+                </v-table>
+              </v-card>
+              <br>
+              <v-btn block color="primary" @click="edit.fieldAdd()">Add Field</v-btn>
+
+              <br>
+              <!-- <debug :model-value="edit"></debug> -->
+            </v-card-text>
+          </template>
+
+        </template>
+
+        <!-- <div class="pa-3">
+          <debug :model-value="app.files()"></debug>
+
+          <div class="d-flex flex-column" style="background:#444; color:lime; padding:5px;">
+            <template v-for="_file in app.files()">
+              <pre style="font-size:14px; color:#888;">{{ _file.file }}</pre>
+              <pre style="font-size:14px;">{{ _file.content }}</pre>
+            </template>
+          </div>
+
+          <pre>{{ app }}</pre>
+        </div> -->
+
+        <template #drawer>
           <v-card-title>Laramake</v-card-title>
           <v-divider></v-divider>
 
@@ -116,146 +256,8 @@
             <v-list-item @click="loadPreset('tur.json')">Tur</v-list-item>
             <v-list-item @click="loadPreset('uber.json')">Uber</v-list-item>
           </v-list>
-        </v-navigation-drawer>
-
-        <v-main style="height:100vh; overflow:auto;">
-
-          <template v-if="edit">
-            
-            <template v-if="edit.constructor.name=='LaramakeDatabaseTable'">
-              <v-card-text>
-                <v-text-field
-                  v-model="edit.name"
-                ></v-text-field>
-                <br>
-
-                <v-card>
-                  <v-table>
-                    <template #default>
-                      <colgroup>
-                        <col width="50px">
-                        <col width="*">
-                        <col width="300px">
-                        <col width="100px">
-                        <col width="50px">
-                      </colgroup>
-                      <thead>
-                        <tr>
-                          <th></th>
-                          <th>Field</th>
-                          <th>Type</th>
-                          <th>FK</th>
-                          <th></th>
-                        </tr>
-                      </thead>
-                      <draggable v-model="edit.fields" tag="tbody" item-key="uuid" handle="._handle">
-                        <template #item="{ element: _field}">
-                          <tr>
-                            <td class="pa-0"><v-btn class="_handle" flat icon="mdi-dots-grid"></v-btn></td>
-                            <td class="py-0">
-                              <v-text-field
-                                v-model="_field.name"
-                              ></v-text-field>
-                            </td>
-                            <td>
-                              <v-select
-                                v-model="_field.type"
-                                :items="_field.typesList()"
-                                item-title="name"
-                                item-value="id"
-                              ></v-select>
-                            </td>
-                            <td>
-                              <v-dialog>
-                                <template #activator="{ props }">
-                                  <v-btn
-                                    block
-                                    v-bind="props"
-                                    ref="fk"
-                                    :color="(_field.fk_table && _field.fk_field)? 'warning': null"
-                                  >
-                                    <v-icon v-if="_field.fk_table && _field.fk_field">mdi-key</v-icon>
-                                    <span v-else>FK</span>
-                                  </v-btn>
-                                </template>
-
-                                <div class="mx-auto" style="width:600px; max-width:90vh;">
-                                  <v-card>
-                                    <v-card-text>
-                                      <v-row>
-                                        <v-col cols="6">
-                                          <v-select
-                                            v-model="_field.fk_table"
-                                            label="Table reference"
-                                            :items="app.databaseTablesList()"
-                                          ></v-select>
-                                        </v-col>
-                                        <v-col cols="6">
-                                          <v-select
-                                            v-model="_field.fk_field"
-                                            label="Field in table reference"
-                                            :items="app.databaseTableFieldsList(_field.fk_table)"
-                                          ></v-select>
-                                        </v-col>
-                                        <v-col cols="6">
-                                          <v-btn
-                                            block
-                                            color="error"
-                                            @click="_field.fk_table=null; _field.fk_field=null;"
-                                          >Clear</v-btn>
-                                        </v-col>
-                                        <v-col cols="6">
-                                          <v-btn
-                                            block
-                                            color="primary"
-                                            @click="$refs.fk.$el.click()"
-                                          >Ok</v-btn>
-                                        </v-col>
-                                      </v-row>
-                                    </v-card-text>
-                                  </v-card>
-                                </v-dialog>
-                                </div>
-                            </td>
-                            <td class="pa-0">
-                              <v-btn
-                                flat
-                                size="small"
-                                icon="mdi-close"
-                                color="error"
-                                @click="edit.fieldRemove(_field)"
-                              ></v-btn>
-                            </td>
-                          </tr>
-                        </template>
-                      </draggable>
-                    </template>
-                  </v-table>
-                </v-card>
-                <br>
-                <v-btn block color="primary" @click="edit.fieldAdd()">Add Field</v-btn>
-
-                <br>
-                <!-- <debug :model-value="edit"></debug> -->
-              </v-card-text>
-            </template>
-
-          </template>
-
-          <!-- <div class="pa-3">
-            <debug :model-value="app.files()"></debug>
-
-            <div class="d-flex flex-column" style="background:#444; color:lime; padding:5px;">
-              <template v-for="_file in app.files()">
-                <pre style="font-size:14px; color:#888;">{{ _file.file }}</pre>
-                <pre style="font-size:14px;">{{ _file.content }}</pre>
-              </template>
-            </div>
-
-            <pre>{{ app }}</pre>
-          </div> -->
-        </v-main>
-      </v-layout>
+        </template>
+      </vv-app-layout>
     </v-app>
   </div>
   <script>
@@ -325,16 +327,17 @@
     })
     .use(Vuetify.createVuetify({
       defaults: {
-        VTextField: {variant: 'outlined', density: 'compact', hideDetails:true},
-        VSelect: {variant: 'outlined', density: 'compact', hideDetails:true},
-        VCombobox: {variant: 'outlined', density: 'compact', hideDetails:true},
-        VList: {density: 'compact'},
+        global: { density: 'compact' },
+        VBtn: { density: 'default' },
+        VTextField: { hideDetails: true, variant: 'outlined' },
+        VSelect: { hideDetails: true, variant: 'outlined' },
       },
     }))
     .use(VueRouter.createRouter({
       history: VueRouter.createWebHashHistory(),
       routes: [],
     }))
+    .use(createVuetifyPlus())
 		.mount('#app');
   </script>
 </body>
