@@ -40,7 +40,7 @@ window.addEventListener('DOMContentLoaded', (event) => {
     }),
     computed: {
       sourceUrl() {
-        return location.href.replace(/.+\/demo\/(.+?)\/index\.html.*/g, 'https://github.com/jeff-silva/jeff-silva.github.io/blob/master/demo/$1/index.html');
+        return location.href.replace(/.+\/demo\/(.+?)\/index\.html.*/g, 'https://github.com/jeff-silva/jeff-silva.github.io/blob/master/demo/$1/');
       },
     },
   })
