@@ -18,7 +18,6 @@ window.addEventListener('DOMContentLoaded', (event) => {
                 :hide-details="true"
               ></v-text-field>
             </div>
-            <v-divider></v-divider>
             <div style="max-height:80vh; overflow:auto;">
               <v-list>
                 <template v-for="(_item, i) in itemsFiltered()">

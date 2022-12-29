@@ -184,21 +184,36 @@ class LaramakeDatabase extends LaramakeBase {
     this.tables = this.newInstances(LaramakeDatabaseTable, params.tables || []);
   }
 
-  diagramUrl() {
+  diagramSource() {
     let source = [];
 
     this.tables.forEach(table => {
       source.push(`[${table.name}]`);
       table.fields.forEach(field => {
-        source.push(`${field.name}`);
+        let field_name = [];
+        if (field.fk_table && field.fk_field) {
+          field_name.push('+');
+        }
+        field_name.push(field.name);
+        source.push(field_name.join(''));
       });
-      // table.fks.forEach(fk => {
-      //   source.push(`${table.name} *--* ${fk.ref_table}`);
-      // });
       source.push('');
     });
 
-    let data = new TextEncoder('utf-8').encode(source.join("\n"));
+    this.tables.forEach(table => {
+      table.fields.forEach(field => {
+        if (!field.fk_table || !field.fk_field) return;
+        source.push(`${table.name} *--* ${field.fk_table}`);
+      });
+    });
+
+    return source.join("\n");
+  }
+
+  diagramUrl() {
+    const source = this.diagramSource();
+    // console.clear(); console.log(source);
+    let data = new TextEncoder('utf-8').encode(source);
     data = pako.deflate(data, { level: 9, to: 'string' });
     data = btoa(data) .replace(/\+/g, '-').replace(/\//g, '_');
     return `https://kroki.io/erd/svg/${data}`;
@@ -267,6 +282,11 @@ class LaramakeDatabaseTableField extends LaramakeBase {
         id: 'decimal',
         name: 'Decimal',
         type: 'decimal(10, 2)',
+      },
+      {
+        id: 'file',
+        name: 'File',
+        type: 'BLOB',
       },
       {
         id: 'relation',

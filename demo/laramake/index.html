@@ -165,18 +165,7 @@
 
         </template>
 
-        <!-- <div class="pa-3">
-          <debug :model-value="app.files()"></debug>
-
-          <div class="d-flex flex-column" style="background:#444; color:lime; padding:5px;">
-            <template v-for="_file in app.files()">
-              <pre style="font-size:14px; color:#888;">{{ _file.file }}</pre>
-              <pre style="font-size:14px;">{{ _file.content }}</pre>
-            </template>
-          </div>
-
-          <pre>{{ app }}</pre>
-        </div> -->
+        <!-- <vv-dd v-model="app.database"></vv-dd> -->
 
         <template #drawer>
           <v-card-title>Laramake</v-card-title>
@@ -291,38 +280,6 @@
       },
       components: {
         draggable: vuedraggable,
-        debug: {
-          props: {
-            modelValue: {
-              type: [Boolean, Number, String, Array, Object, Function],
-            },
-          },
-          methods: {
-            dataType(data) {
-              return Array.isArray(data) ? 'array' : (typeof data);
-            },
-            dataValue(data) {
-              const type = this.dataType(data);
-              if (type=='object') {
-                let r = {};
-                for(let key in data) {
-                  let dataValue = data[key];
-                  let dataType = this.dataType(dataValue);
-                  if (dataType=='function') {
-                    dataValue = '() => {}';
-                  }
-                  r[`${key}: ${dataType}`] = dataValue;
-                }
-                return r;
-              }
-              if (type=='function') {
-                return data.toString();
-              }
-              return data;
-            },
-          },
-          template: `<pre style="background:#444; color:lime; padding:5px;">{{ dataType(modelValue) }}: {{ dataValue(modelValue) }}</pre>`,
-        },
       },
     })
     .use(Vuetify.createVuetify({
