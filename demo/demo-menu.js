@@ -52,6 +52,11 @@ window.addEventListener('DOMContentLoaded', (event) => {
     data: () => ({
       filter: '',
       items: [
+        {
+          id: 'bookapp',
+          name: 'Gerador app bookmark',
+          icon: 'mdi-bookmark-plus-outline',
+        },
         // {
         //   id: 'brainjs',
         //   name: 'BrainJS',
