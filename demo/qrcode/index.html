@@ -35,7 +35,10 @@
     <v-app style="background:#f5f5f5;">
       <vv-app-layout title="QR Code">
         <v-card>
-          <v-card-title>{{ type.name }}</v-card-title>
+          <v-card-title>
+            <v-icon>{{ type.icon }}</v-icon>
+            <span class="ms-2">{{ type.name }}</span>
+          </v-card-title>
           <v-divider></v-divider>
           <v-card-text>
             <v-row no-gutters>
@@ -110,6 +113,8 @@
               v-for="_type in types"
               :key="_type.id"
               :to="{path:'/', query:{type:_type.id}}"
+              :prepend-icon="_type.icon"
+              :active="_type.id == ($route.query.type || 'text')"
             >
               {{ _type.name }}
             </v-list-item>
@@ -140,6 +145,7 @@
             {
               id: 'text',
               name: 'Texto',
+              icon: 'mdi-format-color-text',
               text: 'Hello World :)',
               onChange: (self) => {
                 this.qrtext = self.text;
@@ -148,6 +154,7 @@
             {
               id: 'url',
               name: 'URL',
+              icon: 'mdi-link',
               url: '',
               onChange: (self) => {
                 this.qrtext = self.url;
@@ -156,6 +163,7 @@
             {
               id: 'wifi',
               name: 'WIFI',
+              icon: 'mdi-wifi',
               ssid: '',
               type: 'WPA',
               pass: '',
@@ -166,6 +174,7 @@
             {
               id: 'vcard',
               name: 'Cartão de contato',
+              icon: 'mdi-card-account-details',
               firstName: '',
               lastName: '',
               companyName: '',
@@ -200,6 +209,7 @@
             {
               id: 'event',
               name: 'Evento',
+              icon: 'mdi-calendar',
               summary: '',
               dateStart: '',
               dateFinal: '',
@@ -216,6 +226,7 @@
             {
               id: 'sms',
               name: 'SMS',
+              icon: 'mdi-check',
               mobile: '',
               message: '',
               onChange: (self) => {
@@ -225,6 +236,7 @@
             {
               id: 'phone',
               name: 'Ligação',
+              icon: 'mdi-message-processing',
               phone: '',
               onChange: (self) => {
                 this.qrtext = `tel:${self.phone.replace(/[^0-9]/g, '')}`;
@@ -233,6 +245,7 @@
             {
               id: 'geo',
               name: 'Geo posicionamento',
+              icon: 'mdi-map-marker',
               lat: 0,
               lng: 0,
               onChange: (self) => {
@@ -262,6 +275,7 @@
             {
               id: 'pix',
               name: 'PIX',
+              icon: 'mdi-currency-usd',
               key: 'john@doe.com',
               city: 'Brasília',
               fullName: 'John Doe',
