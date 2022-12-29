@@ -69,6 +69,8 @@
           v-if="clockify.userTimeEntries.loading"
         ></v-progress-linear>
 
+        <!-- <vv-dd v-model="clockify.userTimeEntries" active-key="items"></vv-dd> -->
+
         <template #drawer>
           <v-card-title>Clockify</v-card-title>
           <v-divider></v-divider>
@@ -118,20 +120,6 @@
     </v-app>
   </div>
   <script>
-    let clockify = axios.create({
-        baseURL: 'https://api.clockify.me/api/v1',
-        headers: { 'X-Api-Key': 'MmM1MTVhZjMtM2ZhMS00YWVhLTk0MWYtZjNiY2Q3MDFiZmEw' },
-        cache: {
-          ttl: 1000 * 60 * 5,
-          interpretHeader: false,
-          methods: ['get'],
-          cachePredicate: { statusCheck: (status) => status >= 200 && status < 400 },
-          update: {},
-          etag: false,
-          modifiedSince: false,
-          staleIfError: false
-        },
-    });
     Vue.createApp({
       watch: {
         $route: {deep:true, handler(value, old) {
