@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Base</title>
+
+  <!-- Axios -->
+  <script src="https://unpkg.com/axios@1.2.0/dist/axios.min.js"></script>
+
+  <!-- Vue -->
+  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+  <script src="https://unpkg.com/vue-router@4.1.6/dist/vue-router.global.js"></script>
+
+  <!-- Vuetify -->
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@3.0.3/dist/vuetify.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vuetify@3.0.3/dist/vuetify.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@mdi/font@6.9.96/css/materialdesignicons.min.css">
+
+  <!-- Vuetify+ -->
+  <script src="../../assets/js/vue3-vuetify-plus.js"></script>
+
+  <!-- Dayjs -->
+  <script src="https://unpkg.com/dayjs@1.11.7/dayjs.min.js"></script>
+  <script src="https://unpkg.com/dayjs@1.11.7/locale/en.js"></script>
+  <script src="https://unpkg.com/dayjs@1.11.7/plugin/localeData.js"></script>
+  <script>dayjs.locale('en'); dayjs.extend(dayjs_plugin_localeData);</script>
+
+  <!-- Auth0 -->
+  <script src="https://cdn.auth0.com/js/auth0-spa-js/2.0/auth0-spa-js.production.js"></script>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+    import { getAuth, signOut, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-analytics.js";
+    import { getFirestore, collection, getDocs } from 'https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore-lite.js';
+
+    window.firebase = {
+      initializeApp,
+      getAuth,
+      signOut,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      onAuthStateChanged,
+      getAnalytics,
+      getFirestore,
+      collection,
+      getDocs,
+    };
+
+    window.firebase.$app = firebase.initializeApp({
+      apiKey: "AIzaSyB3FPg8oq-y683IAWRKpRF3tjTRF6nJTBQ",
+      authDomain: "jeff-silva.firebaseapp.com",
+      projectId: "jeff-silva",
+      storageBucket: "jeff-silva.appspot.com",
+      messagingSenderId: "402906668850",
+      appId: "1:402906668850:web:4f272ddf25bc123325812b",
+      measurementId: "G-81E3XZLBFK"
+    });
+
+    console.log(process.env.FIREBASE_APIKEY);
+
+    window.firebase.$analytics = firebase.getAnalytics(firebase.$app);
+    window.firebase.$firestore = firebase.getFirestore(firebase.$app);
+
+    // (async () => {
+    //   const auth = firebase.auth.getAuth(firebase.$app);
+    //   const data = await firebase.auth.createUserWithEmailAndPassword(auth, 'jeff@grr.la', 'jeff@grr.la');
+    //   console.log(data);
+    // })();
+  </script>
+
+  <!-- Demo menu -->
+  <script src="../demo-menu.js"></script>
+</head>
+<body>
+  <div id="app">
+    <v-app style="background:#f5f5f5;">
+      <vv-app-layout>
+        Main content
+
+        <v-row>
+          <v-col cols="6"><v-text-field v-model="login.email" :hide-details="true" label="Email"></v-text-field></v-col>
+          <v-col cols="6"><v-text-field v-model="login.email" :hide-details="true" label="password" type="password"></v-text-field></v-col>
+          <v-col cols="4"><v-btn block @click="firebase.login(login)">Login</v-btn></v-col>
+          <v-col cols="4"><v-btn block @click="firebase.register(login)">Register</v-btn></v-col>
+          <v-col cols="4"><v-btn block @click="firebase.logout()">Logout</v-btn></v-col>
+        </v-row>
+
+        <pre>{{ $data }}</pre>
+
+        <template #drawer>
+          Drawer
+        </template>
+      </vv-app-layout>
+    </v-app>
+  </div>
+  <script>
+    const useFirebase = () => {
+      const { ref } = Vue;
+      const user = ref(null);
+
+      const credentialUserParse = (user) => {
+        return {
+          uid: user.uid,
+          apiKey: user.apiKey,
+          email: user.email,
+          emailVerified: user.emailVerified,
+          ...user.providerData[0],
+        };
+      };
+
+      setTimeout(async () => {
+        const auth = firebase.getAuth(firebase.$app);
+        firebase.onAuthStateChanged(auth, (userData) => {
+          if (! userData) return user.value = null;
+          user.value = credentialUserParse(userData);
+        });
+      }, 200);
+
+      const login = async ({ email, password }) => {
+        try {
+          const auth = firebase.getAuth(firebase.$app);
+          const credential = await firebase.signInWithEmailAndPassword(auth, email, password);
+          user.value = credentialUserParse(credential.user);
+        } catch(err) {
+          console.log(err);
+        }
+      };
+
+      const logout = async () => {
+        const auth = firebase.getAuth(firebase.$app);
+        const data = await firebase.signOut(auth);
+        console.log(data);
+      };
+
+      const register = async ({ email, password }) => {
+        try {
+          const auth = firebase.getAuth(firebase.$app);
+          const credential = await firebase.createUserWithEmailAndPassword(auth, email, password);
+          user.value = credentialUserParse(credential.user);
+        } catch(err) {
+          console.log(err);
+        }
+      };
+
+      return { user, login, logout, register };
+    };
+
+    Vue.createApp({
+      data() {
+        return {
+          login: { email: 'jeff@grr.la', password: 'jeff@grr.la' },
+          test: true,
+          firebase: useFirebase(),
+        };
+      },
+    })
+    .use(Vuetify.createVuetify({
+      defaults: {
+        global: {
+          density: 'compact',
+        },
+        VBtn: { density: 'default' },
+      },
+    }))
+    .use(VueRouter.createRouter({
+      history: VueRouter.createWebHashHistory(),
+      routes: [],
+    }))
+    .use(createVuetifyPlus())
+		.mount('#app');
+  </script>
+</body>
+</html>
+
+<!--
+http://localhost:9000/demo/auth/index.html
+-->
