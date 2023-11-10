@@ -12,6 +12,7 @@
   "devDependencies": {
     "@iconify/vue": "^4.1.1",
     "@nuxt/devtools": "latest",
+    "axios": "^1.6.1",
     "nuxt": "^3.8.1",
     "vite-plugin-vuetify": "^1.0.2",
     "vue": "^3.3.8",

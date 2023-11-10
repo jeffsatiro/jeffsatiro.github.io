@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-container class="py-5">
-      <v-btn icon="mdi-home" />
+      Hello World
     </v-container>
   </v-app>
 </template>
