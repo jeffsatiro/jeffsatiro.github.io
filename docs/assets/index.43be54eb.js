@@ -1,1 +1,0 @@
-import{_ as a,L as t,A as e,V as s,t as c,z as o,B as r,M as n}from"./entry.4fd7a84e.js";const l={};function _(d,f){return c(),t(s,null,{default:e(()=>[o(n,{class:"py-5"},{default:e(()=>[r(" Hello World ")]),_:1})]),_:1})}const i=a(l,[["render",_]]);export{i as default};
