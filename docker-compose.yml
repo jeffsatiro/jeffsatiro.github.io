@@ -21,3 +21,11 @@ services:
     - '8080:80'
     volumes:
     - ./old:/usr/local/apache2/htdocs
+
+  # docs:
+  #   image: httpd:latest
+  #   working_dir: /docs
+  #   ports:
+  #   - '8081:80'
+  #   volumes:
+  #   - ./docs:/usr/local/apache2/htdocs
