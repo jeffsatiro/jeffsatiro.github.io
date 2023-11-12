@@ -2,29 +2,16 @@
   <v-app>
     <div class="d-flex flex-column py-5" style="gap: 20px;" v-if="resume.ready">
       <v-container>
-        <h1>{{ resume.data.name }}</h1>
-        <h2>{{ resume.data.description }}</h2>
+        <h1>{{ resume.data.profile.firstName }} {{ resume.data.profile.lastName }}</h1>
+        <h2>{{ resume.data.profile.headline }}</h2>
         <br>
 
-        <div v-html="resume.data.bio"></div>
+        <div v-html="resume.data.profile.summary" style="white-space:pre-line;"></div>
       </v-container>
 
-      <v-container>
+      <!-- <v-container>
         <h1>Contate-me</h1>
-        <br>
-
-        <table>
-          <tbody>
-            <template v-for="o in [ ...resume.data.links, ...resume.data.contacts ]">
-              <tr>
-                <td class="pe-4">{{ o.name }}</td>
-                <td><a :href="o.url" target="_blank">{{ o.url }}</a></td>
-              </tr>
-            </template>
-          </tbody>
-        </table>
-
-      </v-container>
+      </v-container> -->
 
       <v-container>
         <h1>Skills</h1>
@@ -32,9 +19,12 @@
 
         <div class="d-flex flex-column" style="gap:20px;">
           <template v-for="o in resume.data.skills">
-            <div class="d-flex align-center">
-              <div style="min-width: 100px;">{{ o.name }}</div>
-              <v-progress-linear :model-value="100 * o.rating / 5" height="5" />
+            <div class="d-flex align-center" v-if="o.meta">
+              <div style="min-width: 150px; max-width:150px;">{{ o.name }}</div>
+              <div class="flex-grow-1">
+                <v-progress-linear :model-value="100 * o.meta.rating / 5" height="5" />
+              </div>
+              <small class="d-block text-right" style="min-width:50px; max-width:50px;">{{ o.meta.rating }} / 5</small>
             </div>
           </template>
         </div>
@@ -45,34 +35,55 @@
         <br>
 
         <div class="d-flex flex-column" style="gap:35px;">
-          <template v-for="o in resume.data.experiences">
-            <div v-if="o.active" class="ps-5" style="border-left: solid 5px #444;">
-              <h2>{{ o.name }}</h2>
+          <template v-for="o in resume.data.positions">
+            <div class="ps-5" style="border-left: solid 5px #444;">
+              <h2>{{ o.title }}</h2>
 
               <div class="d-flex align-center">
-                <div>{{ o.date_start || 'Atualmente' }}</div>
+                <div>{{ o.startedOn || 'Atualmente' }}</div>
                 <div class="px-2">~</div>
-                <div>{{ o.date_final || 'Atualmente' }}</div>
+                <div>{{ o.finishedOn || 'Atualmente' }}</div>
               </div>
 
-              <div v-if="o.place" class="d-flex align-center">
-                <!-- <v-icon icon="material-symbols:location-on" size="20" /> -->
-                <span>{{ o.place }}</span>
+              <div class="d-flex align-center" v-if="o.location.fullName">
+                <span>{{ o.location.fullName }}</span>
               </div>
 
-              <div v-html="o.description"></div>
-              <div v-if="o.stack.length">Stack: {{ o.stack.join(', ') }}</div>
-
-              <template v-if="o.projects.length">
-                <br>
-                <h3>Projetos executados:</h3>
-
-                <template v-for="oo in o.projects">
-                  <div>- {{ oo.name }}</div>
-                  <!-- <pre>{{ oo }}</pre> -->
-                </template>
-              </template>
+              <div v-html="o.description" v-if="o.description" class="mt-3"></div>
             </div>
+          </template>
+        </div>
+      </v-container>
+
+      <v-container>
+        <h1>Projetos</h1>
+        <br>
+
+        <v-row>
+          <template v-for="o in resume.data.projects">
+            <v-col cols="12" md="6" v-if="o.active">
+              <div class="ps-5" style="border-left: solid 5px #444;">
+                <h2>{{ o.title }}</h2>
+  
+                <div class="d-flex align-center">
+                  <div>{{ o.startedOn || 'Atualmente' }}</div>
+                  <div class="px-2">~</div>
+                  <div>{{ o.finishedOn || 'Atualmente' }}</div>
+                </div>
+  
+                <div v-html="o.description" v-if="o.description" class="mt-3"></div>
+  
+                <div v-if="o.url" class="mt-3">
+                  <v-btn :href="o.url" target="_blank" block>View</v-btn>
+                </div>
+              </div>
+            </v-col>
+          </template>
+        </v-row>
+
+        <div class="d-flex flex-column" style="gap:35px;">
+          <template v-for="o in resume.data.projects">
+            
           </template>
         </div>
       </v-container>
@@ -89,7 +100,7 @@
     data: false,
     async load() {
       try {
-        const { data } = await axios.get('https://raw.githubusercontent.com/jeff-silva/jeff-silva/main/data/resume.json');
+        const { data } = await axios.get('https://raw.githubusercontent.com/jeff-silva/jeff-silva/main/data/linkedin-resume.json');
         resume.data = data;
       } catch(err) {}
       resume.ready = true;
@@ -106,8 +117,11 @@
   
   html, body {
     font-family: 'Lato', sans-serif;
-    /* font-family: 'Playfair Display', serif;
-    font-weight: 700; */
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
   }
   
 
