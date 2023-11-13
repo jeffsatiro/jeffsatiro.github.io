@@ -6,6 +6,13 @@
         <h2>{{ resume.data.profile.headline }}</h2>
         <br>
 
+        <div class="d-flex align-center" style="gap:10px;">
+          <template v-for="o in resume.data.contacts">
+            <a :href="o.url" target="_blank"><img :src="o.icon" alt="" /></a>
+          </template>
+        </div>
+        <br>
+
         <div v-html="resume.data.profile.summary" style="white-space:pre-line;"></div>
       </v-container>
 
@@ -60,7 +67,7 @@
         <br>
 
         <v-timeline side="end" align="start">
-          <template v-for="o in resume.data.projects">
+          <template v-for="(o, i) in resume.data.projects">
             <v-timeline-item dot-color="pink" size="small">
               <h2>{{ o.title }}</h2>
 
@@ -72,36 +79,42 @@
 
               <div v-html="o.description" v-if="o.description" class="mt-3"></div>
 
-              <template v-if="o.meta">
-                <template v-if="o.meta.images">
-                  <template v-for="oo in o.meta.images">
-                    <v-dialog width="800">
-                      <template #activator="bind">
-                        <v-btn v-bind="bind.props">Images</v-btn>
-                      </template>
-                      <v-card>
-                        <v-card-text>
-                          <img :src="oo.url" alt="" style="width:100%;" />
-                        </v-card-text>
-                      </v-card>
-                    </v-dialog>
+              <br>
+              <div class="d-flex align-center" style="gap:10px;">
+                <v-btn :href="o.url" target="_blank">Visualizar</v-btn>
+                
+                <template v-if="o.meta">
+                  <template v-if="o.meta.images">
+                    <template v-for="(oo, ii) in o.meta.images">
+                      <v-btn @click="projectsModal=`${i}-${ii}`">Image {{ ii+1 }}</v-btn>
+
+                      <v-dialog width="800" scrollable :model-value="projectsModal==`${i}-${ii}`" @update:modelValue="projectsModal=null">
+                        <v-card>
+                          <v-card-title class="d-flex align-center">
+                            <div class="flex-grow-1">Print</div>
+                            <v-btn icon="mdi-close" flat size="35" @click="projectsModal=null" />
+                          </v-card-title>
+                          <v-card-text class="pa-0">
+                            <img :src="oo.url" alt="" style="width:100%;" />
+                          </v-card-text>
+                        </v-card>
+                      </v-dialog>
+                    </template>
                   </template>
                 </template>
-              </template>
-  
-              <div v-if="o.url" class="mt-3">
-                <v-btn :href="o.url" target="_blank">View</v-btn>
               </div>
+              
             </v-timeline-item>
           </template>
         </v-timeline>
       </v-container>
+      <pre>{{ btnRefs }}</pre>
     </div>
   </v-app>
 </template>
 
 <script setup>
-  import { reactive, onMounted } from 'vue';
+  import { ref, reactive, onMounted } from 'vue';
   import axios from 'axios';
 
   const resume = reactive({
@@ -118,6 +131,12 @@
       resume.ready = true;
     },
   });
+
+  const projectsModal = ref(null);
+
+  const closeButton = (ev) => {
+    console.log(ev.target);
+  };
 
   onMounted(() => {
     resume.load();
