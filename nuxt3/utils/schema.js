@@ -11,10 +11,6 @@ const defaultData = (options) => {
         datatable: {
           headers: [{ title: "Title", key: "name" }],
         },
-        actions: [
-          { title: "Edit", icon: "mdi-pencil", action: () => null },
-          { title: "Delete", icon: "mdi-delete", action: () => null },
-        ],
       },
     },
     options

@@ -74,12 +74,13 @@ export default (options = {}) => {
     },
 
     async eventDispatch(eventName) {
-      options.events.forEach(([name, callback]) => {
+      r.events.forEach(([name, callback]) => {
         if (name != eventName) return;
         callback();
       });
     },
 
+    events: options.events,
     options: options.options,
 
     search: {
