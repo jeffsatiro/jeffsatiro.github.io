@@ -18,8 +18,12 @@ export default (options = {}) => {
     collection: "",
     data: {},
     model: { id: false, name: "" },
+    options: {},
+    events: [],
     ...options,
   };
+
+  options.data = { ...options.model };
 
   const config = useRuntimeConfig();
   const db = getFirestore(initializeApp(config.public.firebase));
@@ -29,48 +33,72 @@ export default (options = {}) => {
     data: options.data,
 
     async create() {
-      const id = this.data.id || false;
+      const id = r.data.id || false;
       if (id) return;
-      console.log("create");
       const ref = collection(db, options.collection);
-      return await addDoc(ref, r.data);
+      const ret = await addDoc(ref, r.data);
+      r.data.id = ret.id;
+      r.eventDispatch("created");
+      r.eventDispatch("saved");
+      return ret;
     },
 
     async update() {
-      const id = this.data.id || false;
+      const id = r.data.id || false;
       if (!id) return;
-      console.log("update");
       const docRef = doc(db, options.collection, id);
-      return await setDoc(docRef, this.data);
+      const ret = await setDoc(docRef, r.data);
+      r.eventDispatch("updated");
+      r.eventDispatch("saved");
+      return ret;
     },
 
     async save() {
-      return !!this.data.id ? this.update() : this.create();
+      return !!r.data.id ? r.update() : r.create();
     },
 
-    async delete() {},
+    async delete(item = {}) {
+      const id = item.id || false;
+      if (!id) return;
+      const ret = await deleteDoc(doc(db, options.collection, id));
+      r.eventDispatch("deleted");
+      return ret;
+    },
 
     async setData(data) {
-      r.data = data;
+      r.data = { ...options.model, ...data };
     },
 
     async resetData() {
-      r.data = options.model;
+      r.data = { ...options.model };
     },
+
+    async eventDispatch(eventName) {
+      options.events.forEach(([name, callback]) => {
+        if (name != eventName) return;
+        callback();
+      });
+    },
+
+    options: options.options,
 
     search: {
       busy: false,
-      params: {},
+      params: {
+        orderBy: "id",
+        limit: 25,
+      },
       data: [],
       pagination: {},
       async submit() {
-        r.search.data = [];
+        let data = [];
         const dbRef = collection(db, options.collection);
         const q = query(dbRef);
         const querySnapshot = await getDocs(q);
         querySnapshot.forEach((doc) => {
-          r.search.data.push({ ...options.model, ...doc.data(), id: doc.id });
+          data.push({ ...options.model, ...doc.data(), id: doc.id });
         });
+        r.search.data = data;
       },
     },
   });

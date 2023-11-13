@@ -14,13 +14,12 @@
     "@nuxt/devtools": "latest",
     "axios": "^1.6.1",
     "firebase": "^10.6.0",
+    "lodash": "^4.17.21",
     "nuxt": "^3.8.1",
-    "nuxt-vuefire": "^0.4.1",
     "sass": "^1.69.5",
     "vite-plugin-vuetify": "^1.0.2",
     "vue": "^3.3.8",
     "vue-router": "^4.2.5",
-    "vuefire": "^3.1.18",
     "vuetify": "^3.4.0"
   }
 }

@@ -15,10 +15,10 @@ services:
       - CHOKIDAR_USEPOLLING=true
       - HOST=${NUXT_HOST:-0.0.0.0}
       - PORT=${NUXT_PORT:-3000}
-  old:
-    image: httpd:latest
-    working_dir: /old
-    ports:
-      - "8080:80"
-    volumes:
-      - ./old:/usr/local/apache2/htdocs
+  # old:
+  #   image: httpd:latest
+  #   working_dir: /old
+  #   ports:
+  #     - "8080:80"
+  #   volumes:
+  #     - ./old:/usr/local/apache2/htdocs
