@@ -59,33 +59,42 @@
         <h1>Projetos</h1>
         <br>
 
-        <v-row>
+        <v-timeline side="end" align="start">
           <template v-for="o in resume.data.projects">
-            <v-col cols="12" md="6" v-if="o.active">
-              <div class="ps-5" style="border-left: solid 5px #444;">
-                <h2>{{ o.title }}</h2>
-  
-                <div class="d-flex align-center">
-                  <div>{{ o.startedOn || 'Atualmente' }}</div>
-                  <div class="px-2">~</div>
-                  <div>{{ o.finishedOn || 'Atualmente' }}</div>
-                </div>
-  
-                <div v-html="o.description" v-if="o.description" class="mt-3"></div>
-  
-                <div v-if="o.url" class="mt-3">
-                  <v-btn :href="o.url" target="_blank" block>View</v-btn>
-                </div>
-              </div>
-            </v-col>
-          </template>
-        </v-row>
+            <v-timeline-item dot-color="pink" size="small">
+              <h2>{{ o.title }}</h2>
 
-        <div class="d-flex flex-column" style="gap:35px;">
-          <template v-for="o in resume.data.projects">
-            
+              <div class="d-flex align-center">
+                <div>{{ o.startedOn || 'Atualmente' }}</div>
+                <div class="px-2">~</div>
+                <div>{{ o.finishedOn || 'Atualmente' }}</div>
+              </div>
+
+              <div v-html="o.description" v-if="o.description" class="mt-3"></div>
+
+              <template v-if="o.meta">
+                <template v-if="o.meta.images">
+                  <template v-for="oo in o.meta.images">
+                    <v-dialog width="800">
+                      <template #activator="bind">
+                        <v-btn v-bind="bind.props">Images</v-btn>
+                      </template>
+                      <v-card>
+                        <v-card-text>
+                          <img :src="oo.url" alt="" style="width:100%;" />
+                        </v-card-text>
+                      </v-card>
+                    </v-dialog>
+                  </template>
+                </template>
+              </template>
+  
+              <div v-if="o.url" class="mt-3">
+                <v-btn :href="o.url" target="_blank">View</v-btn>
+              </div>
+            </v-timeline-item>
           </template>
-        </div>
+        </v-timeline>
       </v-container>
     </div>
   </v-app>
@@ -100,7 +109,10 @@
     data: false,
     async load() {
       try {
-        const { data } = await axios.get('https://raw.githubusercontent.com/jeff-silva/jeff-silva/main/data/linkedin-resume.json');
+        let { data } = await axios.get('https://raw.githubusercontent.com/jeff-silva/jeff-silva/main/data/linkedin-resume.json');
+        data.projects = data.projects.sort((a, b) => {
+          return a.dateInterval.start < a.dateInterval.final ? -1 : (a.dateInterval.start > a.dateInterval.final ? 1 : 0);
+        });
         resume.data = data;
       } catch(err) {}
       resume.ready = true;
