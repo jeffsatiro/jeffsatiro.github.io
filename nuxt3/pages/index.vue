@@ -2,20 +2,6 @@
   <v-app>
     <v-layout>
       <v-defaults-provider :defaults="menu.defaults">
-        <!-- <div class="d-flex align-center pa-2" style="position: fixed; top: 15px; right: 15px">
-          <v-spacer />
-          <v-btn href="#info">Informações</v-btn>
-          <v-btn href="#skills">Skills</v-btn>
-          <v-btn href="#experiencias">Experiências</v-btn>
-          <v-btn href="#projetos">Projetos</v-btn>
-          <div class="text-right">
-            <v-btn
-              @click="themeToggle()"
-              :icon="theme.global.name.value == 'light' ? 'material-symbols:dark-mode' : 'material-symbols:light-mode'"
-            />
-          </div>
-        </div> -->
-
         <div style="position: fixed; top: 15px; right: 15px">
           <v-menu location="start">
             <template #activator="bind">
@@ -150,7 +136,7 @@
                         >
                           <v-card>
                             <v-card-title class="d-flex align-center">
-                              <div class="flex-grow-1">Print</div>
+                              <div class="flex-grow-1">{{ o.title }}</div>
                               <v-btn icon="mdi-close" flat size="35" @click="projectsModal = null" />
                             </v-card-title>
                             <v-card-text class="pa-0">
@@ -176,11 +162,11 @@
 import { ref, reactive, computed, onMounted } from "vue";
 import axios from "axios";
 
-import { useTheme } from "vuetify";
-const theme = useTheme();
-
 import { useDisplay } from "vuetify";
 const display = useDisplay();
+
+import useVuetifyThemeSwitcher from "@/composables/useVuetifyThemeSwitcher";
+const vuetifyThemeSwitcher = useVuetifyThemeSwitcher();
 
 const resume = reactive({
   ready: false,
@@ -211,10 +197,10 @@ const menu = reactive({
     { text: "Projetos", href: "#projetos" },
     {
       icon: computed(() => {
-        return theme.global.name.value == "light" ? "material-symbols:dark-mode" : "material-symbols:light-mode";
+        return vuetifyThemeSwitcher.current == "light" ? "material-symbols:dark-mode" : "material-symbols:light-mode";
       }),
       onClick: (ev) => {
-        theme.global.name.value = theme.global.current.value.dark ? "light" : "dark";
+        vuetifyThemeSwitcher.switch();
       },
     },
   ],

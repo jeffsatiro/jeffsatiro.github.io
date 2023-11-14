@@ -1,10 +1,15 @@
 <!--
   TODO:
-  🟦 - Firebase Database Pagination
-  🟦 - Firebase Users Crud
-  🟦 - Firebase Upload
-  🟦 - Admin layout
+  - Firebase Database Pagination
+  - Firebase Users Crud
+  - Firebase Auth
+  - Firebase Upload
+  - Admin layout
 
-  ⏹️ - Firebase Database Crud
-  ⏹️ - Resume Dark/Light Mode
+  WORKING
+  - Firebase Auth
+
+  FINISHED
+  - Firebase Database Crud
+  - Resume Dark/Light Mode
 -->

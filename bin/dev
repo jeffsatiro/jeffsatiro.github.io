@@ -5,5 +5,8 @@ if [ ! -f ".env" ]; then
     cp ".env_example" ".env"
 fi
 
-# Inicia o Docker
+# Start services
 docker-compose up --build --force-recreate --remove-orphans
+
+# Build on service stop
+# docker-compose run --rm nuxt3 yarn generate
