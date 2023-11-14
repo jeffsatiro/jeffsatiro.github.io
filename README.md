@@ -4,12 +4,13 @@
   - Firebase Users Crud
   - Firebase Auth
   - Firebase Upload
-  - Admin layout
 
   WORKING
+  - Admin layout
   - Firebase Auth
 
   FINISHED
+  - useVuetifyThemeSwitcher.js
   - Firebase Database Crud
   - Resume Dark/Light Mode
 -->

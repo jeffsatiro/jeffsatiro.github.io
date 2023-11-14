@@ -4,12 +4,11 @@ import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify';
 export default defineNuxtConfig({
   ssr: false,
   app: { buildAssetsDir: 'assets' },
+  css: ['@/app.scss'],
+
   devtools: {
     enabled: true,
-
-    timeline: {
-      enabled: true,
-    },
+    timeline: { enabled: true },
   },
 
   runtimeConfig: {

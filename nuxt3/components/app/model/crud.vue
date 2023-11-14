@@ -51,7 +51,7 @@
       </template>
     </v-data-table>
 
-    <v-navigation-drawer v-model="edit.visible" location="end" width="600">
+    <v-navigation-drawer v-model="edit.visible" location="end" width="600" absolute temporary>
       <v-form @submit.prevent="model.save()">
         <v-card-title>{{ model.data.id ? "Edit" : "Create" }} {{ model.options.singular }}</v-card-title>
         <v-card-text>
@@ -93,6 +93,8 @@ const slotBind = (merge = {}) => {
 };
 
 const model = useFireModel(schema[props.model] || {});
+useHead({ title: model.options.plural });
+
 model.events.push([
   "saved",
   () => {
