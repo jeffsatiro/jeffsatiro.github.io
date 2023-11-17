@@ -84,15 +84,22 @@
           <div class="d-flex flex-column" style="gap: 35px">
             <template v-for="o in resume.data.positions">
               <div class="ps-5" style="border-left: solid 5px #444">
-                <h2>{{ o.title }}</h2>
+                <h2 class="mb-2">{{ o.title }}</h2>
+
+                <h3 class="d-flex align-center" v-if="o.companyName">
+                  <v-icon icon="material-symbols:alternate-email" size="16" class="me-1" />
+                  <span>{{ o.companyName }}</span>
+                </h3>
 
                 <div class="d-flex align-center">
-                  <div>{{ o.startedOn || "Atualmente" }}</div>
+                  <v-icon icon="material-symbols:calendar-month" size="16" class="me-1" />
+                  <div>{{ o.dateInterval.start.formatted || "Atualmente" }}</div>
                   <div class="px-2">~</div>
-                  <div>{{ o.finishedOn || "Atualmente" }}</div>
+                  <div>{{ o.dateInterval.final.formatted || "Atualmente" }}</div>
                 </div>
 
                 <div class="d-flex align-center" v-if="o.location.fullName">
+                  <v-icon icon="ic:round-place" size="16" class="me-1" />
                   <span>{{ o.location.fullName }}</span>
                 </div>
 
@@ -106,15 +113,30 @@
           <h1>Projetos</h1>
           <br />
 
+          <v-dialog v-model="projectImages.dialog" width="600">
+            <v-carousel v-model="projectImages.dialog" height="80vh" style="border-radius: 6px" :hide-delimiters="true">
+              <template v-for="(_project, _projectIndex) in resume.data.projects">
+                <template v-for="(_image, _imageIndex) in _project.meta.images">
+                  <v-carousel-item :value="_image.url">
+                    <div class="bg-white" style="height: 100%; overflow: auto">
+                      <h2 class="text-center py-3">{{ _project.title }}</h2>
+                      <img :src="_image.url" alt="" style="width: 100%" />
+                    </div>
+                  </v-carousel-item>
+                </template>
+              </template>
+            </v-carousel>
+          </v-dialog>
+
           <v-timeline side="end" align="start">
             <template v-for="(o, i) in resume.data.projects">
               <v-timeline-item size="small">
                 <h2>{{ o.title }}</h2>
 
                 <div class="d-flex align-center">
-                  <div>{{ o.startedOn || "Atualmente" }}</div>
+                  <div>{{ o.dateInterval.start.formatted || "Atualmente" }}</div>
                   <div class="px-2">~</div>
-                  <div>{{ o.finishedOn || "Atualmente" }}</div>
+                  <div>{{ o.dateInterval.start.formatted || "Atualmente" }}</div>
                 </div>
 
                 <div v-html="o.description" v-if="o.description" class="mt-3"></div>
@@ -126,24 +148,7 @@
                   <template v-if="o.meta">
                     <template v-if="o.meta.images">
                       <template v-for="(oo, ii) in o.meta.images">
-                        <v-btn @click="projectsModal = `${i}-${ii}`">Image {{ ii + 1 }}</v-btn>
-
-                        <v-dialog
-                          width="800"
-                          scrollable
-                          :model-value="projectsModal == `${i}-${ii}`"
-                          @update:modelValue="projectsModal = null"
-                        >
-                          <v-card>
-                            <v-card-title class="d-flex align-center">
-                              <div class="flex-grow-1">{{ o.title }}</div>
-                              <v-btn icon="mdi-close" flat size="35" @click="projectsModal = null" />
-                            </v-card-title>
-                            <v-card-text class="pa-0">
-                              <img :src="oo.url" alt="" style="width: 100%" />
-                            </v-card-text>
-                          </v-card>
-                        </v-dialog>
+                        <v-btn @click="projectImages.open(oo)">Image {{ ii + 1 }}</v-btn>
                       </template>
                     </template>
                   </template>
@@ -206,6 +211,13 @@ const menu = reactive({
   ],
   defaults: {
     VBtn: { flat: true },
+  },
+});
+
+const projectImages = reactive({
+  dialog: false,
+  open(image) {
+    projectImages.dialog = image.url;
   },
 });
 
