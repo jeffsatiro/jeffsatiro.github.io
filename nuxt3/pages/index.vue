@@ -185,6 +185,9 @@ const resume = reactive({
         return a.dateInterval.start < a.dateInterval.final ? -1 : a.dateInterval.start > a.dateInterval.final ? 1 : 0;
       });
       resume.data = data;
+      seo.title = `${data.profile.firstName} ${data.profile.lastName} - ${data.profile.headline}`;
+      seo.description = data.profile.summary;
+      seo.image = data.profile.image;
     } catch (err) {}
     resume.ready = true;
   },
@@ -219,6 +222,21 @@ const projectImages = reactive({
   open(image) {
     projectImages.dialog = image.url;
   },
+});
+
+const seo = reactive({
+  title: "",
+  description: "",
+  image: "",
+});
+
+useSeoMeta({
+  title: seo.title,
+  ogTitle: seo.title,
+  description: seo.description,
+  ogDescription: seo.description,
+  ogImage: seo.image,
+  twitterCard: "summary_large_image",
 });
 
 onMounted(() => {
