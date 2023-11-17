@@ -113,19 +113,29 @@
           <h1>Projetos</h1>
           <br />
 
-          <v-dialog v-model="projectImages.dialog" width="600">
-            <v-carousel v-model="projectImages.dialog" height="80vh" style="border-radius: 6px" :hide-delimiters="true">
-              <template v-for="(_project, _projectIndex) in resume.data.projects">
-                <template v-for="(_image, _imageIndex) in _project.meta.images">
-                  <v-carousel-item :value="_image.url">
-                    <div class="bg-white" style="height: 100%; overflow: auto">
-                      <h2 class="text-center py-3">{{ _project.title }}</h2>
-                      <img :src="_image.url" alt="" style="width: 100%" />
-                    </div>
-                  </v-carousel-item>
-                </template>
-              </template>
-            </v-carousel>
+          <v-dialog v-model="projectImages.dialog" width="800">
+            <div class="d-flex align-center">
+              <div class="flex-grow-1 px-3">
+                <v-carousel v-model="projectImages.dialog" height="80vh" :hide-delimiters="true" #default="bind">
+                  <template v-for="(_project, _projectIndex) in resume.data.projects">
+                    <template v-for="(_image, _imageIndex) in _project.meta.images">
+                      <v-carousel-item :value="_image.url">
+                        <div class="px-md-10" style="height: 100%">
+                          <div class="px-md-10" style="height: 100%">
+                            <div class="bg-white mx-auto" style="height: 100%; overflow: auto; border-radius: 6px">
+                              <h2 class="text-center py-3">
+                                {{ _project.title }} ~ {{ _project.dateInterval.final.formatted }}
+                              </h2>
+                              <img :src="_image.url" alt="" style="width: 100%" />
+                            </div>
+                          </div>
+                        </div>
+                      </v-carousel-item>
+                    </template>
+                  </template>
+                </v-carousel>
+              </div>
+            </div>
           </v-dialog>
 
           <v-timeline side="end" align="start">
@@ -164,8 +174,10 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed, onMounted } from "vue";
+import { ref, reactive, computed, onMounted, getCurrentInstance } from "vue";
 import axios from "axios";
+
+const currentInstance = getCurrentInstance();
 
 import { useDisplay } from "vuetify";
 const display = useDisplay();
