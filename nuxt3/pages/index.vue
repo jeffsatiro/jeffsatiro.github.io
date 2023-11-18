@@ -51,13 +51,17 @@
 
           <div class="d-flex flex-wrap align-center" style="gap: 10px">
             <template v-for="o in resume.data.links">
-              <a :href="o.url" target="_blank" :aria-label="o.name"><img :src="o.icon" alt="" loading="lazy" /></a>
+              <a :href="o.url" target="_blank" :aria-label="o.name">
+                <img :src="o.icon" alt="" height="28" loading="lazy" />
+              </a>
             </template>
           </div>
 
           <div class="d-flex flex-wrap align-center" style="gap: 10px">
             <template v-for="o in resume.data.contacts">
-              <a :href="o.url" target="_blank" :aria-label="o.name"><img :src="o.icon" alt="" loading="lazy" /></a>
+              <a :href="o.url" target="_blank" :aria-label="o.name">
+                <img :src="o.icon" alt="" height="28" loading="lazy" />
+              </a>
             </template>
           </div>
           <br />
