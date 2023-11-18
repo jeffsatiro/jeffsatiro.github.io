@@ -1,8 +1,13 @@
 <template>
   <v-app>
     <v-layout>
+      <!-- Loading -->
+      <v-container v-if="!resume.ready" class="d-flex align-center justify-center">
+        <v-icon icon="svg-spinners:180-ring-with-bg" size="100" color="primary" />
+      </v-container>
+
       <v-defaults-provider :defaults="menu.defaults">
-        <div style="position: fixed; top: 15px; right: 15px">
+        <div style="position: fixed; top: 15px; right: 15px" aria-label="Navegação">
           <v-menu location="start">
             <template #activator="bind">
               <v-btn :icon="menu.icon" v-bind="bind.props" v-if="!display.mobile.value" />
@@ -17,7 +22,7 @@
             </v-defaults-provider>
           </v-menu>
 
-          <v-btn :icon="menu.icon" v-if="display.mobile.value" @click="menu.show = true" />
+          <v-btn :icon="menu.icon" v-if="display.mobile.value" @click="menu.show = true" aria-label="Navegação" />
         </div>
       </v-defaults-provider>
 
@@ -29,7 +34,7 @@
         style="position: fixed; top: 0"
       >
         <v-card-title>Seções</v-card-title>
-        <v-list>
+        <v-list aria-label="Seções">
           <template v-for="o in menu.items">
             <v-list-item v-bind="o">
               <v-icon v-if="o.icon" :icon="o.icon" />
@@ -46,23 +51,19 @@
 
           <div class="d-flex flex-wrap align-center" style="gap: 10px">
             <template v-for="o in resume.data.links">
-              <a :href="o.url" target="_blank"><img :src="o.icon" alt="" /></a>
+              <a :href="o.url" target="_blank" :aria-label="o.name"><img :src="o.icon" alt="" loading="lazy" /></a>
             </template>
           </div>
 
           <div class="d-flex flex-wrap align-center" style="gap: 10px">
             <template v-for="o in resume.data.contacts">
-              <a :href="o.url" target="_blank"><img :src="o.icon" alt="" /></a>
+              <a :href="o.url" target="_blank" :aria-label="o.name"><img :src="o.icon" alt="" loading="lazy" /></a>
             </template>
           </div>
           <br />
 
           <div v-html="resume.data.profile.summary" style="white-space: pre-line"></div>
         </v-container>
-
-        <!-- <v-container>
-          <h1>Contate-me</h1>
-        </v-container> -->
 
         <v-container id="skills">
           <h1>Skills</h1>
@@ -73,7 +74,7 @@
               <div class="d-flex align-center" v-if="o.meta">
                 <div style="min-width: 150px; max-width: 150px">{{ o.name }}</div>
                 <div class="flex-grow-1">
-                  <v-progress-linear :model-value="(100 * o.meta.rating) / 5" height="5" />
+                  <v-progress-linear :model-value="(100 * o.meta.rating) / 5" height="5" :aria-label="o.name" />
                 </div>
                 <small class="d-block text-right" style="min-width: 50px; max-width: 50px"
                   >{{ o.meta.rating }} / 5</small
@@ -132,7 +133,7 @@
                               <h2 class="text-center py-3">
                                 {{ _project.title }} ~ {{ _project.dateInterval.final.formatted }}
                               </h2>
-                              <img :src="_image.url" alt="" style="width: 100%" />
+                              <img :src="_image.url" alt="" style="width: 100%" loading="lazy" />
                             </div>
                           </div>
                         </div>
@@ -203,9 +204,14 @@ const resume = reactive({
         return a.dateInterval.start < a.dateInterval.final ? -1 : a.dateInterval.start > a.dateInterval.final ? 1 : 0;
       });
       resume.data = data;
-      seo.title = `${data.profile.firstName} ${data.profile.lastName} - ${data.profile.headline}`;
-      seo.description = data.profile.summary;
-      seo.image = data.profile.image;
+      useSeoMeta({
+        title: data.profile.headline,
+        ogTitle: data.profile.headline,
+        description: data.profile.headline,
+        ogDescription: data.profile.headline,
+        ogImage: "",
+        twitterCard: "summary_large_image",
+      });
     } catch (err) {}
     resume.ready = true;
   },
@@ -242,24 +248,16 @@ const projectImages = reactive({
   },
 });
 
-const seo = reactive({
-  title: "",
-  description: "",
-  image: "",
-});
-
 useSeoMeta({
-  title: seo.title,
-  ogTitle: seo.title,
-  description: seo.description,
-  ogDescription: seo.description,
-  ogImage: seo.image,
+  title: "Loading",
+  ogTitle: "Loading",
+  description: "Loading",
+  ogDescription: "Loading",
+  ogImage: "",
   twitterCard: "summary_large_image",
 });
 
-onMounted(() => {
-  resume.load();
-});
+resume.load();
 </script>
 
 <style lang="scss">

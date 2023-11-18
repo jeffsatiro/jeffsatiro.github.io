@@ -3,8 +3,19 @@ import vuetify, { transformAssetUrls } from 'vite-plugin-vuetify';
 
 export default defineNuxtConfig({
   ssr: false,
-  app: { buildAssetsDir: 'assets' },
-  css: ['@/app.scss'],
+  // css: ['@/app.scss'],
+
+  app: {
+    buildAssetsDir: 'assets',
+    head: {
+      charset: 'utf-8',
+      viewport: 'width=device-width, initial-scale=1',
+      titleTemplate: '%s - Jeferson Silva',
+      htmlAttrs: {
+        lang: 'pt-BR',
+      },
+    },
+  },
 
   devtools: {
     enabled: true,
