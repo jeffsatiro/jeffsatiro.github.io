@@ -45,7 +45,7 @@
           <br />
 
           <div class="d-flex flex-wrap align-center" style="gap: 10px">
-            <template v-for="o in resume.data.contacts">
+            <template v-for="o in [...resume.data.links, ...resume.data.contacts]">
               <a :href="o.url" target="_blank"><img :src="o.icon" alt="" /></a>
             </template>
           </div>
