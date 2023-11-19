@@ -51,6 +51,7 @@
       </template>
     </v-data-table>
 
+    <!-- Edit -->
     <v-navigation-drawer v-model="edit.visible" location="end" width="600" absolute temporary>
       <v-form @submit.prevent="model.save()">
         <v-card-title>{{ model.data.id ? "Edit" : "Create" }} {{ model.options.singular }}</v-card-title>
@@ -58,6 +59,7 @@
           <slot name="form" v-bind="slotBind({ model })">
             <v-text-field label="Name" v-model="model.data.name" />
           </slot>
+          <pre>{{ model.error }}</pre>
         </v-card-text>
         <v-card-actions>
           <v-btn

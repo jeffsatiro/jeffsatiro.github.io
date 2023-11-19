@@ -49,6 +49,7 @@ const nav = reactive({
   items: [
     { title: "Home", to: "/admin" },
     { title: "Pages", to: "/admin/page" },
+    { title: "User", to: "/admin/user" },
     { title: "Test", to: "/admin/test" },
   ],
 });

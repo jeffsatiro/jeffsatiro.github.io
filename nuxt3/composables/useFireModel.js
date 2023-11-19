@@ -28,29 +28,46 @@ export default (options = {}) => {
   const config = useRuntimeConfig();
   const db = getFirestore(initializeApp(config.public.firebase));
 
+  const getExceptionData = (e) => {
+    return {
+      code: e.code || "",
+      message: e.message || "",
+      fields: [],
+    };
+  };
+
   const r = reactive({
     busy: false,
     data: options.data,
+    error: false,
 
     async create() {
-      const id = r.data.id || false;
-      if (id) return;
-      const ref = collection(db, options.collection);
-      const ret = await addDoc(ref, r.data);
-      r.data.id = ret.id;
-      r.eventDispatch("created");
-      r.eventDispatch("saved");
-      return ret;
+      try {
+        const id = r.data.id || false;
+        if (id) return;
+        const ref = collection(db, options.collection);
+        const ret = await addDoc(ref, r.data);
+        r.data.id = ret.id;
+        r.eventDispatch("created");
+        r.eventDispatch("saved");
+        return ret;
+      } catch (e) {
+        r.error = getExceptionData(e);
+      }
     },
 
     async update() {
-      const id = r.data.id || false;
-      if (!id) return;
-      const docRef = doc(db, options.collection, id);
-      const ret = await setDoc(docRef, r.data);
-      r.eventDispatch("updated");
-      r.eventDispatch("saved");
-      return ret;
+      try {
+        const id = r.data.id || false;
+        if (!id) return;
+        const docRef = doc(db, options.collection, id);
+        const ret = await setDoc(docRef, r.data);
+        r.eventDispatch("updated");
+        r.eventDispatch("saved");
+        return ret;
+      } catch (e) {
+        r.error = getExceptionData(e);
+      }
     },
 
     async save() {
