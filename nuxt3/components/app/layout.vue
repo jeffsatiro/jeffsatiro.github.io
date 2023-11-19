@@ -10,45 +10,47 @@
         </slot>
       </v-layout>
 
-      <v-layout v-if="props.ready && view.name != 'admin'">
+      <v-layout v-if="props.ready && view.name != 'admin'" class="app-layout__bg-pattern">
         <v-row>
-          <v-col cols="12" md="6" class="app-layout__bg-pattern"> </v-col>
-          <v-col cols="12" md="6" class="d-flex align-center justify-center">
-            <div class="text-left" style="min-width: 300px">
-              <!-- view=login -->
-              <slot v-if="view.name == 'login'" name="login" v-bind="slotBind()"> Login </slot>
+          <v-col cols="12" sm="6" class="d-none d-sm-flex"> </v-col>
+          <v-col cols="12" sm="6" class="pa-6">
+            <div class="w-100 h-100 d-flex align-center justify-center bg-white rounded-lg pa-6">
+              <div class="w-100">
+                <!-- view=login -->
+                <slot v-if="view.name == 'login'" name="login" v-bind="slotBind()"> Login </slot>
 
-              <!-- view=register -->
-              <slot v-if="view.name == 'register'" name="register" v-bind="slotBind()"> Register </slot>
+                <!-- view=register -->
+                <slot v-if="view.name == 'register'" name="register" v-bind="slotBind()"> Register </slot>
 
-              <!-- view=password -->
-              <slot v-if="view.name == 'password'" name="password" v-bind="slotBind()"> Password </slot>
+                <!-- view=password -->
+                <slot v-if="view.name == 'password'" name="password" v-bind="slotBind()"> Password </slot>
 
-              <div class="mt-4 d-flex flex-column" style="gap: 10px">
-                <v-btn
-                  v-if="view.name != 'login'"
-                  block
-                  prepend-icon="material-symbols:key-outline"
-                  @click="view.set('login')"
-                >
-                  Login
-                </v-btn>
-                <v-btn
-                  v-if="view.name != 'register'"
-                  block
-                  prepend-icon="material-symbols:person-add-outline"
-                  @click="view.set('register')"
-                >
-                  Register
-                </v-btn>
-                <v-btn
-                  v-if="view.name != 'password'"
-                  block
-                  prepend-icon="fluent:key-reset-24-regular"
-                  @click="view.set('password')"
-                >
-                  Password
-                </v-btn>
+                <div class="mt-4 d-flex flex-column" style="gap: 10px">
+                  <v-btn
+                    v-if="view.name != 'login'"
+                    block
+                    prepend-icon="material-symbols:key-outline"
+                    @click="view.set('login')"
+                  >
+                    Login
+                  </v-btn>
+                  <v-btn
+                    v-if="view.name != 'register'"
+                    block
+                    prepend-icon="material-symbols:person-add-outline"
+                    @click="view.set('register')"
+                  >
+                    Register
+                  </v-btn>
+                  <v-btn
+                    v-if="view.name != 'password'"
+                    block
+                    prepend-icon="fluent:key-reset-24-regular"
+                    @click="view.set('password')"
+                  >
+                    Password
+                  </v-btn>
+                </div>
               </div>
             </div>
           </v-col>
@@ -120,6 +122,9 @@ const nav = reactive({
 });
 
 const defaultsProvider = {
+  VTextField: {
+    variant: "outlined",
+  },
   // VNavigationDrawer: { border: 0 },
   ...props.defaultsProvider,
 };
@@ -166,15 +171,28 @@ defineExpose({ view });
   }
 
   &__bg-pattern {
-    --s: 100px; /* control the size */
-    --c1: #e1f5c4;
-    --c2: #3b8183;
+    --s: 41px; /* control the size */
+    --c1: #f2c45a;
+    --c2: #5e8c6a;
+    --c3: #88a65e;
 
-    --_g: #0000, #0004 5%, var(--c2) 6% 14%, var(--c1) 16% 24%, var(--c2) 26% 34%, var(--c1) 36% 44%, var(--c2) 46% 54%,
-      var(--c1) 56% 64%, var(--c2) 66% 74%, var(--c1) 76% 84%, var(--c2) 86% 94%, #0004 95%, #0000;
-    background: radial-gradient(100% 50% at 100% 0, var(--_g)), radial-gradient(100% 50% at 0 50%, var(--_g)),
-      radial-gradient(100% 50% at 100% 100%, var(--_g));
-    background-size: var(--s) calc(2 * var(--s));
+    --_g: , var(--c1) 25%, var(--c2) 0 150deg, var(--c1) 0 240deg, #0000 0;
+    background: conic-gradient(from 60deg at calc(3.866 * var(--s)), var(--c2) 60deg, #0000 0) calc(1.366 * var(--s))
+        calc(1.366 * var(--s)),
+      conic-gradient(from 240deg at calc(0.866 * var(--s)), var(--c2) 60deg, #0000 0) calc(2.366 * var(--s))
+        calc(1.366 * var(--s)),
+      conic-gradient(at var(--s) var(--s), #0000 75%, var(--c1) 0) calc(1.366 * var(--s)) calc(var(--s) / -2),
+      conic-gradient(from 30deg at calc(-0.288 * var(--s)) 50%, #0000 120deg, var(--c3) 0),
+      conic-gradient(from 90deg at calc(3.732 * var(--s)) calc(1.866 * var(--s)), var(--c3) 120deg, #0000 0),
+      conic-gradient(
+        from -30deg at calc(3.732 * var(--s)) calc(0.866 * var(--s)),
+        var(--c3) 120deg,
+        var(--c1) 0 210deg,
+        #0000 0
+      ),
+      conic-gradient(from 150deg at calc(0.866 * var(--s)) var(--_g)),
+      conic-gradient(from -30deg at calc(2.866 * var(--s)) var(--_g)) var(--c3);
+    background-size: calc(4.732 * var(--s)) calc(2.732 * var(--s));
   }
 }
 </style>

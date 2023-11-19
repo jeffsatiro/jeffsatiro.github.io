@@ -70,8 +70,7 @@ import useFireAuth from "@/composables/useFireAuth";
 const auth = await useFireAuth();
 
 auth.on("authChange", () => {
-  console.log(currentInstance.ctx.$refs.appLayoutRef.view.set(auth.user ? "admin" : "login"));
-  console.log(auth.user);
+  currentInstance.ctx.$refs.appLayoutRef.view.set(auth.user ? "admin" : "login");
 });
 
 const nav = reactive({
