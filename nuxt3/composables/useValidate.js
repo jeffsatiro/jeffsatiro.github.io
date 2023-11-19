@@ -8,6 +8,9 @@ const constraints = {
       presence: { allowEmpty: false },
     };
   },
+  email(value) {
+    return { email: true };
+  },
   min(value, minimum = 3) {
     return {
       // presence: { allowEmpty: false },

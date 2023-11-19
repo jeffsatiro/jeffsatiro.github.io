@@ -7,8 +7,12 @@
             <v-text-field label="Name" v-model="test.name" v-bind="validate.bind('name', ['required'])" />
           </v-col>
           <v-col cols="6">
+            <v-text-field label="E-mail" v-model="test.email" v-bind="validate.bind('email', ['email'])" />
+          </v-col>
+          <v-col cols="6">
             <v-text-field
               label="Password"
+              type="password"
               v-model="test.password"
               v-bind="validate.bind('password', ['min:3', 'max:10'])"
             />
@@ -18,8 +22,6 @@
             <v-btn :disabled="!validate.isValid()">Save</v-btn>
           </v-col>
         </v-row>
-        <pre>{{ validate }}</pre>
-        <!-- <pre>{{ { test, validate } }}</pre> -->
       </template>
     </nuxt-layout>
   </div>
@@ -30,6 +32,7 @@ import { reactive } from "vue";
 
 const test = reactive({
   name: "",
+  email: "",
   password: "",
 });
 
