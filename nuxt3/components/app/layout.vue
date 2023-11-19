@@ -1,7 +1,62 @@
 <template>
   <v-app class="app-layout">
     <v-defaults-provider :defaults="defaultsProvider">
-      <v-layout class="rounded rounded-md">
+      <!-- loading -->
+      <v-layout v-if="!props.ready">
+        <slot name="loading" v-bind="slotBind()">
+          <div class="w-100 d-flex align-center justify-center">
+            <v-icon icon="svg-spinners:3-dots-fade" size="30" />
+          </div>
+        </slot>
+      </v-layout>
+
+      <v-layout v-if="props.ready && view.name != 'admin'">
+        <v-row>
+          <v-col cols="12" md="6" class="app-layout__bg-pattern"> </v-col>
+          <v-col cols="12" md="6" class="d-flex align-center justify-center">
+            <div class="text-left" style="min-width: 300px">
+              <!-- view=login -->
+              <slot v-if="view.name == 'login'" name="login" v-bind="slotBind()"> Login </slot>
+
+              <!-- view=register -->
+              <slot v-if="view.name == 'register'" name="register" v-bind="slotBind()"> Register </slot>
+
+              <!-- view=password -->
+              <slot v-if="view.name == 'password'" name="password" v-bind="slotBind()"> Password </slot>
+
+              <div class="mt-4 d-flex flex-column" style="gap: 10px">
+                <v-btn
+                  v-if="view.name != 'login'"
+                  block
+                  prepend-icon="material-symbols:key-outline"
+                  @click="view.set('login')"
+                >
+                  Login
+                </v-btn>
+                <v-btn
+                  v-if="view.name != 'register'"
+                  block
+                  prepend-icon="material-symbols:person-add-outline"
+                  @click="view.set('register')"
+                >
+                  Register
+                </v-btn>
+                <v-btn
+                  v-if="view.name != 'password'"
+                  block
+                  prepend-icon="fluent:key-reset-24-regular"
+                  @click="view.set('password')"
+                >
+                  Password
+                </v-btn>
+              </div>
+            </div>
+          </v-col>
+        </v-row>
+      </v-layout>
+
+      <!-- view=admin -->
+      <v-layout class="rounded rounded-md" v-if="props.ready && view.name == 'admin'">
         <v-navigation-drawer v-model="nav.drawer" width="300">
           <slot name="navigation" v-bind="slotBind()"></slot>
         </v-navigation-drawer>
@@ -19,7 +74,7 @@
               </div>
             </v-defaults-provider>
 
-            <div class="app-layout__box" style="overflow: auto; flex-grow: 1">
+            <div class="app-layout__box" style="overflow-y: auto; overflow-x: hidden; flex-grow: 1">
               <slot name="main" v-bind="slotBind()"></slot>
             </div>
           </div>
@@ -30,11 +85,23 @@
 </template>
 
 <script setup>
-import { reactive, defineProps } from "vue";
+import { reactive, defineProps, defineEmits, defineExpose } from "vue";
 
 const props = defineProps({
+  ready: { type: Boolean, default: true },
+  view: { type: String, default: "admin" },
   defaultsProvider: { type: Object, default: () => ({}) },
 });
+
+const view = reactive({
+  name: props.view,
+  set(name) {
+    emit("update:view", name);
+    view.name = name;
+  },
+});
+
+const emit = defineEmits(["update:view"]);
 
 import { useTitle } from "@vueuse/core";
 const title = useTitle();
@@ -60,9 +127,12 @@ const defaultsProvider = {
 const slotBind = (merge = {}) => {
   return {
     defaultsProvider,
+    view,
     ...merge,
   };
 };
+
+defineExpose({ view });
 </script>
 
 <style lang="scss">
@@ -93,6 +163,18 @@ const slotBind = (merge = {}) => {
     padding: 10px;
     border-radius: 5px !important;
     box-shadow: 0 0 10px 5px #00000015;
+  }
+
+  &__bg-pattern {
+    --s: 100px; /* control the size */
+    --c1: #e1f5c4;
+    --c2: #3b8183;
+
+    --_g: #0000, #0004 5%, var(--c2) 6% 14%, var(--c1) 16% 24%, var(--c2) 26% 34%, var(--c1) 36% 44%, var(--c2) 46% 54%,
+      var(--c1) 56% 64%, var(--c2) 66% 74%, var(--c1) 76% 84%, var(--c2) 86% 94%, #0004 95%, #0000;
+    background: radial-gradient(100% 50% at 100% 0, var(--_g)), radial-gradient(100% 50% at 0 50%, var(--_g)),
+      radial-gradient(100% 50% at 100% 100%, var(--_g));
+    background-size: var(--s) calc(2 * var(--s));
   }
 }
 </style>

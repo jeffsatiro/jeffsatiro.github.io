@@ -26,7 +26,6 @@
             </form>
           </v-col>
         </v-row>
-        <pre>{{ auth }}</pre>
       </template>
     </nuxt-layout>
   </div>
@@ -34,6 +33,5 @@
 
 <script setup>
 import useFireAuth from "@/composables/useFireAuth";
-
 const auth = await useFireAuth();
 </script>
