@@ -4,12 +4,12 @@
       <template #main>
         <v-row>
           <v-col cols="6">
-            <v-text-field v-model="test.name" label="Name" v-bind="validate.bind('name')" />
+            <v-text-field label="Name" v-model="test.name" v-bind="validate.bind('name', ['required'])" />
           </v-col>
           <v-col cols="6">
             <v-text-field
-              v-model="test.password"
               label="Password"
+              v-model="test.password"
               v-bind="validate.bind('password', ['min:3', 'max:10'])"
             />
           </v-col>
@@ -34,11 +34,5 @@ const test = reactive({
 });
 
 import useValidate from "@/composables/useValidate";
-const validate = await useValidate({
-  values: test,
-  rules: {
-    name: ["required"],
-    // password: ["min:6", "max:10"],
-  },
-});
+const validate = await useValidate({ values: test });
 </script>
