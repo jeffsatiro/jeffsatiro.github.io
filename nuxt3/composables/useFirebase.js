@@ -57,9 +57,27 @@ export default () => {
     return docSnap.exists() ? docSnap.data() : false;
   };
 
-  r.firestoreSearch = async () => {};
+  r.firestoreSearch = async (collection, params = {}, query = null) => {
+    params = { perPage: 5, ...params };
 
-  r.firestoreDelete = async () => {};
+    if (query === null) {
+      const collectRef = fireFirestore.collection(fireFirestoreDB, collection);
+      query = fireFirestore.query(collectRef, fireFirestore.limit(params.perPage));
+    }
+
+    const docs = await fireFirestore.getDocs(query);
+    const next = docs.docs[docs.docs.length - 1];
+    const prev = docs.docs[docs.docs.length - 1];
+
+    let data = [];
+    docs.forEach((doc) => {
+      data.push(doc.data());
+    });
+
+    return { params, data, prev, next, docs };
+  };
+
+  r.firestoreDelete = async (collection, uid) => {};
 
   r.realtimeSave = async () => {};
 

@@ -41,14 +41,18 @@ const firebase = useFirebase();
 
 onMounted(async () => {
   // console.log(
-  //   'firebase.userCreate',
+  //   "firebase.userCreate",
   //   await firebase.userCreate({
-  //     name: "John",
-  //     email: "john@grr.la",
-  //     password: "john@grr.la",
+  //     name: "nona",
+  //     email: "nona@grr.la",
+  //     password: "nona@grr.la",
   //   })
   // );
 
-  console.log(await firebase.firestoreFind("user", "x6GpZvJBTCZUWhD3KBEL1JTUQe32"));
+  // console.log(await firebase.firestoreFind("user", "x6GpZvJBTCZUWhD3KBEL1JTUQe32"));
+  const aaa = await firebase.firestoreSearch("user");
+  const bbb = await firebase.firestoreSearch("user", aaa.params, aaa.next);
+  console.log(aaa.data, bbb.data);
+  // console.log(JSON.stringify(aaa, null, 2));
 });
 </script>
