@@ -266,7 +266,7 @@ const resume = reactive({
         ogImage: "",
         twitterCard: "summary_large_image",
       });
-      projectImages.open(resume.data.projects[0].meta.images[0]);
+      // projectImages.open(resume.data.projects[0].meta.images[0]);
     } catch (err) {}
     resume.ready = true;
   },
