@@ -124,7 +124,7 @@
           <h1>Projetos</h1>
           <br />
 
-          <v-dialog v-model="projectImages.dialog" width="800">
+          <!-- <v-dialog v-model="projectImages.dialog" width="800">
             <div class="d-flex align-center">
               <div class="flex-grow-1 px-3">
                 <v-carousel v-model="projectImages.dialog" height="80vh" :hide-delimiters="true" #default="bind">
@@ -147,36 +147,86 @@
                 </v-carousel>
               </div>
             </div>
+          </v-dialog> -->
+
+          <v-dialog v-model="projectImages.dialog" width="1000">
+            <v-carousel v-model="projectImages.dialog" height="auto" :hide-delimiters="true" #default="bind">
+              <template v-for="item in resume.projectsImages">
+                <v-carousel-item :value="item.image.url">
+                  <div class="h-100 px-md-10">
+                    <div class="h-100 px-md-10 d-flex align-center">
+                      <v-row no-gutters class="bg-white" style="position: relative; max-height: 100%">
+                        <v-col cols="12" md="7" style="max-height: 80vh; overflow: auto; position: relative">
+                          <v-btn
+                            flat
+                            icon="mdi-close"
+                            size="30"
+                            @click="projectImages.close()"
+                            class="d-md-none"
+                            style="position: fixed; top: 10px; right: 20px"
+                          />
+
+                          <img :src="item.image.url" alt="" style="width: 100%" />
+
+                          <div
+                            class="d-md-none text-white"
+                            style="position: fixed; left: 0; bottom: 0; width: 100%; background: #000000bb"
+                          >
+                            <v-card-title>{{ item.project.title }}</v-card-title>
+                            <v-card-text class="d-flex flex-column" style="gap: 15px">
+                              <div class="d-flex align-center">
+                                <v-icon icon="material-symbols:calendar-month" size="16" class="me-1" />
+                                <div>{{ item.project.dateInterval.start.formatted || "Atualmente" }}</div>
+                                <div class="px-2">~</div>
+                                <div>{{ item.project.dateInterval.final.formatted || "Atualmente" }}</div>
+                              </div>
+
+                              <div v-if="item.project.description" v-html="item.project.description"></div>
+
+                              <v-btn color="primary" v-if="item.project.url" :href="item.project.url" target="_blank"
+                                >Visualizar</v-btn
+                              >
+                            </v-card-text>
+                          </div>
+                        </v-col>
+                        <v-col cols="12" md="5" class="d-none d-md-block" style="max-height: 80vh; overflow: auto">
+                          <v-card-title class="d-flex align-center">
+                            <div class="flex-grow-1">{{ item.project.title }}</div>
+                            <v-btn flat icon="mdi-close" size="30" @click="projectImages.close()" />
+                          </v-card-title>
+                          <v-card-text class="d-flex flex-column" style="gap: 15px">
+                            <div class="d-flex align-center">
+                              <v-icon icon="material-symbols:calendar-month" size="16" class="me-1" />
+                              <div>{{ item.project.dateInterval.start.formatted || "Atualmente" }}</div>
+                              <div class="px-2">~</div>
+                              <div>{{ item.project.dateInterval.final.formatted || "Atualmente" }}</div>
+                            </div>
+
+                            <div v-if="item.project.description" v-html="item.project.description"></div>
+                            <div v-if="item.image.description" v-html="item.image.description"></div>
+
+                            <v-btn color="primary" v-if="item.project.url" :href="item.project.url" target="_blank">
+                              Visualizar
+                            </v-btn>
+                          </v-card-text>
+                          <!-- <pre>{{ item.project }}</pre> -->
+                        </v-col>
+                      </v-row>
+                    </div>
+                  </div>
+                </v-carousel-item>
+              </template>
+            </v-carousel>
           </v-dialog>
 
-          <v-timeline side="end" align="start">
-            <template v-for="(o, i) in resume.data.projects">
-              <v-timeline-item size="small">
-                <h2>{{ o.title }}</h2>
-
-                <div class="d-flex align-center">
-                  <div>{{ o.dateInterval.start.formatted || "Atualmente" }}</div>
-                  <div class="px-2">~</div>
-                  <div>{{ o.dateInterval.start.formatted || "Atualmente" }}</div>
-                </div>
-
-                <div v-html="o.description" v-if="o.description" class="mt-3"></div>
-
-                <br />
-                <div class="d-flex align-center" style="gap: 10px">
-                  <v-btn :href="o.url" target="_blank">Visualizar</v-btn>
-
-                  <template v-if="o.meta">
-                    <template v-if="o.meta.images">
-                      <template v-for="(oo, ii) in o.meta.images">
-                        <v-btn @click="projectImages.open(oo)">Image {{ ii + 1 }}</v-btn>
-                      </template>
-                    </template>
-                  </template>
-                </div>
-              </v-timeline-item>
+          <app-mansory :cols="3" :items="resume.projectsImages">
+            <template #item="bind">
+              <v-card @click="projectImages.open(bind.item.image)">
+                <v-card-title>{{ bind.item.project.title }}</v-card-title>
+                <img :src="bind.item.image.url" alt="" style="width: 100%" />
+              </v-card>
             </template>
-          </v-timeline>
+          </app-mansory>
         </v-container>
         <pre>{{ btnRefs }}</pre>
       </div>
@@ -216,9 +266,21 @@ const resume = reactive({
         ogImage: "",
         twitterCard: "summary_large_image",
       });
+      projectImages.open(resume.data.projects[0].meta.images[0]);
     } catch (err) {}
     resume.ready = true;
   },
+  projectsImages: computed(() => {
+    let projectsImages = [];
+
+    resume.data.projects.map((project) => {
+      project.meta.images.map((image) => {
+        projectsImages.push({ image, project });
+      });
+    });
+
+    return projectsImages;
+  }),
 });
 
 const projectsModal = ref(null);
@@ -249,6 +311,9 @@ const projectImages = reactive({
   dialog: false,
   open(image) {
     projectImages.dialog = image.url;
+  },
+  close() {
+    projectImages.dialog = false;
   },
 });
 
