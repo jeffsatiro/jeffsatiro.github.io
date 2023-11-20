@@ -2,7 +2,7 @@
   <div>
     <nuxt-layout name="admin">
       <template #main>
-        <v-row>
+        <!-- <v-row>
           <v-col cols="6">
             <v-text-field label="Name" v-model="test.name" v-bind="validate.bind('name', ['required'])" />
           </v-col>
@@ -21,21 +21,34 @@
             <v-spacer />
             <v-btn :disabled="!validate.isValid()">Save</v-btn>
           </v-col>
-        </v-row>
+        </v-row> -->
+
+        <pre>{{ firebase }}</pre>
       </template>
     </nuxt-layout>
   </div>
 </template>
 
 <script setup>
-import { reactive } from "vue";
+import { reactive, onMounted } from "vue";
 
-const test = reactive({
-  name: "",
-  email: "",
-  password: "",
+// const test = reactive({ name: "", email: "", password: "" });
+// import useValidate from "@/composables/useValidate";
+// const validate = await useValidate({ values: test });
+
+import useFirebase from "@/composables/useFirebase";
+const firebase = useFirebase();
+
+onMounted(async () => {
+  // console.log(
+  //   'firebase.userCreate',
+  //   await firebase.userCreate({
+  //     name: "John",
+  //     email: "john@grr.la",
+  //     password: "john@grr.la",
+  //   })
+  // );
+
+  console.log(await firebase.firestoreFind("user", "x6GpZvJBTCZUWhD3KBEL1JTUQe32"));
 });
-
-import useValidate from "@/composables/useValidate";
-const validate = await useValidate({ values: test });
 </script>

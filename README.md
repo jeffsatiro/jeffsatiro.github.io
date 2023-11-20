@@ -4,13 +4,13 @@
   - Firebase: Users Crud
   - Firebase: Auth
   - Firebase: Upload
-  - Composable validation and error
   - FirebaseAuth: Users List
   - Admin Layout: Multilogin
 
   WORKING
 
   FINISHED
+  - Composable validation and error
   - Firebase: Auth
   - Admin: layout
   - useVuetifyThemeSwitcher.js

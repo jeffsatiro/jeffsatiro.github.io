@@ -1,3 +1,5 @@
+// https://validatejs.org/
+
 import { reactive } from "vue";
 import validate from "validate.js";
 import _ from "lodash";
