@@ -124,38 +124,17 @@
           <h1>Projetos</h1>
           <br />
 
-          <!-- <v-dialog v-model="projectImages.dialog" width="800">
-            <div class="d-flex align-center">
-              <div class="flex-grow-1 px-3">
-                <v-carousel v-model="projectImages.dialog" height="80vh" :hide-delimiters="true" #default="bind">
-                  <template v-for="(_project, _projectIndex) in resume.data.projects">
-                    <template v-for="(_image, _imageIndex) in _project.meta.images">
-                      <v-carousel-item :value="_image.url">
-                        <div class="px-md-10" style="height: 100%">
-                          <div class="px-md-10" style="height: 100%">
-                            <div class="bg-white mx-auto" style="height: 100%; overflow: auto; border-radius: 6px">
-                              <h2 class="text-center py-3">
-                                {{ _project.title }} ~ {{ _project.dateInterval.final.formatted }}
-                              </h2>
-                              <img :src="_image.url" alt="" style="width: 100%" loading="lazy" />
-                            </div>
-                          </div>
-                        </div>
-                      </v-carousel-item>
-                    </template>
-                  </template>
-                </v-carousel>
-              </div>
-            </div>
-          </v-dialog> -->
-
           <v-dialog v-model="projectImages.dialog" width="1000">
             <v-carousel v-model="projectImages.dialog" height="auto" :hide-delimiters="true" #default="bind">
               <template v-for="item in resume.projectsImages">
                 <v-carousel-item :value="item.image.url">
                   <div class="h-100 px-md-10">
                     <div class="h-100 px-md-10 d-flex align-center">
-                      <v-row no-gutters class="bg-white" style="position: relative; max-height: 100%">
+                      <v-row
+                        no-gutters
+                        class="bg-white rounded-lg elevation-10"
+                        style="position: relative; max-height: 100%; overflow: hidden"
+                      >
                         <v-col cols="12" md="7" style="max-height: 80vh; overflow: auto; position: relative">
                           <v-btn
                             flat
@@ -172,7 +151,7 @@
                             class="d-md-none text-white"
                             style="position: fixed; left: 0; bottom: 0; width: 100%; background: #000000bb"
                           >
-                            <v-card-title>{{ item.project.title }}</v-card-title>
+                            <v-card-title class="font-weight-bold">{{ item.project.title }}</v-card-title>
                             <v-card-text class="d-flex flex-column" style="gap: 15px">
                               <div class="d-flex align-center">
                                 <v-icon icon="material-symbols:calendar-month" size="16" class="me-1" />
@@ -183,15 +162,20 @@
 
                               <div v-if="item.project.description" v-html="item.project.description"></div>
 
-                              <v-btn color="primary" v-if="item.project.url" :href="item.project.url" target="_blank"
-                                >Visualizar</v-btn
-                              >
+                              <v-btn v-if="item.project.url" color="white" :href="item.project.url" target="_blank">
+                                Visualizar
+                              </v-btn>
                             </v-card-text>
                           </div>
                         </v-col>
-                        <v-col cols="12" md="5" class="d-none d-md-block" style="max-height: 80vh; overflow: auto">
+                        <v-col
+                          cols="12"
+                          md="5"
+                          class="d-none d-md-block bg-grey-lighten-3"
+                          style="max-height: 80vh; overflow: auto"
+                        >
                           <v-card-title class="d-flex align-center">
-                            <div class="flex-grow-1">{{ item.project.title }}</div>
+                            <div class="flex-grow-1 font-weight-bold">{{ item.project.title }}</div>
                             <v-btn flat icon="mdi-close" size="30" @click="projectImages.close()" />
                           </v-card-title>
                           <v-card-text class="d-flex flex-column" style="gap: 15px">
@@ -205,11 +189,17 @@
                             <div v-if="item.project.description" v-html="item.project.description"></div>
                             <div v-if="item.image.description" v-html="item.image.description"></div>
 
-                            <v-btn color="primary" v-if="item.project.url" :href="item.project.url" target="_blank">
+                            <v-btn
+                              v-if="item.project.url"
+                              color="primary"
+                              theme="light"
+                              variant="outlined"
+                              :href="item.project.url"
+                              target="_blank"
+                            >
                               Visualizar
                             </v-btn>
                           </v-card-text>
-                          <!-- <pre>{{ item.project }}</pre> -->
                         </v-col>
                       </v-row>
                     </div>
