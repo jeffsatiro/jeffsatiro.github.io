@@ -66,7 +66,11 @@
           </div>
           <br />
 
-          <div v-html="resume.data.profile.summary" style="white-space: pre-line"></div>
+          <div
+            v-if="resume.data.profile.summary"
+            v-html="resume.data.profile.summary.replace(/\n/g, '<br />')"
+            style="white-space: pre-line"
+          ></div>
         </v-container>
 
         <v-container id="skills">
@@ -114,7 +118,7 @@
                   <span>{{ o.location.fullName }}</span>
                 </div>
 
-                <div v-html="o.description" v-if="o.description" class="mt-3"></div>
+                <div v-html="o.description.replace(/\n/g, '<br />')" v-if="o.description" class="mt-3"></div>
               </div>
             </template>
           </div>
@@ -160,7 +164,10 @@
                                 <div>{{ item.project.dateInterval.final.formatted || "Atualmente" }}</div>
                               </div>
 
-                              <div v-if="item.project.description" v-html="item.project.description"></div>
+                              <div
+                                v-if="item.project.description"
+                                v-html="item.project.description.replace(/\n/g, '<br />')"
+                              ></div>
 
                               <v-btn v-if="item.project.url" color="white" :href="item.project.url" target="_blank">
                                 Visualizar
@@ -181,13 +188,20 @@
                           <v-card-text class="d-flex flex-column" style="gap: 15px">
                             <div class="d-flex align-center">
                               <v-icon icon="material-symbols:calendar-month" size="16" class="me-1" />
-                              <div>{{ item.project.dateInterval.start.formatted || "Atualmente" }}</div>
-                              <div class="px-2">~</div>
+                              <!-- <div>{{ item.project.dateInterval.start.formatted || "Atualmente" }}</div> -->
+                              <!-- <div class="px-2">~</div> -->
                               <div>{{ item.project.dateInterval.final.formatted || "Atualmente" }}</div>
                             </div>
 
-                            <div v-if="item.project.description" v-html="item.project.description"></div>
-                            <div v-if="item.image.description" v-html="item.image.description"></div>
+                            <h4
+                              v-if="item.image.description"
+                              v-html="item.image.description.replace(/\n/g, '<br />')"
+                            ></h4>
+
+                            <div
+                              v-if="item.project.description"
+                              v-html="item.project.description.replace(/\n/g, '<br />')"
+                            ></div>
 
                             <v-btn
                               v-if="item.project.url"
