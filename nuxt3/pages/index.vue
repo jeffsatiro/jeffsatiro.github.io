@@ -79,15 +79,13 @@
 
           <div class="d-flex flex-column" style="gap: 20px">
             <template v-for="o in resume.data.skills">
-              <div class="d-flex align-center" v-if="o.meta">
-                <div style="min-width: 150px; max-width: 150px">{{ o.name }}</div>
-                <div class="flex-grow-1">
+              <v-row no-gutters class="align-center">
+                <v-col cols="12" md="2">{{ o.name }}</v-col>
+                <v-col cols="10" md="9">
                   <v-progress-linear :model-value="(100 * o.meta.rating) / 5" height="5" :aria-label="o.name" />
-                </div>
-                <small class="d-block text-right" style="min-width: 50px; max-width: 50px"
-                  >{{ o.meta.rating }} / 5</small
-                >
-              </div>
+                </v-col>
+                <v-col cols="2" md="1" class="text-center">{{ o.meta.rating }} / 5</v-col>
+              </v-row>
             </template>
           </div>
         </v-container>
