@@ -49,38 +49,47 @@ export default class {
   static async firestoreSearch(collection, query = {}) {
     query = {
       limit: 5,
-      orderBy: ["uid", "desc"],
-      where: [],
+      // orderBy: ["uid", "desc"],
+      // where: [],
       startAfter: false,
-      endBefore: false,
+      endAt: false,
       ...query,
     };
 
-    let queryPrev = false;
-    let queryNext = false;
+    let prev = false;
+    let next = false;
 
     const { fireFirestore, fireFirestoreDB } = await this.getData();
     const collectRef = fireFirestore.collection(fireFirestoreDB, collection);
 
     let queryArgs = [];
-    if (query.limit) {
-      queryArgs.push(fireFirestore.limit(query.limit));
-    }
+
     if (query.orderBy) {
       queryArgs.push(fireFirestore.orderBy.apply(null, query.orderBy));
     }
+
     // if (query.where.length > 0) {
     //   query.where.map((condition) => {
     //     queryArgs.push(fireFirestore.where.apply(null, condition));
     //   });
     // }
+
     if (query.startAfter) {
-      const nextDoc = await fireFirestore.getDoc(fireFirestore.doc(fireFirestoreDB, collection, query.startAfter));
-      queryArgs.push(fireFirestore.startAfter(nextDoc));
+      queryArgs.push(
+        fireFirestore.startAfter(
+          await fireFirestore.getDoc(fireFirestore.doc(fireFirestoreDB, collection, query.startAfter))
+        )
+      );
     }
-    if (query.endBefore) {
-      const prevDoc = await fireFirestore.getDoc(fireFirestore.doc(fireFirestoreDB, collection, query.endBefore));
-      queryArgs.push(fireFirestore.endBefore(prevDoc));
+
+    if (query.endAt) {
+      queryArgs.push(
+        fireFirestore.endAt(await fireFirestore.getDoc(fireFirestore.doc(fireFirestoreDB, collection, query.endAt)))
+      );
+    }
+
+    if (query.limit) {
+      queryArgs.push(fireFirestore.limit(query.limit));
     }
 
     const docsQuery = fireFirestore.query.apply(null, [collectRef, ...queryArgs]);
@@ -92,17 +101,19 @@ export default class {
     });
 
     if (data.length == query.limit) {
-      queryNext = { ...query, startAfter: data[data.length - 1]["uid"] };
+      next = JSON.parse(JSON.stringify(query));
+      next.startAfter = data[data.length - 1]["uid"];
+      next.endAt = false;
     }
 
-    if (query.startAfter && data[0]) {
-      queryPrev = { ...query, endBefore: data[0]["uid"], startAfter: false };
-    }
-
-    return { query, data, queryPrev, queryNext };
+    return { query, data, prev, next };
   }
 
-  static async firestoreDelete() {}
+  static async firestoreDelete(collection, uid) {
+    const { fireFirestore, fireFirestoreDB } = await this.getData();
+    const itemRef = fireFirestore.doc(fireFirestoreDB, collection, uid);
+    return await fireFirestore.deleteDoc(itemRef);
+  }
 
   static async realtimeSave() {}
 
