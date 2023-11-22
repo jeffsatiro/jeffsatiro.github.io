@@ -1,6 +1,7 @@
 import * as fireApp from "firebase/app";
 import * as fireAuth from "firebase/auth";
 import * as fireFirestore from "firebase/firestore";
+import * as fireStorage from "firebase/storage";
 
 const config = useRuntimeConfig();
 fireApp.initializeApp(config.public.firebase);
@@ -9,7 +10,7 @@ export default class {
   static async getData() {
     const auth = fireAuth.getAuth();
     const fireFirestoreDB = fireFirestore.getFirestore();
-    return { config, auth, fireApp, fireAuth, fireFirestore, fireFirestoreDB };
+    return { config, auth, fireApp, fireAuth, fireFirestore, fireFirestoreDB, fireStorage };
   }
 
   // static async userCreate() {}
@@ -123,7 +124,15 @@ export default class {
 
   static async realtimeDelete() {}
 
-  static async storageSave() {}
+  static async storageSave(data, file = null) {
+    data = { uid: false, name: "", size: "", type: "", ...data };
+
+    const { fireStorage } = await this.getData();
+    const storage = fireStorage.getStorage();
+    const fileRef = fireStorage.ref(storage, data.name);
+    fireStorage.uploadBytes(fileRef, file);
+    console.log(data, file);
+  }
 
   static async storageFind() {}
 

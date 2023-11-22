@@ -23,6 +23,10 @@
           </v-col>
         </v-row> -->
 
+        <v-btn @click="personStorage.browse()">Browse</v-btn>
+        <v-btn @click="personStorage.upload()">Upload</v-btn>
+        <br /><br />
+
         <v-table class="border">
           <tbody>
             <template v-for="o in personSearch.data">
@@ -41,6 +45,7 @@
         </div>
 
         <pre>{{ personSearch.query }}</pre>
+        <pre>{{ personStorage }}</pre>
         <!-- <pre>{{ firebase }}</pre> -->
       </template>
     </nuxt-layout>
@@ -94,6 +99,35 @@ const personSearch = reactive({
       picture: randomUser.picture.thumbnail,
     });
     await personSearch.submit();
+  },
+});
+
+const personStorage = reactive({
+  files: [],
+  async browse() {
+    Object.assign(document.createElement("input"), {
+      type: "file",
+      multiple: true,
+      onchange(ev) {
+        Array.from(ev.target.files).forEach((file) => {
+          personStorage.files.push({
+            data: {
+              name: file.name,
+              size: file.size,
+              type: file.type,
+            },
+            file,
+          });
+        });
+      },
+    }).click();
+  },
+
+  async upload() {
+    personStorage.files.forEach((file) => {
+      file.upload = r.storageSave(file.data, file.file);
+      console.log(file);
+    });
   },
 });
 
