@@ -4,7 +4,7 @@
       <!-- loading -->
       <v-layout v-if="!props.ready">
         <slot name="loading" v-bind="slotBind()">
-          <div class="w-100 d-flex align-center justify-center">
+          <div :class="props.loadingClass">
             <v-icon icon="svg-spinners:3-dots-fade" size="30" />
           </div>
         </slot>
@@ -59,25 +59,53 @@
 
       <!-- view=admin -->
       <v-layout class="rounded rounded-md" v-if="props.ready && view.name == 'admin'">
-        <v-navigation-drawer v-model="nav.drawer" width="300">
+        <v-navigation-drawer v-model="nav.drawer" width="300" elevation="0" :class="navigationClass" border="0">
           <slot name="navigation" v-bind="slotBind()"></slot>
         </v-navigation-drawer>
 
-        <v-main>
-          <div class="d-flex flex-column px-5 py-3" style="gap: 20px; height: 100vh">
-            <v-defaults-provider
-              :defaults="{
-                VBtn: { flat: true, size: 30 },
-              }"
+        <!-- Mobile -->
+        <v-main v-touch="layout.vTouch" v-if="display.mobile.value">
+          <v-slide-y-transition>
+            <div
+              :class="`d-flex align-center pa-3 ${props.headerClass}`"
+              style="position: fixed; top: 0; width: 100%; gap: 15px"
+              v-if="!display.mobile || layout.headerShow"
             >
-              <div class="app-layout__box d-flex align-center" style="gap: 10px">
+              <v-defaults-provider :defaults="{ VBtn: { flat: true, size: 30 } }">
                 <v-btn icon="ci:hamburger" size="30" flat @click="nav.drawer = !nav.drawer" class="d-lg-none" />
                 <slot name="header" v-bind="slotBind()"></slot>
-              </div>
-            </v-defaults-provider>
+              </v-defaults-provider>
+            </div>
+          </v-slide-y-transition>
 
-            <div class="app-layout__box" style="overflow-y: auto; overflow-x: hidden; flex-grow: 1">
+          <v-slide-y-reverse-transition>
+            <div
+              :class="`${props.footerClass}`"
+              style="position: fixed; bottom: 0; width: 100%"
+              v-if="layout.footerShow"
+            >
+              <slot name="footer" v-bind="slotBind()"></slot>
+            </div>
+          </v-slide-y-reverse-transition>
+
+          <div :class="`pa-3 ${props.mainClass}`">
+            <slot name="main" v-bind="slotBind()"></slot>
+          </div>
+        </v-main>
+
+        <!-- Desktop -->
+        <v-main v-if="!display.mobile.value">
+          <div class="d-flex flex-column" style="height: 100vh">
+            <div :class="`d-flex align-center pa-3 ${props.headerClass}`" style="gap: 15px">
+              <v-defaults-provider :defaults="{ VBtn: { flat: true, size: 30 } }">
+                <slot name="header" v-bind="slotBind()"></slot>
+              </v-defaults-provider>
+            </div>
+            <div :class="`flex-grow-1 pa-3 ${props.mainClass}`" style="overflow: auto">
               <slot name="main" v-bind="slotBind()"></slot>
+            </div>
+            <div :class="`${props.footerClass}`">
+              <slot name="footer" v-bind="slotBind()"></slot>
             </div>
           </div>
         </v-main>
@@ -93,6 +121,11 @@ const props = defineProps({
   ready: { type: Boolean, default: true },
   view: { type: String, default: "admin" },
   defaultsProvider: { type: Object, default: () => ({}) },
+  loadingClass: { type: String, default: "w-100 d-flex align-center justify-center" },
+  navigationClass: { type: String, default: "" },
+  headerClass: { type: String, default: "bg-white" },
+  mainClass: { type: String, default: "" },
+  footerClass: { type: String, default: "" },
 });
 
 const view = reactive({
@@ -108,8 +141,13 @@ const emit = defineEmits(["update:view"]);
 import { useTitle } from "@vueuse/core";
 const title = useTitle();
 
+import { useDisplay } from "vuetify";
+const display = useDisplay();
+
 import useVuetifyThemeSwitcher from "@/composables/useVuetifyThemeSwitcher";
 const vuetifyThemeSwitcher = useVuetifyThemeSwitcher();
+
+import { useSwipe } from "@vueuse/core";
 
 const nav = reactive({
   drawer: null,
@@ -119,6 +157,21 @@ const nav = reactive({
     { title: "User", to: "/admin/user" },
     { title: "Test", to: "/admin/test" },
   ],
+});
+
+const layout = reactive({
+  headerShow: true,
+  footerShow: true,
+  vTouch: {
+    up: () => {
+      layout.headerShow = false;
+      layout.footerShow = true;
+    },
+    down: () => {
+      layout.headerShow = true;
+      layout.footerShow = false;
+    },
+  },
 });
 
 const defaultsProvider = {
@@ -157,17 +210,6 @@ defineExpose({ view });
       margin: 0 0 25px 0;
       border-bottom: solid 1px #7f7f7f44;
     } */
-  }
-
-  .v-navigation-drawer {
-    border: none;
-    box-shadow: 0 0 10px 5px #00000015;
-  }
-
-  &__box {
-    padding: 10px;
-    border-radius: 5px !important;
-    box-shadow: 0 0 10px 5px #00000015;
   }
 
   &__bg-pattern {
