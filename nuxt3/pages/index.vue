@@ -43,7 +43,12 @@
         </v-list>
       </v-navigation-drawer>
 
-      <div class="d-flex flex-column py-5" style="width: 100vw !important; gap: 20px" v-if="resume.ready">
+      <v-container>
+        <h1>Site em manutenção</h1>
+        <p>Voltarei em alguns minutos</p>
+      </v-container>
+
+      <div class="d-flex flex-column py-5" style="width: 100vw !important; gap: 20px" v-if="false && resume.ready">
         <v-container id="info">
           <h1>{{ resume.data.profile.firstName }} {{ resume.data.profile.lastName }}</h1>
           <h2>{{ resume.data.profile.headline }}</h2>
