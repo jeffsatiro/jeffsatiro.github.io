@@ -43,15 +43,15 @@
         </v-list>
       </v-navigation-drawer>
 
-      <v-container>
+      <!-- <v-container>
         <h1>Site em manutenção</h1>
         <p>Voltarei em alguns minutos</p>
-      </v-container>
+      </v-container> -->
 
-      <div class="d-flex flex-column py-5" style="width: 100vw !important; gap: 20px" v-if="false && resume.ready">
+      <div class="d-flex flex-column py-5" style="width: 100vw !important; gap: 20px" v-if="resume.ready">
         <v-container id="info">
-          <h1>{{ resume.data.profile.firstName }} {{ resume.data.profile.lastName }}</h1>
-          <h2>{{ resume.data.profile.headline }}</h2>
+          <h1>{{ resume.data.basics.name }}</h1>
+          <h2>{{ resume.data.basics.label }}</h2>
           <br />
 
           <div class="d-flex flex-wrap align-center" style="gap: 10px">
@@ -72,8 +72,8 @@
           <br />
 
           <div
-            v-if="resume.data.profile.summary"
-            v-html="resume.data.profile.summary.replace(/\n/g, '<br />')"
+            v-if="resume.data.basics.summary"
+            v-html="resume.data.basics.summary.replace(/\n/g, '<br />')"
             style="white-space: pre-line"
           ></div>
         </v-container>
@@ -87,9 +87,9 @@
               <v-row no-gutters class="align-center">
                 <v-col cols="12" md="2">{{ o.name }}</v-col>
                 <v-col cols="10" md="9">
-                  <v-progress-linear :model-value="(100 * o.meta.rating) / 5" height="5" :aria-label="o.name" />
+                  <v-progress-linear :model-value="o.rating" height="5" :aria-label="o.name" />
                 </v-col>
-                <v-col cols="2" md="1" class="text-center">{{ o.meta.rating }} / 5</v-col>
+                <v-col cols="2" md="1" class="text-center">{{ o.rating }} %</v-col>
               </v-row>
             </template>
           </div>
@@ -100,28 +100,28 @@
           <br />
 
           <div class="d-flex flex-column" style="gap: 35px">
-            <template v-for="o in resume.data.positions">
+            <template v-for="o in resume.data.work">
               <div class="ps-5" style="border-left: solid 5px #444">
-                <h2 class="mb-2">{{ o.title }}</h2>
+                <h2 class="mb-2">{{ o.position }}</h2>
 
                 <h3 class="d-flex align-center" v-if="o.companyName">
                   <v-icon icon="material-symbols:alternate-email" size="16" class="me-1" />
-                  <span>{{ o.companyName }}</span>
+                  <span>{{ o.name }}</span>
                 </h3>
 
                 <div class="d-flex align-center">
                   <v-icon icon="material-symbols:calendar-month" size="16" class="me-1" />
-                  <div>{{ o.dateInterval.start.formatted || "Atualmente" }}</div>
+                  <div>{{ o.date.start.formatted || "Atualmente" }}</div>
                   <div class="px-2">~</div>
-                  <div>{{ o.dateInterval.final.formatted || "Atualmente" }}</div>
+                  <div>{{ o.date.final.formatted || "Atualmente" }}</div>
                 </div>
 
-                <div class="d-flex align-center" v-if="o.location.fullName">
+                <div class="d-flex align-center" v-if="o.location.formatted">
                   <v-icon icon="ic:round-place" size="16" class="me-1" />
-                  <span>{{ o.location.fullName }}</span>
+                  <span>{{ o.location.formatted }}</span>
                 </div>
 
-                <div v-html="o.description.replace(/\n/g, '<br />')" v-if="o.description" class="mt-3"></div>
+                <div v-if="o.summary" v-html="o.summary.replace(/\n/g, '<br />')" class="mt-3"></div>
               </div>
             </template>
           </div>
@@ -158,13 +158,13 @@
                             class="d-md-none text-white"
                             style="position: fixed; left: 0; bottom: 0; width: 100%; background: #000000bb"
                           >
-                            <v-card-title class="font-weight-bold">{{ item.project.title }}</v-card-title>
+                            <v-card-title class="font-weight-bold">{{ item.project.name }}</v-card-title>
                             <v-card-text class="d-flex flex-column" style="gap: 15px">
                               <div class="d-flex align-center">
                                 <v-icon icon="material-symbols:calendar-month" size="16" class="me-1" />
-                                <div>{{ item.project.dateInterval.start.formatted || "Atualmente" }}</div>
+                                <div>{{ item.project.date.start.formatted || "Atualmente" }}</div>
                                 <div class="px-2">~</div>
-                                <div>{{ item.project.dateInterval.final.formatted || "Atualmente" }}</div>
+                                <div>{{ item.project.date.final.formatted || "Atualmente" }}</div>
                               </div>
 
                               <div
@@ -185,25 +185,20 @@
                           style="max-height: 80vh; overflow: auto"
                         >
                           <v-card-title class="d-flex align-center">
-                            <div class="flex-grow-1 font-weight-bold">{{ item.project.title }}</div>
+                            <div class="flex-grow-1 font-weight-bold">{{ item.project.name }}</div>
                             <v-btn flat icon="mdi-close" size="30" @click="projectImages.close()" />
                           </v-card-title>
                           <v-card-text class="d-flex flex-column" style="gap: 15px">
                             <div class="d-flex align-center">
                               <v-icon icon="material-symbols:calendar-month" size="16" class="me-1" />
-                              <!-- <div>{{ item.project.dateInterval.start.formatted || "Atualmente" }}</div> -->
-                              <!-- <div class="px-2">~</div> -->
-                              <div>{{ item.project.dateInterval.final.formatted || "Atualmente" }}</div>
+                              <div>{{ item.project.date.final.formatted || "Atualmente" }}</div>
                             </div>
 
-                            <h4
-                              v-if="item.image.description"
-                              v-html="item.image.description.replace(/\n/g, '<br />')"
-                            ></h4>
+                            <h4 v-if="item.image.summary" v-html="item.image.summary.replace(/\n/g, '<br />')"></h4>
 
                             <div
-                              v-if="item.project.description"
-                              v-html="item.project.description.replace(/\n/g, '<br />')"
+                              v-if="item.project.summary"
+                              v-html="item.project.summary.replace(/\n/g, '<br />')"
                             ></div>
 
                             <v-btn
@@ -235,7 +230,8 @@
             </template>
           </app-mansory>
         </v-container>
-        <pre>{{ btnRefs }}</pre>
+
+        <pre>{{ resume }}</pre>
       </div>
     </v-layout>
   </v-app>
@@ -261,10 +257,9 @@ const resume = reactive({
       let { data } = await axios.get(
         "https://raw.githubusercontent.com/jeff-silva/jeff-silva/main/data/linkedin-resume.json"
       );
-      data.projects = data.projects.sort((a, b) => {
-        return a.dateInterval.start < a.dateInterval.final ? -1 : a.dateInterval.start > a.dateInterval.final ? 1 : 0;
-      });
       resume.data = data;
+      resume.data.skills = resume.data.skills.filter((o) => o.show);
+      resume.data.work = resume.data.work.filter((o) => o.show);
       useSeoMeta({
         title: data.profile.headline,
         ogTitle: data.profile.headline,
@@ -281,7 +276,7 @@ const resume = reactive({
     let projectsImages = [];
 
     resume.data.projects.map((project) => {
-      project.meta.images.map((image) => {
+      project.images.map((image) => {
         projectsImages.push({ image, project });
       });
     });
