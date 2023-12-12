@@ -230,8 +230,6 @@
             </template>
           </app-mansory>
         </v-container>
-
-        <pre>{{ resume }}</pre>
       </div>
     </v-layout>
   </v-app>
