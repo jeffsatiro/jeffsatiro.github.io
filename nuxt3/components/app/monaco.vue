@@ -19,7 +19,7 @@
   import "monaco-editor/esm/vs/basic-languages/scss/scss.contribution";
   import "monaco-editor/esm/vs/basic-languages/php/php.contribution";
   
-//   import emmet from "emmet";
+  import emmet from "emmet";
   
   import { ref, reactive, watch, defineProps, defineEmits, onMounted, nextTick } from "vue";
   
@@ -86,19 +86,13 @@
       editor.resize();
     });
   
-    // editor.addCommand(monaco.KeyCode.Tab, () => {
-    //   const word = editor._modelData.model
-    //     .getValueInRange({
-    //       ...editor.getSelection(),
-    //       startColumn: 1,
-    //     })
-    //     .split(/[^a-zA-Z0-9]/)
-    //     .at(-1);
-    //   const pos = editor.getPosition();
-    //   const text = emmet(word) || `\t`;
-    //   const range = new monaco.Range(pos.lineNumber, pos.column - word.length, pos.lineNumber, pos.column);
-    //   editor.executeEdits("", [{ identifier: { major: 1, minor: 1 }, range, text, forceMoveMarkers: true }]);
-    // });
+    editorInstance.addCommand(monaco.KeyCode.Tab, () => {
+      const word = editorInstance._modelData.model.getValueInRange({ ...editorInstance.getSelection(), startColumn: 1 }).split(/[^a-zA-Z0-9]/).at(-1);
+      const pos = editorInstance.getPosition();
+      const text = emmet(word) || `\t`;
+      const range = new monaco.Range(pos.lineNumber, pos.column - word.length, pos.lineNumber, pos.column);
+      editorInstance.executeEdits("", [{ identifier: { major: 1, minor: 1 }, range, text, forceMoveMarkers: true }]);
+    });
   
     nextTick(async () => {
       setTimeout(editor.resize, 1);

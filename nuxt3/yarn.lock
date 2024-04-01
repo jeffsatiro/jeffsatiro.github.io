@@ -319,6 +319,25 @@
   dependencies:
     mime "^3.0.0"
 
+"@emmetio/abbreviation@^2.3.3":
+  version "2.3.3"
+  resolved "https://registry.yarnpkg.com/@emmetio/abbreviation/-/abbreviation-2.3.3.tgz#ed2b88fe37b972292d6026c7c540aaf887cecb6e"
+  integrity sha512-mgv58UrU3rh4YgbE/TzgLQwJ3pFsHHhCLqY20aJq+9comytTXUDNGG/SMtSeMJdkpxgXSXunBGLD8Boka3JyVA==
+  dependencies:
+    "@emmetio/scanner" "^1.0.4"
+
+"@emmetio/css-abbreviation@^2.1.8":
+  version "2.1.8"
+  resolved "https://registry.yarnpkg.com/@emmetio/css-abbreviation/-/css-abbreviation-2.1.8.tgz#b785313486eba6cb7eb623ad39378c4e1063dc00"
+  integrity sha512-s9yjhJ6saOO/uk1V74eifykk2CBYi01STTK3WlXWGOepyKa23ymJ053+DNQjpFcy1ingpaO7AxCcwLvHFY9tuw==
+  dependencies:
+    "@emmetio/scanner" "^1.0.4"
+
+"@emmetio/scanner@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@emmetio/scanner/-/scanner-1.0.4.tgz#e9cdc67194fd91f8b7eb141014be4f2d086c15f1"
+  integrity sha512-IqRuJtQff7YHHBk4G8YZ45uB9BaAGcwQeVzgj/zj8/UdOhtQpEIupUhSk8dys6spFIWVZVeK20CzGEnqR5SbqA==
+
 "@esbuild/android-arm64@0.18.20":
   version "0.18.20"
   resolved "https://registry.yarnpkg.com/@esbuild/android-arm64/-/android-arm64-0.18.20.tgz#984b4f9c8d0377443cc2dfcef266d02244593622"
@@ -2716,6 +2735,14 @@ electron-to-chromium@^1.4.535:
   version "1.4.580"
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.580.tgz#2f8f70f70733a6be1fb6f31de1224e6dc4bb196d"
   integrity sha512-T5q3pjQon853xxxHUq3ZP68ZpvJHuSMY2+BZaW3QzjS4HvNuvsMmZ/+lU+nCrftre1jFZ+OSlExynXWBihnXzw==
+
+emmet@^2.4.7:
+  version "2.4.7"
+  resolved "https://registry.yarnpkg.com/emmet/-/emmet-2.4.7.tgz#19893c34e6274af14ea3c5729101e3c4ed18f01e"
+  integrity sha512-O5O5QNqtdlnQM2bmKHtJgyChcrFMgQuulI+WdiOw2NArzprUqqxUW6bgYtKvzKgrsYpuLWalOkdhNP+1jluhCA==
+  dependencies:
+    "@emmetio/abbreviation" "^2.3.3"
+    "@emmetio/css-abbreviation" "^2.1.8"
 
 emoji-regex@^8.0.0:
   version "8.0.0"
@@ -6083,3 +6110,8 @@ zip-stream@^5.0.1:
     archiver-utils "^4.0.1"
     compress-commons "^5.0.1"
     readable-stream "^3.6.0"
+
+zoomist@^2.0.11:
+  version "2.0.11"
+  resolved "https://registry.yarnpkg.com/zoomist/-/zoomist-2.0.11.tgz#3a419422546c8192a1643f6bf5eb90c461977d20"
+  integrity sha512-kE2ORk5gjdJq6/gv6xNcGHe6aV6hsVEzRAmXFgYBb5EXdw/8bClO6LYd3BDL4uOba1a94zjLcAXdUY1v/1KEAg==
