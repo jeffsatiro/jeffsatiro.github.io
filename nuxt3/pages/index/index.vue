@@ -125,7 +125,7 @@ const resume = reactive({
   async load() {
     try {
       let { data } = await axios.get(
-        "https://raw.githubusercontent.com/jeff-silva/jeff-silva/main/data/linkedin-resume.json"
+        "https://raw.githubusercontent.com/jeff-silva/jeff-silva/main/data/jeferson-silva.json"
       );
       resume.data = data;
       resume.data.skills = resume.data.skills.filter((o) => o.show);

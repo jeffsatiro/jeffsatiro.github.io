@@ -6,7 +6,7 @@
             <template v-for="o in [ ...resume.data.contacts, ...resume.data.links ]">
             <tr>
                 <td>{{ o.name }}</td>
-                <td><a href="o.url" target="_blank" style="color: #fff; text-decoration: none;;">{{ o.url }}</a></td>
+                <td><a :href="o.url" target="_blank" style="color: #fff; text-decoration: none;;">{{ o.url }}</a></td>
                 <td>
                 <v-btn
                     :color="clipboard.copied.value && o.url==resume.clipboardText ? 'success' : null"

@@ -42,12 +42,12 @@
     instance: () => false,
     options: {},
     resize() {
-      if (!editor.options.automaticLayout) return;
-      if (editorRef.value.style.height == "100%") return;
-      const width = editorRef.value.offsetWidth;
-      const height = editor.getContentHeight();
-      editor.layout({ width, height });
-      editorRef.value.style.height = `${height}px`;
+      // if (!editor.options.automaticLayout) return;
+      // if (editorRef.value.style.height == "100%") return;
+      // const width = editorRef.value.offsetWidth;
+      // const height = editor.getContentHeight();
+      // editor.layout({ width, height });
+      // editorRef.value.style.height = `${height}px`;
     },
   });
   
