@@ -6,7 +6,7 @@
 -->
 
 <template>
-    <div ref="editorRef" class="v-code" style="width: 100%; height: 300px"></div>
+    <div ref="editorRef" class="v-code" style="width: 100%;"></div>
   </template>
   
   <script setup>
@@ -40,12 +40,14 @@
   const editorRef = ref(null);
   const editor = reactive({
     instance: () => false,
+    options: {},
     resize() {
-        // if (editorRef.value.style.height == "100%") return;
-        // const width = editorRef.value.offsetWidth;
-        // const height = editor.getContentHeight();
-        // editor.layout({ width, height });
-        // editorRef.value.style.height = `${height}px`;
+      if (!editor.options.automaticLayout) return;
+      if (editorRef.value.style.height == "100%") return;
+      const width = editorRef.value.offsetWidth;
+      const height = editor.getContentHeight();
+      editor.layout({ width, height });
+      editorRef.value.style.height = `${height}px`;
     },
   });
   
@@ -58,7 +60,7 @@
   });
   
   onMounted(() => {
-    let options = {
+    editor.options = {
       value: props.modelValue,
       wordWrap: "off",
       minimap: { enabled: false },
@@ -73,12 +75,12 @@
       ...props.options,
     };
 
-    options.scrollbar = {
+    editor.options.scrollbar = {
         alwaysConsumeMouseWheel: false,
-        ...options.scrollbar
+        ...editor.options.scrollbar
     };
 
-    editorInstance = monaco.editor.create(editorRef.value, options);
+    editorInstance = monaco.editor.create(editorRef.value, editor.options);
     // editor.scrollbar.alwaysConsumeMouseWheel = false;
   
     editorInstance.onDidChangeModelContent(() => {
@@ -95,7 +97,7 @@
     });
   
     nextTick(async () => {
-      setTimeout(editor.resize, 1);
+      setTimeout(() => editor.resize(), 10);
     });
   });
   </script>
