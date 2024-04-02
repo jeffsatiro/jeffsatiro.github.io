@@ -1,7 +1,6 @@
 <template>
-    <v-container class="pa-3 mt-lg-4" style="max-width:1000px;">
+    <v-container class="page-index-markdown">
         <h2>Contatos</h2>
-        <div class="mt-3"></div>
         <v-table>
         <tbody>
             <template v-for="o in [ ...resume.data.contacts, ...resume.data.links ]">

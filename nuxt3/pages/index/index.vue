@@ -249,3 +249,13 @@ useSeoMeta({
 
 resume.load();
 </script>
+
+<style>
+.page-index-markdown {
+  max-width: 1000px;
+}
+
+.page-index-markdown h2 {
+  margin-bottom: 15px;
+}
+</style>
